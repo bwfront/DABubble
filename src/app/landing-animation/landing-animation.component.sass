@@ -1,0 +1,76 @@
+.bg
+    width: 100vw
+    height: 100vh
+    background: rgb(49,58,229)
+    background: linear-gradient(0deg, rgba(49,58,229,1) 0%, rgba(121,126,243,1) 100%)
+.landing-animation-con
+    position: absolute
+    width: 100vw
+    height: 100vh
+    display: flex
+    justify-content: center
+    align-items: center
+    animation: contentLeftCorner 4s
+    top: calc( -50% + 100px )
+    left: calc( -50% + 100px )
+    scale: 0.5
+
+@keyframes contentLeftCorner
+    0%
+        top: 0
+        left: 0
+        scale: 1
+    50%
+        scale: 1
+        top: 0
+        left: 0
+    100%
+        top: calc( -50% + 100px )
+        left: calc( -50% + 100px )
+        scale: 0.5
+
+.heading
+    position: absolute
+    font-size: 80px
+    font-family: 'Nunito Sans', sans-serif
+    font-weight: 700
+    color: #fff
+    animation: headingAnimation 2s
+    left: calc( 50% + 120px )
+@keyframes headingAnimation
+    0%
+        left: calc( 50% - 290px )
+    50%
+        left: calc( 50% - 290px )
+
+.logo
+    position: absolute
+    width: 186px
+    height: auto
+    animation: logoAnimation 2s
+    z-index: 4
+@keyframes logoAnimation
+    0%
+        margin-left: 40%
+    50%
+        margin-left: 0
+    100%
+        margin-left: 0
+
+.hiding-background
+    z-index: 3
+    position: absolute
+    left: 0
+    width: calc( 50% + 93px )
+    height: 100vh
+    background: rgb(49,58,229)
+    background: linear-gradient(0deg, rgba(49,58,229,0) 0%, rgba(121,126,243,0) 100%)
+    animation: hide-background 2s
+
+@keyframes hide-background
+    0%
+      background: linear-gradient(0deg, rgba(49,58,229,1) 0%, rgba(121,126,243,1) 100%)  
+    99%
+      background: linear-gradient(0deg, rgba(49,58,229,1) 0%, rgba(121,126,243,1) 100%)  
+    100%
+      background: linear-gradient(0deg, rgba(49,58,229,0) 0%, rgba(121,126,243,0) 100%)    
