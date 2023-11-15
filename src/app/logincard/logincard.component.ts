@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-
+import { AuthService } from 'src/app//services/auth.service';
 
 @Component({
   selector: 'app-logincard',
@@ -13,12 +13,36 @@ export class LogincardComponent {
   userEmail: string = '';
   userPassword: string = '';
 
-  constructor() {}
+  constructor(private authService: AuthService) {}
 
   userLogin() {
     if (this.userEmail && this.userPassword) {
-
-      console.log('Email:', this.userEmail, 'Password:', this.userPassword);
+      this.authService
+        .signIn(this.userEmail, this.userPassword)
+        .then((userCredential) => {
+          console.log('Sign in as:', userCredential.user);
+        })
+        .catch((error) => {
+          console.error('Login error:', error);
+        });
     }
+  }
+
+  registerUser() {
+    if (this.userEmail && this.userPassword) {
+      this.authService
+        .signup(this.userEmail, this.userPassword)
+        .then((userCredential) => {
+          console.log('Sign in as:', userCredential.user);
+        })
+        .catch((error) => {
+          console.error('Login error:', error);
+        });
+    }
+  }
+
+
+  googleLogin(){
+    this.authService.byGoogle()
   }
 }

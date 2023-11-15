@@ -11,6 +11,8 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { FormsModule } from '@angular/forms';
 
+
+
 @NgModule({
   declarations: [
     AppComponent,

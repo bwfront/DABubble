@@ -25,7 +25,7 @@
         <div class="vector">
             <p>Oder</p>
         </div>
-        <a class="google-login-con" href=""><img src="assets/images/login/google.png" alt="">Anmelden mit Google</a>
+        <a class="google-login-con" (click)="googleLogin()"><img src="assets/images/login/google.png" alt="">Anmelden mit Google</a>
         <div class="login-button-con">
             <button type="submit" class="login" [disabled]="!loginForm.valid">Login</button>
             <button type="button" class="guest">Gäste-Login</button>
