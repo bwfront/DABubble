@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./logincard.component.sass']
 })
 export class LogincardComponent {
-
+  passworderror: boolean = false
+  emailerror: boolean = false
 }

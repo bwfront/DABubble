@@ -1,12 +1,25 @@
 <div class="login-card-con">
     <div class="heading">Anmeldung</div>
     <div class="text">Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der Arbeit verwendest.</div>
-    <div class="formgroup">
-        <div class="input-con"><img class="mailimg" src="assets/images/login/mail.png" alt="mail"><input type="text" placeholder="beispielname@email.com"></div>
-        <div class="error-input">Diese E-Mail-Adresse ist leider ungültig.</div>
-    </div>
-    <div class="formgroup">
-        <div class="input-con"><img class="lockimg" src="assets/images/login/lock.png" alt="passsword"><input type="password" placeholder="Passwort"></div>
-        <div class="error-input">Falsches Passwort. Bitte noch einmal versuchen.</div>
-    </div>
+    <form>
+        <div class="formgroup">
+            <div class="input-con"><img class="mailimg" src="assets/images/login/mail.png" alt="mail"><input
+                    type="email" placeholder="beispielname@email.com" required></div>
+            <div class="error-input" *ngIf="emailerror">Diese E-Mail-Adresse ist leider ungültig.</div>
+        </div>
+        <div class="formgroup">
+            <div class="input-con"><img class="lockimg" src="assets/images/login/lock.png" alt="passsword"><input
+                    type="password" placeholder="Passwort" required></div>
+            <div class="error-input" *ngIf="passworderror">Falsches Passwort. Bitte noch einmal versuchen.</div>
+        </div>
+        <div class="password-forgot-con"><a class="password-forgot" href="">Passwort vergessen?</a></div>
+        <div class="vector">
+            <p>Oder</p>
+        </div>
+        <a class="google-login-con" href=""><img src="assets/images/login/google.png" alt="">Anmelden mit Google</a>
+        <div class="login-button-con">
+            <button type="submit" class="login">Login</button>
+            <button class="guest">Gäste-Login</button>
+        </div>
+    </form>
 </div>
