@@ -69,8 +69,24 @@
 
 @keyframes hide-background
     0%
-      background: linear-gradient(0deg, rgba(49,58,229,1) 0%, rgba(121,126,243,1) 100%)  
+        background: linear-gradient(0deg, rgba(49,58,229,1) 0%, rgba(121,126,243,1) 100%)
     99%
-      background: linear-gradient(0deg, rgba(49,58,229,1) 0%, rgba(121,126,243,1) 100%)  
+        background: linear-gradient(0deg, rgba(49,58,229,1) 0%, rgba(121,126,243,1) 100%)
     100%
-      background: linear-gradient(0deg, rgba(49,58,229,0) 0%, rgba(121,126,243,0) 100%)    
+        background: linear-gradient(0deg, rgba(49,58,229,0) 0%, rgba(121,126,243,0) 100%)
+
+/*Responsive */
+
+@media  ( max-width: 1100px )
+    .logo
+        width: 70px
+    .heading
+        font-size: 30px
+        left: calc( 50% + 45px )
+    .hiding-background
+        z-index: 3
+        position: absolute
+        left: 0
+        width: calc( 50% + 53px )
+    .landing-animation-con
+        left: -50px !important

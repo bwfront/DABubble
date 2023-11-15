@@ -2,6 +2,8 @@
     position: absolute
     animation: hideanimation 4.2s
     opacity: 0
+    z-index: 10
+    display: none
 @keyframes hideanimation
     0%
         opacity: 1
@@ -9,3 +11,50 @@
        opacity: 1
     100%
        opacity: 0
+
+.loginpage-con
+    width: 100vw
+    height: 100vh
+    background-color: #ECEEFE
+
+.login-logo
+    position: absolute
+    top: 75px
+    left: 75px
+    display: flex
+    align-items: center
+    gap: 20px
+    .logo
+        width: 70px
+        height: auto
+    .logo-text
+        font-size: 26px
+        font-weight: 600
+
+
+.createconto-con
+    position: absolute
+    right: 75px
+    top: 75px
+    font-size: 18px
+    display: flex
+    flex-direction: column
+    align-items: flex-end
+    .new
+        padding: 10px 0 10px 15px
+    .create
+        text-decoration: none
+        color: #9094fa
+        padding: 10px 15px
+        &:hover
+            border-radius: 10px
+            border: 1px solid 
+            color: #797ef3
+
+
+.register-login-card
+    width: 100%
+    height: 100%
+    display: flex
+    align-items: center
+    justify-content: center

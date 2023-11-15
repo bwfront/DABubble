@@ -5,12 +5,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LandingAnimationComponent } from './landing-animation/landing-animation.component';
 import { LoginpageComponent } from './loginpage/loginpage.component';
+import { LogincardComponent } from './logincard/logincard.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LandingAnimationComponent,
-    LoginpageComponent
+    LoginpageComponent,
+    LogincardComponent
   ],
   imports: [
     BrowserModule,
