@@ -45,10 +45,10 @@
     <div *ngIf="userInfoFilled" class="register-avatar-con">
         <div class="heading">Wähle dein Avatar</div>
         <div class="profile-avatar"><img src="{{ choosedAvatar }}" alt="avatar"></div>
-        <div class="username-heading">Test</div>
+        <div class="username-heading">{{ userName }}</div>
         <div class="avatar-text">Aus der Liste wählen</div>
         <div class="avatar-con">
-            <img *ngFor="let avatar of avatarImages; let index = index" (click)="choosedAvatar = avatarImages[index]" [ngStyle]="{ 'border': avatar === choosedAvatar ? '1px solid #444DF2' : '1px solid transparent' }" class="avatarIMG" src="{{ avatar }}" alt="avatar">
+            <img *ngFor="let avatar of avatarImages; let index = index" (click)="choosedAvatar = avatarImages[index]" [ngStyle]="{ 'border': avatar === choosedAvatar ? '1px solid #444DF2' : '' }" class="avatarIMG" src="{{ avatar }}" alt="avatar">
         </div>
         <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" style="display: none;">
         <div class="avatar-upload">eigenes Bild verwenden<button (click)="fileInput.click()" class="avatar-upload-button">Datei Hochladen</button></div>

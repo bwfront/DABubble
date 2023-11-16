@@ -11,8 +11,17 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { FormsModule } from '@angular/forms';
 import { RegistercardComponent } from './registercard/registercard.component';
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 
-
+const firebaseConfig = {
+  projectId: 'dabubble-1a43e',
+  appId: '1:913169184248:web:8beb137d5661d06397120d',
+  storageBucket: 'dabubble-1a43e.appspot.com',
+  apiKey: 'AIzaSyCemzBdnjhG6MBmsJGQVi4-i9RuWLyGGUs',
+  authDomain: 'dabubble-1a43e.firebaseapp.com',
+  messagingSenderId: '913169184248',
+};
 
 @NgModule({
   declarations: [
@@ -20,17 +29,28 @@ import { RegistercardComponent } from './registercard/registercard.component';
     LandingAnimationComponent,
     LoginpageComponent,
     LogincardComponent,
-    RegistercardComponent
+    RegistercardComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    provideFirebaseApp(() => initializeApp({"projectId":"dabubble-1a43e","appId":"1:913169184248:web:8beb137d5661d06397120d","storageBucket":"dabubble-1a43e.appspot.com","apiKey":"AIzaSyCemzBdnjhG6MBmsJGQVi4-i9RuWLyGGUs","authDomain":"dabubble-1a43e.firebaseapp.com","messagingSenderId":"913169184248"})),
+    AngularFireStorageModule,
+    AngularFireModule.initializeApp(firebaseConfig),
+    provideFirebaseApp(() =>
+      initializeApp({
+        projectId: 'dabubble-1a43e',
+        appId: '1:913169184248:web:8beb137d5661d06397120d',
+        storageBucket: 'dabubble-1a43e.appspot.com',
+        apiKey: 'AIzaSyCemzBdnjhG6MBmsJGQVi4-i9RuWLyGGUs',
+        authDomain: 'dabubble-1a43e.firebaseapp.com',
+        messagingSenderId: '913169184248',
+      })
+    ),
     provideAuth(() => getAuth()),
-    provideFirestore(() => getFirestore())
+    provideFirestore(() => getFirestore()),
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
