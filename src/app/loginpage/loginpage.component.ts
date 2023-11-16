@@ -6,11 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./loginpage.component.sass']
 })
 export class LoginpageComponent {
-  logincard: boolean = true;
-
-
-
-  registerCardOpen(){
-    this.logincard = !this.logincard
-  }
+  logincard: boolean = false;
+  loginsuccesfull: boolean = false;
 }

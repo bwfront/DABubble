@@ -6,9 +6,20 @@
 
 .heading
     text-align: center
-@media ( max-width: 330px )
-    .heading
-        font-size: 30px
+
+.backbutton
+    position: relative
+    width: 100%
+    .backbuttonIMG
+        position: absolute
+        left: 0
+        top: 20px
+        padding: 5px
+        border-radius: 50%
+        transition: all 255ms
+        cursor: pointer
+        &:hover
+            background-color: #ECEEFE
 
 .avatar-upload-button
     font-size: 16px
@@ -25,14 +36,14 @@
         background-color: #444DF2
         border: 1px solid #444DF2
 
-.register-avatar-con  
+.register-avatar-con
     width: 100%
 
 .avatar-text
     font-size: 20
 
 .username-heading
-    font-size:  32px
+    font-size: 32px
     font-weight: 700
     text-align: center
     margin: 20px 0
@@ -43,7 +54,6 @@
     display: flex
     align-items: center
     justify-content: space-between
-
 
 .profile-avatar
     display: flex
@@ -68,3 +78,33 @@
     border: 1px solid transparent
     &:hover
         border: 1px solid #444DF2
+
+@media ( max-width: 650px )
+    .heading
+        margin-bottom: 0
+    .backbuttonIMG
+        top: 10px !important
+    .text
+        margin: 20px 0
+    .profile-avatar
+        img
+            width: 80px !important
+            height: 80px !important
+            margin-top: 20px
+    .username-heading
+        font-size: 26px !important
+@media ( max-width: 420px )
+    .heading
+        margin-top: 40px
+        font-size: 30px
+    .backbuttonIMG
+        top: 0px !important
+    .text
+        font-size: 16px
+        margin: 10px 0
+    .formgroup
+        margin-bottom: 20px
+    .error-input
+        margin: 0 5px
+        font-size: 13px
+

@@ -1,4 +1,6 @@
 <div class="login-card-con">
+    <div *ngIf="!userInfoFilled" class="backbutton"><a (click)="loginCardOpen()"><img class="backbuttonIMG" src="assets/images/arrow_back.png" alt="back"></a></div>
+    <div *ngIf="userInfoFilled" class="backbutton"><a (click)="userInfoFilled = false"><img class="backbuttonIMG" src="assets/images/arrow_back.png" alt="back"></a></div>
     <div class="register-information-con" *ngIf="!userInfoFilled">
     <div class="heading">Konto erstellen</div>
     <div class="text">Mit deinem Namen und deiner E-Mail-Adresse hast du dein neues DABubble-Konto.</div>

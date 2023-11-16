@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app//services/auth.service';
+import { LoginpageComponent } from '../loginpage/loginpage.component';
 
 @Component({
   selector: 'app-registercard',
@@ -28,7 +29,11 @@ export class RegistercardComponent {
 
   choosedAvatar: string = 'assets/images/profile/empty/default.png';
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private loginpage: LoginpageComponent) {}
+
+  loginCardOpen(){
+    this.loginpage.logincard = true;
+  }
 
   registerUser() {
     if (this.userEmail && this.userPassword) {
@@ -41,6 +46,8 @@ export class RegistercardComponent {
         )
         .then((userCredential) => {
           console.log('Register in as:', userCredential.user);
+          this.loginpage.logincard = true;
+          this.loginpage.loginsuccesfull = true;
         })
         .catch((error) => {
           if (error.code === 'auth/email-already-in-use') {
