@@ -10,6 +10,7 @@ import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { FormsModule } from '@angular/forms';
+import { RegistercardComponent } from './registercard/registercard.component';
 
 
 
@@ -18,7 +19,8 @@ import { FormsModule } from '@angular/forms';
     AppComponent,
     LandingAnimationComponent,
     LoginpageComponent,
-    LogincardComponent
+    LogincardComponent,
+    RegistercardComponent
   ],
   imports: [
     BrowserModule,

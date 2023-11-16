@@ -28,20 +28,6 @@ export class LogincardComponent {
     }
   }
 
-  registerUser() {
-    if (this.userEmail && this.userPassword) {
-      this.authService
-        .signup(this.userEmail, this.userPassword)
-        .then((userCredential) => {
-          console.log('Sign in as:', userCredential.user);
-        })
-        .catch((error) => {
-          console.error('Login error:', error);
-        });
-    }
-  }
-
-
   googleLogin(){
     this.authService.byGoogle()
   }

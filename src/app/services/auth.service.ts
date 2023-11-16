@@ -6,8 +6,10 @@ import {
   GoogleAuthProvider,
   signInWithRedirect,
   UserCredential,
-  createUserWithEmailAndPassword
+  createUserWithEmailAndPassword,
+  updateProfile,
 } from '@angular/fire/auth';
+import { doc, setDoc, Firestore } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -15,9 +17,8 @@ import {
 export class AuthService {
   provider = new GoogleAuthProvider();
   private _auth = inject(Auth);
-  constructor() {
-
-  }
+  private _firestore = inject(Firestore);
+  constructor() {}
 
   signIn(email: string, password: string): Promise<UserCredential> {
     return signInWithEmailAndPassword(this._auth, email, password);
@@ -27,11 +28,31 @@ export class AuthService {
     return signInWithRedirect(this._auth, new GoogleAuthProvider());
   }
 
-  signup(email: string, password: string): Promise<UserCredential> {
+  signUp(
+    email: string,
+    password: string,
+    realName: string,
+    avatar: string,
+  ): Promise<UserCredential> {
     return createUserWithEmailAndPassword(
       this._auth,
       email.trim(),
       password.trim()
-    );
+    ).then((userCredential) => {
+      return this.signUpName(userCredential, realName).then(
+        () => userCredential
+      );
+    });
+  }
+
+  signUpName(userCredential: any, realName: string) {
+    return updateProfile(userCredential.user, {
+      displayName: realName,
+    }).then(() => {
+      const userRef = doc(this._firestore, 'users', userCredential.user.uid);
+      return setDoc(userRef, {
+        realName: realName,
+      });
+    });
   }
 }

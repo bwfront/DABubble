@@ -6,9 +6,10 @@
     </div>
     <div class="createconto-con">
         <div class="new">Neu bei DABubble?</div>
-        <a href="/" class="create">Konto erstellen</a>
+        <a class="create" (click)="registerCardOpen()">Konto erstellen</a>
     </div>
     <div class="register-login-card">
-        <app-logincard></app-logincard>
+        <app-logincard *ngIf="!logincard"></app-logincard>
+        <app-registercard *ngIf="logincard"></app-registercard>
     </div>
 </div>

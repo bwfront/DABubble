@@ -1,0 +1,60 @@
+<div class="login-card-con">
+    <div class="register-information-con" *ngIf="!userInfoFilled">
+    <div class="heading">Konto erstellen</div>
+    <div class="text">Mit deinem Namen und deiner E-Mail-Adresse hast du dein neues DABubble-Konto.</div>
+    <form #loginForm="ngForm">
+            <div class="formgroup">
+                <div class="input-con">
+                    <img class="userimg" src="assets/images/login/user.png" alt="user">
+                    <input type="text" placeholder="Name und Nachname" 
+                    required name [(ngModel)]="userName" name="name" #name="ngModel">
+                </div>
+                <div class="error-input" *ngIf="name.invalid && (name.dirty || name.touched)">
+                    Bitte schreiben Sie ihren Namen.
+                </div>
+            </div>
+            <div class="formgroup">
+                <div class="input-con">
+                    <img class="mailimg" src="assets/images/login/mail.png" alt="mail">
+                    <input type="email" placeholder="beispielname@email.com" 
+                    required email [(ngModel)]="userEmail" name="email" #email="ngModel">
+                </div>
+                <div class="error-input" *ngIf="email.invalid && (email.dirty || email.touched)">
+                    Diese E-Mail-Adresse ist leider ungültig.
+                </div>
+                <div class="error-input" *ngIf="emailinuse">
+                    Diese E-Mail-Adresse ist bereits Registriert.
+                </div>
+            </div>
+            <div class="formgroup">
+                <div class="input-con">
+                    <img class="lockimg" src="assets/images/login/lock.png" alt="password">
+                    <input type="password" placeholder="Passwort" required [(ngModel)]="userPassword" name="password" #password="ngModel">
+                </div>
+                <div class="error-input" *ngIf="password.invalid && (password.dirty || password.touched)">
+                    Falsches Passwort. Bitte noch einmal versuchen.
+                </div>
+            </div>
+            
+            
+            <div class="login-button-con">
+                <button type="button" class="login" (click)="userInfoFilled = true" [disabled]="!loginForm.valid">Weiter</button>
+            </div>
+        </form>
+    </div>
+    <div *ngIf="userInfoFilled" class="register-avatar-con">
+        <div class="heading">Wähle dein Avatar</div>
+        <div class="profile-avatar"><img src="{{ choosedAvatar }}" alt="avatar"></div>
+        <div class="username-heading">Test</div>
+        <div class="avatar-text">Aus der Liste wählen</div>
+        <div class="avatar-con">
+            <img *ngFor="let avatar of avatarImages; let index = index" (click)="choosedAvatar = avatarImages[index]" [ngStyle]="{ 'border': avatar === choosedAvatar ? '1px solid #444DF2' : '1px solid transparent' }" class="avatarIMG" src="{{ avatar }}" alt="avatar">
+        </div>
+        <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" style="display: none;">
+        <div class="avatar-upload">eigenes Bild verwenden<button (click)="fileInput.click()" class="avatar-upload-button">Datei Hochladen</button></div>
+        <div class="login-button-con">
+            <button type="button" class="login" (click)="registerUser()">Weiter</button>
+        </div>
+    </div>
+</div>
+
