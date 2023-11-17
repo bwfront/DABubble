@@ -37,8 +37,22 @@
                     Falsches Passwort. Bitte noch einmal versuchen.
                 </div>
             </div>
-            
-            
+            <div class="formgroup">
+                <input type="checkbox"
+                       id="privacyCheckbox"
+                       [(ngModel)]="userPrivacy"
+                       name="privacy"
+                       #privacy="ngModel"
+                       required
+                       hidden>
+                <label class="checkboxprivacy">
+                    <img src="assets/images/checkbox/default.png" 
+                         alt="Checkbox" 
+                         class="checkbox-image"
+                         (click)="toggleCheckbox()">
+                    <p>Ich stimme der <span >Datenschutzerklärung</span> zu.</p>
+                </label>
+            </div>
             <div class="login-button-con">
                 <button type="button" class="login" (click)="userInfoFilled = true" [disabled]="!loginForm.valid">Weiter</button>
             </div>

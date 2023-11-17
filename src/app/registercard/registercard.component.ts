@@ -15,6 +15,7 @@ export class RegistercardComponent {
   userEmail: string = '';
   userPassword: string = '';
   userName: string = '';
+  userPrivacy = false;
 
   userInfoFilled: boolean = false; //false
 
@@ -29,9 +30,12 @@ export class RegistercardComponent {
 
   choosedAvatar: string = 'assets/images/profile/empty/default.png';
 
-  constructor(private authService: AuthService, private loginpage: LoginpageComponent) {}
+  constructor(
+    private authService: AuthService,
+    private loginpage: LoginpageComponent
+  ) {}
 
-  loginCardOpen(){
+  loginCardOpen() {
     this.loginpage.logincard = true;
   }
 
@@ -63,12 +67,17 @@ export class RegistercardComponent {
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
       this.authService.uploadFile(file).subscribe(
-        url => {
+        (url) => {
           this.choosedAvatar = url;
           console.log('Uploaded File URL:', url);
         },
-        error => console.error('Error uploading file:', error)
+        (error) => console.error('Error uploading file:', error)
       );
     }
   }
+
+  toggleCheckbox() {
+    this.userPrivacy = !this.userPrivacy;
+}
+
 }

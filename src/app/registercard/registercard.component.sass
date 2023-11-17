@@ -79,6 +79,37 @@
     &:hover
         border: 1px solid #444DF2
 
+.checkboxprivacy
+    display: flex
+    align-items: center
+    gap: 5px
+    span
+        cursor: pointer
+        color: #797EF3
+        font-size: 16px
+        text-decoration: none
+        padding: 2px 5px
+        transition: all 155ms ease-in-out
+        border-radius: 20px
+        &:hover
+            color: #444df2
+            font-weight: 500
+            background-color: #ECEEFE
+.checkbox-image
+    cursor: pointer
+
+    #privacyCheckbox + label &
+        content: url('/assets/images/checkbox/default.png')
+
+    #privacyCheckbox + .checkbox-image:hover &
+        content: url('/assets/images/checkbox/default_hover.png')
+
+    #privacyCheckbox:checked + label &
+        content: url('/assets/images/checkbox/checked.png')
+
+    #privacyCheckbox:checked + .checkbox-image:hover &
+        content: url('/assets/images/checkbox/checked_hover.png')
+
 @media ( max-width: 650px )
     .heading
         margin-bottom: 0
@@ -99,5 +130,3 @@
         font-size: 30px
     .backbuttonIMG
         top: 0px !important
-
-
