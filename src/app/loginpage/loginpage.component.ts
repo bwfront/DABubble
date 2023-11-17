@@ -8,6 +8,8 @@ import { Component } from '@angular/core';
 export class LoginpageComponent {
   logincard: boolean = true;
   loginsuccesfull: boolean = false;
+  
+  passwordresetcard: boolean = true;
 
   imprintcard: boolean = false;
   privacycard: boolean = false;

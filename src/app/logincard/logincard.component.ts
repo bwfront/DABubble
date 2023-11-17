@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app//services/auth.service';
+import { LoginpageComponent } from '../loginpage/loginpage.component';
 
 @Component({
   selector: 'app-logincard',
@@ -13,7 +14,7 @@ export class LogincardComponent {
   userEmail: string = '';
   userPassword: string = '';
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private loginpage: LoginpageComponent) {}
 
   userLogin() {
     if (this.userEmail && this.userPassword) {
@@ -30,5 +31,9 @@ export class LogincardComponent {
 
   googleLogin(){
     this.authService.byGoogle()
+  }
+
+  passwordresetopen(){
+    this.loginpage.passwordresetcard = true;
   }
 }
