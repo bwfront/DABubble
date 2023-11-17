@@ -16,6 +16,9 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { ImprintComponent } from './imprint/imprint.component';
 import { PrivacypolicyComponent } from './privacypolicy/privacypolicy.component';
 import { PasswordresetComponent } from './passwordreset/passwordreset.component';
+import { NewpasswordComponent } from './newpassword/newpassword.component';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 const firebaseConfig = {
   projectId: 'dabubble-1a43e',
@@ -36,10 +39,15 @@ const firebaseConfig = {
     ImprintComponent,
     PrivacypolicyComponent,
     PasswordresetComponent,
+    NewpasswordComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    RouterOutlet,
+    RouterLinkActive,
+    CommonModule,
+    RouterLink,
     FormsModule,
     AngularFireStorageModule,
     AngularFireModule.initializeApp(firebaseConfig),

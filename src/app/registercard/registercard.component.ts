@@ -55,10 +55,7 @@ export class RegistercardComponent {
         .then((userCredential) => {
           console.log('Register in as:', userCredential.user);
           this.loginpage.logincard = true;
-          this.loginpage.loginsuccesfull = true;
-          setTimeout(() => {
-            this.loginpage.loginsuccesfull = false;
-          }, 3000);
+          this.loginpage.showPopUpMessage('Konto erfolgreich erstellt!');
         })
         .catch((error) => {
           if (error.code === 'auth/email-already-in-use') {
