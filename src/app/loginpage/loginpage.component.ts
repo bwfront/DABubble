@@ -9,6 +9,6 @@ export class LoginpageComponent {
   logincard: boolean = true;
   loginsuccesfull: boolean = false;
 
-  imprintcard: boolean = true;
+  imprintcard: boolean = false;
   privacycard: boolean = false;
 }

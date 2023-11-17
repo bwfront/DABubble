@@ -1,15 +1,17 @@
 <div class="login-card-con">
-    <div *ngIf="!userInfoFilled" class="backbutton"><a (click)="loginCardOpen()"><img class="backbuttonIMG" src="assets/images/arrow_back.png" alt="back"></a></div>
-    <div *ngIf="userInfoFilled" class="backbutton"><a (click)="userInfoFilled = false"><img class="backbuttonIMG" src="assets/images/arrow_back.png" alt="back"></a></div>
+    <div *ngIf="!userInfoFilled" class="backbutton"><a (click)="loginCardOpen()"><img class="backbuttonIMG"
+                src="assets/images/arrow_back.png" alt="back"></a></div>
+    <div *ngIf="userInfoFilled" class="backbutton"><a (click)="userInfoFilled = false"><img class="backbuttonIMG"
+                src="assets/images/arrow_back.png" alt="back"></a></div>
     <div class="register-information-con" *ngIf="!userInfoFilled">
-    <div class="heading">Konto erstellen</div>
-    <div class="text">Mit deinem Namen und deiner E-Mail-Adresse hast du dein neues DABubble-Konto.</div>
-    <form #loginForm="ngForm">
+        <div class="heading">Konto erstellen</div>
+        <div class="text">Mit deinem Namen und deiner E-Mail-Adresse hast du dein neues DABubble-Konto.</div>
+        <form #loginForm="ngForm">
             <div class="formgroup">
                 <div class="input-con">
                     <img class="userimg" src="assets/images/login/user.png" alt="user">
-                    <input type="text" placeholder="Name und Nachname" 
-                    required name [(ngModel)]="userName" name="name" #name="ngModel">
+                    <input type="text" placeholder="Name und Nachname" required name [(ngModel)]="userName" name="name"
+                        #name="ngModel">
                 </div>
                 <div class="error-input" *ngIf="name.invalid && (name.dirty || name.touched)">
                     Bitte schreiben Sie ihren Namen.
@@ -18,8 +20,8 @@
             <div class="formgroup">
                 <div class="input-con">
                     <img class="mailimg" src="assets/images/login/mail.png" alt="mail">
-                    <input type="email" placeholder="beispielname@email.com" 
-                    required email [(ngModel)]="userEmail" name="email" #email="ngModel">
+                    <input type="email" placeholder="beispielname@email.com" required email [(ngModel)]="userEmail"
+                        name="email" #email="ngModel">
                 </div>
                 <div class="error-input" *ngIf="email.invalid && (email.dirty || email.touched)">
                     Diese E-Mail-Adresse ist leider ungültig.
@@ -31,30 +33,25 @@
             <div class="formgroup">
                 <div class="input-con">
                     <img class="lockimg" src="assets/images/login/lock.png" alt="password">
-                    <input type="password" placeholder="Passwort" required [(ngModel)]="userPassword" name="password" #password="ngModel">
+                    <input type="password" placeholder="Passwort" required [(ngModel)]="userPassword" name="password"
+                        #password="ngModel">
                 </div>
                 <div class="error-input" *ngIf="password.invalid && (password.dirty || password.touched)">
                     Falsches Passwort. Bitte noch einmal versuchen.
                 </div>
             </div>
             <div class="formgroup">
-                <input type="checkbox"
-                       id="privacyCheckbox"
-                       [(ngModel)]="userPrivacy"
-                       name="privacy"
-                       #privacy="ngModel"
-                       required
-                       hidden>
+                <input type="checkbox" id="privacyCheckbox" [(ngModel)]="userPrivacy" name="privacy" #privacy="ngModel"
+                    required hidden>
                 <label class="checkboxprivacy">
-                    <img src="assets/images/checkbox/default.png" 
-                         alt="Checkbox" 
-                         class="checkbox-image"
-                         (click)="toggleCheckbox()">
-                    <p>Ich stimme der <span >Datenschutzerklärung</span> zu.</p>
+                    <img src="assets/images/checkbox/default.png" alt="Checkbox" class="checkbox-image"
+                        (click)="toggleCheckbox()">
+                    <p>Ich stimme der <span (click)="privacyopen()">Datenschutzerklärung</span> zu.</p>
                 </label>
             </div>
             <div class="login-button-con">
-                <button type="button" class="login" (click)="userInfoFilled = true" [disabled]="!loginForm.valid">Weiter</button>
+                <button type="button" class="login" (click)="userInfoFilled = true"
+                    [disabled]="!loginForm.valid">Weiter</button>
             </div>
         </form>
     </div>
@@ -64,13 +61,15 @@
         <div class="username-heading">{{ userName }}</div>
         <div class="avatar-text">Aus der Liste wählen</div>
         <div class="avatar-con">
-            <img *ngFor="let avatar of avatarImages; let index = index" (click)="choosedAvatar = avatarImages[index]" [ngStyle]="{ 'border': avatar === choosedAvatar ? '1px solid #444DF2' : '' }" class="avatarIMG" src="{{ avatar }}" alt="avatar">
+            <img *ngFor="let avatar of avatarImages; let index = index" (click)="choosedAvatar = avatarImages[index]"
+                [ngStyle]="{ 'border': avatar === choosedAvatar ? '1px solid #444DF2' : '' }" class="avatarIMG"
+                src="{{ avatar }}" alt="avatar">
         </div>
         <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" style="display: none;">
-        <div class="avatar-upload">eigenes Bild verwenden<button (click)="fileInput.click()" class="avatar-upload-button">Datei Hochladen</button></div>
+        <div class="avatar-upload">eigenes Bild verwenden<button (click)="fileInput.click()"
+                class="avatar-upload-button">Datei Hochladen</button></div>
         <div class="login-button-con">
             <button type="button" class="login" (click)="registerUser()">Weiter</button>
         </div>
     </div>
 </div>
-

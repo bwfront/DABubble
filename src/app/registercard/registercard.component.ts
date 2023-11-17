@@ -35,6 +35,10 @@ export class RegistercardComponent {
     private loginpage: LoginpageComponent
   ) {}
 
+  privacyopen() {
+    this.loginpage.privacycard = true;
+  }
+
   loginCardOpen() {
     this.loginpage.logincard = true;
   }
@@ -78,6 +82,5 @@ export class RegistercardComponent {
 
   toggleCheckbox() {
     this.userPrivacy = !this.userPrivacy;
-}
-
+  }
 }
