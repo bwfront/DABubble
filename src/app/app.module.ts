@@ -13,6 +13,8 @@ import { FormsModule } from '@angular/forms';
 import { RegistercardComponent } from './registercard/registercard.component';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+import { ImprintComponent } from './imprint/imprint.component';
+import { PrivacypolicyComponent } from './privacypolicy/privacypolicy.component';
 
 const firebaseConfig = {
   projectId: 'dabubble-1a43e',
@@ -30,6 +32,8 @@ const firebaseConfig = {
     LoginpageComponent,
     LogincardComponent,
     RegistercardComponent,
+    ImprintComponent,
+    PrivacypolicyComponent,
   ],
   imports: [
     BrowserModule,

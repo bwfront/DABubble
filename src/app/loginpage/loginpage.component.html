@@ -4,18 +4,24 @@
         <img class="logo" src="assets/images/login/logo.png" alt="logo">
         <div class="logo-text">DABubble</div>
     </div>
-    <div *ngIf="logincard" class="createconto-con">
+    <div *ngIf="logincard && !imprintcard && !privacycard" class="createconto-con">
         <div class="new">Neu bei DABubble?</div>
         <a class="create" (click)="this.logincard = !this.logincard">Konto erstellen</a>
     </div>
     <div class="register-login-card">
-        <app-logincard *ngIf="logincard"></app-logincard>
-        <app-registercard *ngIf="!logincard">
+        <app-logincard *ngIf="logincard && !imprintcard && !privacycard"></app-logincard>
+        <app-registercard *ngIf="!logincard && !imprintcard && !privacycard">
         </app-registercard>
+        <app-imprint *ngIf="imprintcard"></app-imprint>
+        <app-privacypolicy *ngIf="privacycard"></app-privacypolicy>
         <div *ngIf="loginsuccesfull" class="loginSuccesfull-con">
             <div class="loginSuccesfull">
                 Konto erfolgreich erstellt!
             </div>
         </div>
+    </div>
+    <div class="footer-con" *ngIf="!imprintcard && !privacycard">
+        <div class="footer-link" (click)="imprintcard = true">Impressum</div>
+        <div class="footer-link" (click)="privacycard = true">Datenschutz</div>
     </div>
 </div>

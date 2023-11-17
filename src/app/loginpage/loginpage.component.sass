@@ -85,6 +85,21 @@
         right: 20px
     100%
         right: -600px
+.footer-con
+    width: 100%
+    display: flex
+    justify-content: center
+    margin-top: -80px
+    gap: 20px
+.footer-link
+    font-size: 18px
+    color: #797EF3
+    cursor: pointer
+    padding: 10px 15px
+    &:hover
+        border-radius: 10px
+        border: 1px solid
+        color: #797ef3
 
 @media ( max-height: 950px )
     .login-logo
@@ -99,7 +114,8 @@
             border-radius: 10px !important
             border: 1px solid !important
             color: #797ef3 !important
-
+    .footer-con
+        display: none
 @media ( max-height: 900px )
     .register-login-card
         top: 0px
@@ -129,7 +145,8 @@
     .loginSuccesfull
         font-size: 30px !important
         padding: 30px !important
-
+    .footer-con
+        display: none
 @media ( max-width: 500px )
     .loginSuccesfull
         font-size: 20px !important
