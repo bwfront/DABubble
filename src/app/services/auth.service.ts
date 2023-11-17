@@ -22,7 +22,7 @@ export class AuthService {
   private _auth = inject(Auth);
   private _firestore = inject(Firestore);
   private _firestorage = inject(AngularFireStorage)
-  constructor(private storage: AngularFireStorage) {}
+  constructor() {}
 
   signIn(email: string, password: string): Promise<UserCredential> {
     return signInWithEmailAndPassword(this._auth, email, password);
@@ -63,8 +63,8 @@ export class AuthService {
 
   uploadFile(file: File): Observable<string> {
     const filePath = `userAvatars/${new Date().getTime()}_${file.name}`;
-    const fileRef = this.storage.ref(filePath);
-    const task = this.storage.upload(filePath, file);
+    const fileRef = this._firestorage.ref(filePath);
+    const task = this._firestorage.upload(filePath, file);
   
     return task.snapshotChanges().pipe(
       last(),

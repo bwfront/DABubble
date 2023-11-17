@@ -56,6 +56,9 @@ export class RegistercardComponent {
           console.log('Register in as:', userCredential.user);
           this.loginpage.logincard = true;
           this.loginpage.loginsuccesfull = true;
+          setTimeout(() => {
+            this.loginpage.loginsuccesfull = false;
+          }, 3000);
         })
         .catch((error) => {
           if (error.code === 'auth/email-already-in-use') {

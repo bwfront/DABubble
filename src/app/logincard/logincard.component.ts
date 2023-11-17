@@ -23,7 +23,7 @@ export class LogincardComponent {
           console.log('Sign in as:', userCredential.user);
         })
         .catch((error) => {
-          console.error('Login error:', error);
+          this.emailerror = true;
         });
     }
   }

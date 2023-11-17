@@ -8,7 +8,7 @@
                 <input type="email" placeholder="beispielname@email.com" 
                 required email [(ngModel)]="userEmail" name="email" #email="ngModel">
             </div>
-            <div class="error-input" *ngIf="email.invalid && (email.dirty || email.touched)">
+            <div class="error-input" *ngIf="email.invalid && (email.dirty || email.touched) || emailerror ">
                 Diese E-Mail-Adresse ist leider ungültig.
             </div>
         </div>
