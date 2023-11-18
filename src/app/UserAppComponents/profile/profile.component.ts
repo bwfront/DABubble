@@ -21,12 +21,13 @@ export class ProfileComponent {
   ) {}
 
   ngOnInit() {
-    this.reatUserData();
+    this.readUserData();
   }
-  reatUserData() {
+  readUserData() {
     if (this.local.get('currentUser')) {
       let user = this.local.get('currentUser');
       this.uid = user.user.uid;
+      this.userName = user.user.displayName;
       this.getUserData();
     } else {
       this.router.navigate(['/']);
@@ -48,7 +49,6 @@ export class ProfileComponent {
   }
 
   setUserData(user: any) {
-    this.userName = user.realName;
     this.userAvatar = user.avatarURl;
   }
 }

@@ -1,15 +1,37 @@
 <div class="profile-menu">
     <div class="popup-profile-header">
-        <div class="heading">Profil</div>
+        <div class="heading" *ngIf="!editProfile">Profil</div>
+        <div class="heading" *ngIf="editProfile">Dein Profil bearbeiten</div>
         <div class="close" (click)="closeProfile()"><img src="assets/images/close.png" alt="close"></div>
     </div>
-    <div class="popup-profile-content">
-        <div class="avatar-con"><img class="avatar" src="assets/images/profile/empty/default.png" alt="avatar"></div>
-        <div class="name">Name Name<div class="edit">Bearbeiten</div></div>
+    <div class="popup-profile-content" *ngIf="!editProfile">
+        <div class="avatar-con"><img class="avatar" src="{{ avatarURl }}" alt="avatar"></div>
+        <div class="name">{{ name }}<div class="edit" (click)="editProfile = true">Bearbeiten</div></div>
         <div class="status"><img src="assets/images/profile/online_status.png" alt="status">Aktiv</div>
         <div class="mail-con">
             <div class="mail-head"><img src="assets/images/login/mail.png" alt="mail">E-Mail-Adresse</div>
-            <div class="mail">mail{{ '@' }}asdas.com</div>
+            <div class="mail">{{ mail }}</div>
         </div>
+    </div>
+    <div class="popup-profile-content" *ngIf="editProfile">
+        <div class="avatar-con"><img class="avatar" src="{{ avatarURl }}" alt="avatar"></div>
+        <form #changeUser="ngForm" (ngSubmit)="changeUserInfo()">
+            <div class="mail-con">
+                <div class="mail-head">
+                    <img class="nameimg" src="assets/images/profile/account.png" alt="mail">Vollständiger Name
+                </div>
+                <input class="mail" [(ngModel)]="name" name="name" required placeholder="Vollständiger Name">
+            </div>
+            <div class="mail-con">
+                <div class="mail-head">
+                    <img src="assets/images/login/mail.png" alt="mail">E-Mail-Adresse
+                </div>
+                <input class="mail" [(ngModel)]="mail" name="email" required type="email" placeholder="E-Mail-Adresse">
+            </div>
+            <div class="login-button-con">
+                <button class="guest" (click)="editProfile = false">Abbrechen</button>
+                <button class="login" type="submit" [disabled]="!changeUser.valid">Speichern</button>
+            </div>
+        </form>
     </div>
 </div>

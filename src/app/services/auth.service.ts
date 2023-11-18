@@ -9,16 +9,12 @@ import {
   updateProfile,
   sendPasswordResetEmail,
   confirmPasswordReset,
+  updateEmail,
+  sendEmailVerification,
 } from '@angular/fire/auth';
 import { doc, setDoc, Firestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
-import {
-  Observable,
-  catchError,
-  last,
-  switchMap,
-  throwError,
-} from 'rxjs';
+import { Observable, catchError, last, switchMap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -82,30 +78,54 @@ export class AuthService {
     );
   }
 
-  resetPassword(email: string)  {
-    return sendPasswordResetEmail(this._auth, email)
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode);
-        console.log(errorMessage);
+  resetPassword(email: string) {
+    return sendPasswordResetEmail(this._auth, email).catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorCode);
+      console.log(errorMessage);
+    });
+  }
+
+  setNewPassword(code: string, newPassword: string) {
+    return confirmPasswordReset(this._auth, code, newPassword)
+      .then(() => {
+        console.log('worked');
+        return true;
+      })
+      .catch(() => {
+        return null;
       });
   }
 
-  setNewPassword(code: string, newPassword: string){
-    return confirmPasswordReset(this._auth , code, newPassword)
-    .then(()=> {
-      console.log('worked');
-      return true;
-    })
-    .catch(()=> {
-      return null;
-    })
+  logOut() {
+    this._auth.signOut().catch((error) => {
+      console.log('Sign Out Failed', error);
+    });
   }
 
-  logOut(){
-    this._auth.signOut().catch((error) =>{
-      console.log('Sign Out Failed', error);
-    })
+  changeEmail(newEmail: string) {
+    let current = this._auth.currentUser;
+    if (current) {
+      return updateEmail(current, newEmail)
+        .then(() => {
+          this.logOut();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+    return Promise.reject('No current user');
   }
+
+  changeName(name: string) {
+    let current = this._auth.currentUser;
+    if (current) {
+      updateProfile(current, {
+        displayName: name
+      })
+    }
+    return Promise.reject('No current user');
+  }
+
 }

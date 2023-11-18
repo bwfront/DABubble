@@ -26,7 +26,7 @@
         &:hover
             border-radius: 50%
             background-color: #ECEEFE
-            
+
 .popup-profile-content
     width: 100%
     .avatar-con
@@ -37,6 +37,7 @@
             width: 200px
             height: 200px
             border-radius: 50%
+            object-fit: cover
     .name
         display: flex
         justify-content: space-between
@@ -49,7 +50,7 @@
             &:hover
                 font-weight: 700
     .status
-        margin: 10px 0
+        margin: 20px 0
         display: flex
         align-items: center
         gap: 10px
@@ -59,6 +60,16 @@
             height: 16px
             width: 16px
     .mail-con
+        position: relative
+        margin: 10px 0
+        input
+            border-radius: 30px
+            padding: 15px 20px
+            width: calc( 100% - 40px )
+            font-size: 18px
+            color: #686868 !important
+            border: solid #ADB0D9
+            margin: 10px 0!important
         .mail-head
             display: flex
             gap: 10px
@@ -70,3 +81,8 @@
         .mail
             color: #1381FF
             margin: 5px 0 0 34px
+        .nameimg
+            width: 28px !important
+
+.login-button-con
+    margin-top: 20px
