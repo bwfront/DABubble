@@ -1,0 +1,40 @@
+.dabubble-head
+    display: flex
+    align-items: center
+    gap: 20px
+    cursor: pointer
+    .name
+        font-size: 32px
+        font-weight: 700
+    .avatar-con
+        position: relative
+        .avatar
+            width: 70px
+            height: 70px
+            object-fit: cover
+            border-radius: 50%
+        .status
+            position: absolute
+            right: 5px
+            bottom: 5px
+    &:hover
+        color: #797EF3
+        .hover-arrow-down
+            opacity: 1
+        .default-arrow-down
+                opacity: 0
+.arrow-con
+    position: relative
+    display: flex
+    align-items: center
+    justify-content: center
+    margin-right: 10px
+.default-arrow-down
+    position: absolute
+    width: 30px
+    height: 30px
+.hover-arrow-down
+    position: absolute
+    width: 30px
+    height: 30px
+    opacity: 0

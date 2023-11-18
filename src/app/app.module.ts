@@ -3,22 +3,25 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LandingAnimationComponent } from './landing-animation/landing-animation.component';
-import { LoginpageComponent } from './loginpage/loginpage.component';
-import { LogincardComponent } from './logincard/logincard.component';
+import { LandingAnimationComponent } from './UserAuthComponents/landing-animation/landing-animation.component';
+import { LoginpageComponent } from './UserAuthComponents/loginpage/loginpage.component';
+import { LogincardComponent } from './UserAuthComponents/logincard/logincard.component';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { FormsModule } from '@angular/forms';
-import { RegistercardComponent } from './registercard/registercard.component';
+import { RegistercardComponent } from './UserAuthComponents/registercard/registercard.component';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
-import { ImprintComponent } from './imprint/imprint.component';
-import { PrivacypolicyComponent } from './privacypolicy/privacypolicy.component';
-import { PasswordresetComponent } from './passwordreset/passwordreset.component';
-import { NewpasswordComponent } from './newpassword/newpassword.component';
+import { ImprintComponent } from './UserAuthComponents/imprint/imprint.component';
+import { PrivacypolicyComponent } from './UserAuthComponents/privacypolicy/privacypolicy.component';
+import { PasswordresetComponent } from './UserAuthComponents/passwordreset/passwordreset.component';
+import { NewpasswordComponent } from './UserAuthComponents/newpassword/newpassword.component';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { SearchbarComponent } from './UserAppComponents/searchbar/searchbar.component';
+import { ProfileComponent } from './UserAppComponents/profile/profile.component';
+import { DabubbleappComponent } from './UserAppComponents/dabubbleapp/dabubbleapp.component';
 
 const firebaseConfig = {
   projectId: 'dabubble-1a43e',
@@ -40,6 +43,9 @@ const firebaseConfig = {
     PrivacypolicyComponent,
     PasswordresetComponent,
     NewpasswordComponent,
+    SearchbarComponent,
+    ProfileComponent,
+    DabubbleappComponent,
   ],
   imports: [
     BrowserModule,

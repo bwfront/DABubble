@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app//services/auth.service';
 import { LoginpageComponent } from '../loginpage/loginpage.component';
+import { LocalStorageService } from 'src/app/services/localstorage.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-logincard',
@@ -15,14 +17,15 @@ export class LogincardComponent {
   userEmail: string = '';
   userPassword: string = '';
 
-  constructor(private authService: AuthService, private loginpage: LoginpageComponent) {}
+  constructor(private authService: AuthService, private loginpage: LoginpageComponent, private local: LocalStorageService, private router: Router) {}
 
   userLogin() {
     if (this.userEmail && this.userPassword) {
       this.authService
         .signIn(this.userEmail, this.userPassword)
         .then((userCredential) => {
-          console.log('Sign in as:', userCredential.user);
+          this.router.navigate(['/dabubble']);
+          this.local.set('currentUser', userCredential)
         })
         .catch((error) => {
           this.loginError = true;

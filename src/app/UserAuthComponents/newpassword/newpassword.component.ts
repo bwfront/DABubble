@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { AuthService } from '../services/auth.service';
-import { LoginpageComponent } from '../loginpage/loginpage.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-newpassword',
@@ -15,7 +14,11 @@ export class NewpasswordComponent {
 
   backToLogin: boolean = false;
 
-  constructor(private route: ActivatedRoute, private authservice: AuthService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private authservice: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
@@ -24,6 +27,8 @@ export class NewpasswordComponent {
   }
 
   setNewPassword() {
-    this.authservice.setNewPassword(this.oobCode, this.newPassword)
+    this.authservice.setNewPassword(this.oobCode, this.newPassword).then(() => {
+      this.router.navigate(['/']);
+    });
   }
 }

@@ -97,10 +97,11 @@ export class AuthService {
   setNewPassword(code: string, newPassword: string){
     return confirmPasswordReset(this._auth , code, newPassword)
     .then(()=> {
-      console.log('Worked');
+      console.log('worked');
+      return true;
     })
     .catch(()=> {
-      console.log('Dont Work');
+      return null;
     })
   }
 }
