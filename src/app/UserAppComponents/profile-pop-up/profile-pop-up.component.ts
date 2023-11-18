@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthService } from 'src/app/services/auth.service';
-import { LocalStorageService } from 'src/app/services/localstorage.service';
-
+import { DabubbleappComponent } from '../dabubbleapp/dabubbleapp.component';
+import { PopUpMenuComponent } from '../pop-up-menu/pop-up-menu.component';
 @Component({
   selector: 'app-profile-pop-up',
   templateUrl: './profile-pop-up.component.html',
@@ -10,12 +8,10 @@ import { LocalStorageService } from 'src/app/services/localstorage.service';
 })
 export class ProfilePopUpComponent {
 
-  constructor(private local: LocalStorageService, private authservice: AuthService, private router: Router){}
+  constructor(private popupmenu: PopUpMenuComponent){}
 
-  userLogout(){
-    this.local.remove('currentUser')
-    this.authservice.logOut();
-    this.router.navigate(['/']); 
+  closeProfile(){
+    this.popupmenu.profilePopUpOpen = false;
   }
 
 }

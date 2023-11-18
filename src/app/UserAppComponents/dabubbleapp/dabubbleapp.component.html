@@ -5,10 +5,10 @@
             <div class="logo-text">DABubble</div>
         </div>
         <app-searchbar></app-searchbar>
-        <app-profile></app-profile>
+        <app-profile (click)="profilePopUpOpen = !profilePopUpOpen"></app-profile>
     </div>
-    <div class="profile-popup">
-        <app-profile-pop-up></app-profile-pop-up>
+    <div class="profile-popup" *ngIf="profilePopUpOpen">
+        <app-pop-up-menu></app-pop-up-menu>
     </div>
 </div>
 

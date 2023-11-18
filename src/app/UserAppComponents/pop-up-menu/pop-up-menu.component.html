@@ -1,0 +1,10 @@
+<div class="profile-popup-con">
+    <div class="popup-menu" *ngIf="menuOpen">
+        <div class="menu-link" (click)="profilePopUpOpen = true">Profile</div>
+        <div class="menu-link" (click)="userLogout()">Log out</div>
+    </div>
+    <div class="profile" *ngIf="profilePopUpOpen"> 
+        <app-profile-pop-up></app-profile-pop-up>
+    </div>
+    <div class="bg" (click)="closePopUp()"></div>
+</div>

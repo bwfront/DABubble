@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./dabubbleapp.component.sass']
 })
 export class DabubbleappComponent {
-
+  profilePopUpOpen: boolean = false;
 }

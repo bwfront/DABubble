@@ -104,12 +104,8 @@ export class AuthService {
   }
 
   logOut(){
-    this._auth.signOut().then(() => {
-      console.log('GJ');
-      
-    }, () => {
-      console.log('BasdasdasdasJ');
-      // An error happened.
-    });
+    this._auth.signOut().catch((error) =>{
+      console.log('Sign Out Failed', error);
+    })
   }
 }

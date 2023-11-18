@@ -1,6 +1,15 @@
-<div class="profile-popup-con">
-    <div class="pop-up-menu">
-        <div class="menu-link">Profile</div>
-        <div class="menu-link" (click)="userLogout()">Log out</div>
+<div class="profile-menu">
+    <div class="popup-profile-header">
+        <div class="heading">Profil</div>
+        <div class="close" (click)="closeProfile()"><img src="assets/images/close.png" alt="close"></div>
+    </div>
+    <div class="popup-profile-content">
+        <div class="avatar-con"><img class="avatar" src="assets/images/profile/empty/default.png" alt="avatar"></div>
+        <div class="name">Name Name<div class="edit">Bearbeiten</div></div>
+        <div class="status"><img src="assets/images/profile/online_status.png" alt="status">Aktiv</div>
+        <div class="mail-con">
+            <div class="mail-head"><img src="assets/images/login/mail.png" alt="mail">E-Mail-Adresse</div>
+            <div class="mail">mail{{ '@' }}asdas.com</div>
+        </div>
     </div>
 </div>

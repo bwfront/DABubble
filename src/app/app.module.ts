@@ -23,6 +23,7 @@ import { SearchbarComponent } from './UserAppComponents/searchbar/searchbar.comp
 import { ProfileComponent } from './UserAppComponents/profile/profile.component';
 import { DabubbleappComponent } from './UserAppComponents/dabubbleapp/dabubbleapp.component';
 import { ProfilePopUpComponent } from './UserAppComponents/profile-pop-up/profile-pop-up.component';
+import { PopUpMenuComponent } from './UserAppComponents/pop-up-menu/pop-up-menu.component';
 
 const firebaseConfig = {
   projectId: 'dabubble-1a43e',
@@ -48,6 +49,7 @@ const firebaseConfig = {
     ProfileComponent,
     DabubbleappComponent,
     ProfilePopUpComponent,
+    PopUpMenuComponent,
   ],
   imports: [
     BrowserModule,
