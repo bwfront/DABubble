@@ -3,6 +3,9 @@
     <div class="text">Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der Arbeit verwendest.</div>
     <form (ngSubmit)="userLogin()" #loginForm="ngForm">
         <div class="formgroup">
+            <div class="error-input user-error" *ngIf="loginError">
+                Die E-Mail-Adresse und das Passwort stimmen nicht überein.
+            </div>
             <div class="input-con">
                 <img class="mailimg" src="assets/images/login/mail.png" alt="mail">
                 <input type="email" placeholder="beispielname@email.com" 

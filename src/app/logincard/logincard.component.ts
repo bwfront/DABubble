@@ -10,6 +10,7 @@ import { LoginpageComponent } from '../loginpage/loginpage.component';
 export class LogincardComponent {
   passworderror: boolean = false;
   emailerror: boolean = false;
+  loginError: boolean = false;
 
   userEmail: string = '';
   userPassword: string = '';
@@ -24,7 +25,10 @@ export class LogincardComponent {
           console.log('Sign in as:', userCredential.user);
         })
         .catch((error) => {
-          this.emailerror = true;
+          this.loginError = true;
+          setTimeout(() =>{
+            this.loginError = false;
+          },3000)
         });
     }
   }
