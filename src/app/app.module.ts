@@ -22,6 +22,7 @@ import { CommonModule } from '@angular/common';
 import { SearchbarComponent } from './UserAppComponents/searchbar/searchbar.component';
 import { ProfileComponent } from './UserAppComponents/profile/profile.component';
 import { DabubbleappComponent } from './UserAppComponents/dabubbleapp/dabubbleapp.component';
+import { ProfilePopUpComponent } from './UserAppComponents/profile-pop-up/profile-pop-up.component';
 
 const firebaseConfig = {
   projectId: 'dabubble-1a43e',
@@ -46,6 +47,7 @@ const firebaseConfig = {
     SearchbarComponent,
     ProfileComponent,
     DabubbleappComponent,
+    ProfilePopUpComponent,
   ],
   imports: [
     BrowserModule,

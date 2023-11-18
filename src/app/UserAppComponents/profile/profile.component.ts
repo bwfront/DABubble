@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { DataService } from 'src/app/services/data.service';
 import { LocalStorageService } from 'src/app/services/localstorage.service';
 
@@ -13,12 +14,23 @@ export class ProfileComponent {
   userAvatar: string = '';
 
   uid: string = '';
-  constructor(private local: LocalStorageService, private data: DataService) {}
+  constructor(
+    private local: LocalStorageService,
+    private data: DataService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
-    let user = this.local.get('currentUser');
-    this.uid = user.user.uid;
-    this.getUserData();
+    this.reatUserData();
+  }
+  reatUserData() {
+    if (this.local.get('currentUser')) {
+      let user = this.local.get('currentUser');
+      this.uid = user.user.uid;
+      this.getUserData();
+    } else {
+      this.router.navigate(['/']);
+    }
   }
 
   getUserData() {
@@ -30,8 +42,8 @@ export class ProfileComponent {
           this.setUserData(user);
         }
       })
-      .catch((error) => {
-        console.error('Error fetching user:', error);
+      .catch(() => {
+        this.router.navigate(['/']);
       });
   }
 

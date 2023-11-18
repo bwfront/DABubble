@@ -2,13 +2,14 @@
     position: absolute
     animation: hideanimation 4.2s
     opacity: 0
-    z-index: 10
-    display: none
+    z-index: -10
 
 @keyframes hideanimation
     0%
+        z-index: 100
         opacity: 1
     90%
+        z-index: 100
         opacity: 1
     100%
         opacity: 0

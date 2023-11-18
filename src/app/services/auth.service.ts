@@ -1,7 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import {
   Auth,
-  getAuth,
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithRedirect,
@@ -16,7 +15,6 @@ import { AngularFireStorage } from '@angular/fire/compat/storage';
 import {
   Observable,
   catchError,
-  finalize,
   last,
   switchMap,
   throwError,
@@ -103,5 +101,15 @@ export class AuthService {
     .catch(()=> {
       return null;
     })
+  }
+
+  logOut(){
+    this._auth.signOut().then(() => {
+      console.log('GJ');
+      
+    }, () => {
+      console.log('BasdasdasdasJ');
+      // An error happened.
+    });
   }
 }
