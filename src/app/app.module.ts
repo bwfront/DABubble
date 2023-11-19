@@ -26,6 +26,8 @@ import { ProfilePopUpComponent } from './UserAppComponents/profile-pop-up/profil
 import { PopUpMenuComponent } from './UserAppComponents/pop-up-menu/pop-up-menu.component';
 import { ChanelMenuComponent } from './UserAppComponents/chanel-menu/chanel-menu.component';
 import { CreateChannelPopUpComponent } from './UserAppComponents/create-channel-pop-up/create-channel-pop-up.component';
+import { ChatComponent } from './UserAppComponents/chat/chat.component';
+import { SecondaryChatComponent } from './UserAppComponents/secondary-chat/secondary-chat.component';
 
 const firebaseConfig = {
   projectId: 'dabubble-1a43e',
@@ -54,6 +56,8 @@ const firebaseConfig = {
     PopUpMenuComponent,
     ChanelMenuComponent,
     CreateChannelPopUpComponent,
+    ChatComponent,
+    SecondaryChatComponent,
   ],
   imports: [
     BrowserModule,
