@@ -10,10 +10,10 @@
         <app-searchbar></app-searchbar>
         <app-profile (click)="profilePopUpOpen = !profilePopUpOpen"></app-profile>
     </div>
-    <div class="profile-popup" *ngIf="profilePopUpOpen">
-        <app-pop-up-menu></app-pop-up-menu>
-    </div>
     <div class="dabubble-content">
+        <div class="profile-popup" *ngIf="profilePopUpOpen">
+            <app-pop-up-menu></app-pop-up-menu>
+        </div>
         <div class="channels">
             <app-chanel-menu class="channels"></app-chanel-menu>
         </div>

@@ -15,10 +15,20 @@
                 +
             </div>
         </div>
-
         <div *ngIf="channelOpen">
             <span class="channel" *ngFor="let channel of channels"><div class="tag">#</div> {{ channel.data.name }}</span>
             <div class="createchannel" (click)="createChannelOpen()"><div class="createimg"></div>Channel hinzufügen</div>
+        </div>
+
+        <div class="head">
+            <div class="left-head" (click)="usersChannelOpen = !usersChannelOpen">
+                <div class="arrow" [ngStyle]="{'transform': usersChannelOpen ? 'rotate(0deg)' : 'rotate(270deg)'}"></div>
+                <div class="users"></div>
+                <div>Direktnachrichten</div>
+            </div>
+        </div>
+        <div *ngIf="usersChannelOpen" class="users-con"  [ngClass]="{'users-con-channel': !channelOpen}">
+            <div class="user" *ngFor="let user of users"><div class="avatar"><img src="{{ user.data.avatarURl }}" alt=""></div> {{ user.data.realName }} <span *ngIf="uid === user.data.uid">(Du)</span></div>
         </div>
     </div>
 </div>

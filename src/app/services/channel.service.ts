@@ -13,8 +13,8 @@ export class ChannelService {
     
   }
 
-  getChannels(): Observable<any[]> {
-    return this.firestore.collection('channels').snapshotChanges().pipe(
+  fetchData(collection: string): Observable<any[]> {
+    return this.firestore.collection(collection).snapshotChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.doc.data();
         const id = a.payload.doc.id;

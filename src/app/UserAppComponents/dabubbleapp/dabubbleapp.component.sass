@@ -3,7 +3,7 @@
 
 .header-con
     display: flex
-    justify-content: space-between   
+    justify-content: space-between
     align-items: center
 
 .logo-con
@@ -24,6 +24,18 @@
     width: 100%
     height: 100%
 
+.dabubble-content
+    margin-top: 20px
+    .channels
+        z-index: 100
+        width: 366px
+
+.popup
+    z-index: 1000
+    position: absolute
+    width: 100vw
+    height: 100vh
+
 @media  ( max-width: 485px )
     .dabubble-content
         .channels
@@ -41,14 +53,3 @@
         font-size: 23px
         font-weight: 600
 
-.dabubble-content
-    margin-top: 20px
-    .channels
-        width: 366px
-
-
-.popup
-    z-index: 100
-    position: absolute
-    width: 100vw
-    height: 100vh

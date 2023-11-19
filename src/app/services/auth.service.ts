@@ -45,13 +45,13 @@ export class AuthService {
       email.trim(),
       password.trim()
     ).then((userCredential) => {
-      return this.signUpName(userCredential, realName, avatarURl).then(
+      return this.signUpName(userCredential, realName, avatarURl, email).then(
         () => userCredential
       );
     });
   }
 
-  signUpName(userCredential: any, realName: string, avatarURl: string) {
+  signUpName(userCredential: any, realName: string, avatarURl: string, email: string) {
     return updateProfile(userCredential.user, {
       displayName: realName,
     }).then(() => {
@@ -59,6 +59,8 @@ export class AuthService {
       return setDoc(userRef, {
         realName: realName,
         avatarURl: avatarURl,
+        uid: userCredential.user.uid,
+        email: email,
       });
     });
   }

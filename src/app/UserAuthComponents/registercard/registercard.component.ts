@@ -52,8 +52,7 @@ export class RegistercardComponent {
           this.userName,
           this.choosedAvatar
         )
-        .then((userCredential) => {
-          console.log('Register in as:', userCredential.user);
+        .then(() => {
           this.loginpage.logincard = true;
           this.loginpage.showPopUpMessage('Konto erfolgreich erstellt!');
         })
@@ -73,7 +72,6 @@ export class RegistercardComponent {
       this.authService.uploadFile(file).subscribe(
         (url) => {
           this.choosedAvatar = url;
-          console.log('Uploaded File URL:', url);
         },
         (error) => console.error('Error uploading file:', error)
       );

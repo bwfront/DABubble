@@ -4,6 +4,7 @@ import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 export type UserData = {
   realName: string;
   avatarURl: string;
+  uid: string;
 };
 
 @Injectable({
@@ -21,6 +22,7 @@ export class DataService {
         return {
           realName: data.realName,
           avatarURl: data.avatarURl,
+          uid: data.uid
         };
       } else {
         console.log('No User Found');
