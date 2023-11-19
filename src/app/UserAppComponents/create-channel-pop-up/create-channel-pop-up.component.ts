@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { DabubbleappComponent } from '../dabubbleapp/dabubbleapp.component';
+import { ChannelService } from 'src/app/services/channel.service';
 
 @Component({
   selector: 'app-create-channel-pop-up',
@@ -12,11 +13,13 @@ export class CreateChannelPopUpComponent {
     description: '',
   };
 
-  constructor(private dabubble: DabubbleappComponent){}
+  constructor(private dabubble: DabubbleappComponent, private channelService: ChannelService){}
 
   createChannel() {
-    console.log('Channel Created:', this.channel);
-
+    this.channelService.createChannel(this.channel.name, this.channel.description).then(() =>
+    {
+      this.closePopUp()
+    });
   }
 
   closePopUp(){

@@ -3,6 +3,14 @@
     justify-content: center
     align-items: center
     height: 100%
+    animation: opcaityIn 255ms ease-in-out
+    opacity: 1
+    margin-right: 60px
+@keyframes opcaityIn
+    0%
+        opacity: 0
+    100%
+        opacity: 1
 
 .create-popup
     width: 750px
@@ -10,6 +18,7 @@
     padding: 30px
     border-radius: 30px
     background-color: #ffffff
+
 .head
     display: flex
     justify-content: space-between
@@ -59,3 +68,12 @@ input
     top: -30px
     position: absolute
     background-color: #00000030
+
+@media  ( max-width: 485px )
+    .create-popup
+        width: calc(100% - 60px) !important
+        left: -30px
+        top: -30px
+        position: absolute
+        height: 100vh
+        border-radius: 0px
