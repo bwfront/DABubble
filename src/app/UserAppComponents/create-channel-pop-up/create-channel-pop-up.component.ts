@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { DabubbleappComponent } from '../dabubbleapp/dabubbleapp.component';
 
 @Component({
   selector: 'app-create-channel-pop-up',
@@ -10,9 +11,15 @@ export class CreateChannelPopUpComponent {
     name: '',
     description: '',
   };
-  
+
+  constructor(private dabubble: DabubbleappComponent){}
+
   createChannel() {
     console.log('Channel Created:', this.channel);
 
+  }
+
+  closePopUp(){
+    this.dabubble.createChannelOpen = false;
   }
 }

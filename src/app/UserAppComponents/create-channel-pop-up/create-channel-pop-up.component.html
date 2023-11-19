@@ -2,7 +2,7 @@
     <div class="create-popup">
         <div class="head">
             <div class="heading">Channel erstellen</div>
-            <div>
+            <div (click)="closePopUp()">
                 <img src="assets/images/close.png" alt="close">
             </div>
         </div>
@@ -20,5 +20,5 @@
             </div>
         </form>
     </div>
-    <div class="bg"></div>
+    <div class="bg" (click)="closePopUp()"></div>
 </div>

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ChannelService } from 'src/app/services/channel.service';
+import { DabubbleappComponent } from '../dabubbleapp/dabubbleapp.component';
 
 @Component({
   selector: 'app-chanel-menu',
@@ -11,7 +12,7 @@ export class ChanelMenuComponent {
   channelOpen: boolean = true;
   channels: any[] = [];
   private subscription: Subscription = new Subscription();
-  constructor(private channelService: ChannelService) {}
+  constructor(private channelService: ChannelService, private dabubble: DabubbleappComponent) {}
 
   ngOnInit() {
     this.loadChannels();
@@ -27,5 +28,9 @@ export class ChanelMenuComponent {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  createChannelOpen(){
+    this.dabubble.createChannelOpen = true;
   }
 }

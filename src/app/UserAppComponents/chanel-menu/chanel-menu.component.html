@@ -11,14 +11,14 @@
                 <div class="workspace"></div>
                 <div>Channels</div>
             </div>
-            <div class="right-head">
+            <div class="right-head" (click)="createChannelOpen()">
                 +
             </div>
         </div>
 
         <div *ngIf="channelOpen">
             <span class="channel" *ngFor="let channel of channels"><div class="tag">#</div> {{ channel.data.name }}</span>
-            <div class="createchannel"><div class="createimg"></div>Channel hinzufügen</div>
+            <div class="createchannel" (click)="createChannelOpen()"><div class="createimg"></div>Channel hinzufügen</div>
         </div>
     </div>
 </div>

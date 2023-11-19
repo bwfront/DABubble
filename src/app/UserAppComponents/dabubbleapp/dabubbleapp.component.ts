@@ -7,4 +7,5 @@ import { Component } from '@angular/core';
 })
 export class DabubbleappComponent {
   profilePopUpOpen: boolean = false;
+  createChannelOpen: boolean = false;
 }
