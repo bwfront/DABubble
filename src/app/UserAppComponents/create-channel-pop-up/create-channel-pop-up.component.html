@@ -1,0 +1,24 @@
+<div class="createchannel-con">
+    <div class="create-popup">
+        <div class="head">
+            <div class="heading">Channel erstellen</div>
+            <div>
+                <img src="assets/images/close.png" alt="close">
+            </div>
+        </div>
+        <div class="head-description">
+            Channel erstellen Channels dienen deinem Team zur Kommunikatio ob. Am besten sollen sie themenbezogen sein
+            #marketing zum Beispiel.
+        </div>
+        <form #channelForm="ngForm" (ngSubmit)="createChannel()">
+            <div class="createform-text">Channel-Name</div>
+            <input type="text" placeholder="z.B. Kooperationsprojekte" name="channelName" [(ngModel)]="channel.name" required>
+            <div class="createform-text">Beschreibung<span>(optional)</span></div>
+            <input type="text" placeholder="Dein Text hier" name="description" [(ngModel)]="channel.description">
+            <div class="login-button-con">
+                <button class="login" type="submit" [disabled]="!channelForm.valid">Erstellen</button>
+            </div>
+        </form>
+    </div>
+    <div class="bg"></div>
+</div>

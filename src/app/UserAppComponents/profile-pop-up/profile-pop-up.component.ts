@@ -53,6 +53,7 @@ export class ProfilePopUpComponent {
   changeUserInfo() {
     this.auth.changeEmail(this.mail).then(() => {
       this.auth.changeName(this.name).then(() => {
+        this.auth.logOut();
         this.local.remove('currentUser');
         this.router.navigate(['/']);
       });

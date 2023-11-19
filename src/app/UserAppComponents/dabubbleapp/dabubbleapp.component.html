@@ -1,4 +1,7 @@
 <div class="dabubble-con">
+    <div class="popup">
+        <app-create-channel-pop-up></app-create-channel-pop-up>
+    </div>
     <div class="header-con">
         <div class="logo-con">
             <img class="logo" src="assets/images/login/logo.png" alt="logo">
@@ -9,6 +12,11 @@
     </div>
     <div class="profile-popup" *ngIf="profilePopUpOpen">
         <app-pop-up-menu></app-pop-up-menu>
+    </div>
+    <div class="dabubble-content">
+        <div class="channels">
+            <app-chanel-menu class="channels"></app-chanel-menu>
+        </div>
     </div>
 </div>
 

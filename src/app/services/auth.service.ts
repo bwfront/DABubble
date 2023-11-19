@@ -108,24 +108,23 @@ export class AuthService {
     let current = this._auth.currentUser;
     if (current) {
       return updateEmail(current, newEmail)
-        .then(() => {
-          this.logOut();
-        })
         .catch((error) => {
           console.error(error);
         });
+    }else{
+      return Promise.reject('No current user');
     }
-    return Promise.reject('No current user');
   }
 
   changeName(name: string) {
     let current = this._auth.currentUser;
     if (current) {
-      updateProfile(current, {
-        displayName: name
-      })
+      return updateProfile(current, { displayName: name })
+        .then(() => 'Profile updated successfully')
+        .catch(error => Promise.reject(error)); 
+    } else {
+      return Promise.reject('No current user');
     }
-    return Promise.reject('No current user');
   }
 
 }

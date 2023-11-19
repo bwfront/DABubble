@@ -1,0 +1,24 @@
+<div class="channels-con">
+    <div class="header">
+        <div class="channelimg"><img src="assets/images/channel/workspace_logo.png" alt="Chanel Image"></div>
+        <div class="head">Code learning</div>
+        <div class="newmessage"></div>
+    </div>
+    <div class="channels">
+        <div class="head">
+            <div class="left-head" (click)="channelOpen = !channelOpen">
+                <div class="arrow" [ngStyle]="{'transform': channelOpen ? 'rotate(0deg)' : 'rotate(270deg)'}"></div>
+                <div class="workspace"></div>
+                <div>Channels</div>
+            </div>
+            <div class="right-head">
+                +
+            </div>
+        </div>
+
+        <div *ngIf="channelOpen">
+            <span class="channel" *ngFor="let channel of channels"><div class="tag">#</div> {{ channel.data.name }}</span>
+            <div class="createchannel"><div class="createimg"></div>Channel hinzufügen</div>
+        </div>
+    </div>
+</div>
