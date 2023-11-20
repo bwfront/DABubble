@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ChatService } from 'src/app/services/chat.service';
 import { LocalStorageService } from 'src/app/services/localstorage.service';
+import { Message } from 'src/app/models/message.model'; 
 
 @Component({
   selector: 'app-chat',
@@ -12,6 +13,7 @@ export class ChatComponent {
   channel: any;
   currentId: string = '';
   message: string = '';
+  messages: Message[] = [];
   constructor(private chatService: ChatService, private local: LocalStorageService) {}
 
   ngOnInit() {
@@ -20,6 +22,7 @@ export class ChatComponent {
         this.channel = channel
         this.groupName = channel.group_name;
         this.currentId = channel.id
+        this.loadMessages();
       } else {
         this.groupName = 'Erstellen Sie Ihren ersten Gruppenchat!';
       }
@@ -36,5 +39,14 @@ export class ChatComponent {
       this.chatService.sendMessage(this.currentId, this.getUid(),  this.message)
     }
     this.message = '';
+  }
+
+  loadMessages() {
+    if (this.currentId) {
+      this.chatService.getMessages(this.currentId).subscribe(messages => {
+        this.messages = messages;
+        console.log(messages);
+      });
+    }
   }
 }

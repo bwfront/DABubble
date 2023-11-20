@@ -86,7 +86,6 @@ export class ChanelMenuComponent {
     this.subscription.add(
       this.channelService.fetchData('users').subscribe((users) => {
         this.users = users;
-        console.log(users);
       })
     );
   }
