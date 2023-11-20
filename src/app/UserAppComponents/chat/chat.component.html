@@ -6,10 +6,10 @@
     </div>
     <div class="chat"></div>
     <div class="input-chat">
-        <textarea type="text" placeholder="Nachricht an #Entwicklerteam"></textarea>
+        <textarea type="text" placeholder="Nachricht an #{{ groupName }}" [(ngModel)]="message"></textarea>
         <div class="chat-icons">
             <div class="left-icons"></div>
-            <div class="send-icon"></div>
+            <div class="send-icon" (click)="sendMessage()"></div>
         </div>
     </div>
 </div>

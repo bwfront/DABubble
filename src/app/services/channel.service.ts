@@ -17,7 +17,7 @@ export class ChannelService {
       map(actions => actions.map(a => {
         const data = a.payload.doc.data();
         const id = a.payload.doc.id;
-        return { data };
+        return { data, id };
       }))
     );
   }

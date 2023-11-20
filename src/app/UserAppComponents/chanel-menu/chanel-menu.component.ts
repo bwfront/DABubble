@@ -57,16 +57,16 @@ export class ChanelMenuComponent {
       })
     );
   }
-
-  checkChannel(channels: Channel[]) {
+  checkChannel(channels: any[]) { // The type is now any[] to account for the new structure
     this.channels = [];
     channels.forEach((element) => {
-      element.data.participants.forEach((participant) => {
+      element.data.participants.forEach((participant: string) => {
         if (this.uid == participant) {
-          this.channels.push(element.data);
+          this.channels.push({ ...element.data, id: element.id });
         }
       });
     });
+  
     if (this.channels.length > 0) {
       this.chatService.updateOpenChannel(this.channels[0]);
     } else {
