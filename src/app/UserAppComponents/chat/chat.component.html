@@ -4,7 +4,14 @@
     </div>
        <div class="users-con"></div>
     </div>
-    <div class="chat"></div>
+    <div class="chat">
+        <div *ngFor="let message of messages">
+            <div>Name: {{ message.name }}</div>
+            <div>Message: {{message.text}}</div>
+            <div><img style="width: 100px; height: 100px;" src="{{ message.avatar }}" alt=""></div>
+        </div>
+
+    </div>
     <div class="input-chat">
         <textarea type="text" placeholder="Nachricht an #{{ groupName }}" [(ngModel)]="message"></textarea>
         <div class="chat-icons">
