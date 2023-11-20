@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { setDoc } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -23,10 +22,12 @@ export class ChannelService {
     );
   }
 
-  createChannel(docId: string, desc: string){
-    return this.firestore.collection("channels").doc(docId).set({
-        name: docId,
-        desc: desc,
+  createChannel(channel: any){
+    return this.firestore.collection("group_chats").doc().set({
+      created_at: new Date(),
+      group_name: channel.name,
+      description: channel.description,
+      participants: channel.participants
     })
     .then(() => {
         console.log("Document successfully written!");

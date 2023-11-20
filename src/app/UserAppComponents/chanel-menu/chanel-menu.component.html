@@ -16,7 +16,7 @@
             </div>
         </div>
         <div *ngIf="channelOpen">
-            <span class="channel" *ngFor="let channel of channels"><div class="tag">#</div> {{ channel.data.name }}</span>
+            <span class="channel" *ngFor="let channel of channels" (click)="openChannel(channel.group_name)"><div class="tag">#</div> {{ channel.group_name }}</span>
             <div class="createchannel" (click)="createChannelOpen()"><div class="createimg"></div>Channel hinzufügen</div>
         </div>
 
