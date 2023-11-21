@@ -1,7 +1,8 @@
 export interface Message {
   sender_id: string;
   text: string;
-  timestamp: string;
+  date: string;
+  time: string;
   name: any;
   avatar: any;
 }

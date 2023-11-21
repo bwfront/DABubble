@@ -14,8 +14,6 @@ export class DataService {
   private _firestore = inject(Firestore);
   
   async getUserRef(docId: string): Promise<UserData | null> {
-    console.log('asd');
-    
     try {
       const docRef = doc(this._firestore, 'users', docId);
       const docSnap = await getDoc(docRef);

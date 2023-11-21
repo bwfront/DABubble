@@ -22,7 +22,9 @@ export class ChatService {
     const message = {
       sender_id: senderId,
       text: messageText,
-      timestamp: new Date(),
+      date: this.getDate(),
+      time: this.getTime(),
+      timestamp: new Date
     };
     return this.firestore
       .collection('group_chats')
@@ -32,6 +34,26 @@ export class ChatService {
       .then(() => console.log('Message sent'))
       .catch((error) => console.error('Error sending message:', error));
   }
+
+  getDate() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth() + 1;
+    const day = now.getDate();
+    const formattedMonth = month.toString().padStart(2, '0');
+    const formattedDay = day.toString().padStart(2, '0');
+    return `${year}-${formattedMonth}-${formattedDay}`;
+  }
+
+  getTime(){
+      const now = new Date();
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+      const formattedHours = hours.toString().padStart(2, '0');
+      const formattedMinutes = minutes.toString().padStart(2, '0');
+      return `${formattedHours}:${formattedMinutes}`;
+    }
+  
 
   getMessages(chatId: string): Observable<Message[]> {
     return this.firestore

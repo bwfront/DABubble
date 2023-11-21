@@ -15,6 +15,7 @@ export class ChatComponent {
   currentId: string = '';
   message: string = '';
   messages: Message[] = [];
+  uid: string = '';
   constructor(
     private chatService: ChatService,
     private local: LocalStorageService,
@@ -33,6 +34,7 @@ export class ChatComponent {
         this.groupName = 'Erstellen Sie Ihren ersten Gruppenchat!';
       }
     });
+    this.uid = this.getUid();
   }
 
   getUid() {
@@ -51,7 +53,6 @@ export class ChatComponent {
     if (this.currentId) {
       this.chatService.getMessages(this.currentId).subscribe((messages) => {
         this.messages = messages;
-        console.log(messages);
         this.getUserInformation();
       });
     }
@@ -69,7 +70,13 @@ export class ChatComponent {
     });
     const augmentedMessages = await Promise.all(messagePromises);
     this.messages = augmentedMessages;
-    console.log(this.messages);
-    
+  }
+
+  messageSendFrom(senderid: string) {
+    if (this.uid == senderid) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
