@@ -34,10 +34,10 @@
                 <div class="input-con">
                     <img class="lockimg" src="assets/images/login/lock.png" alt="password">
                     <input type="password" placeholder="Passwort" required [(ngModel)]="userPassword" name="password"
-                        #password="ngModel">
+                        #password="ngModel" required minlength="6">
                 </div>
                 <div class="error-input" *ngIf="password.invalid && (password.dirty || password.touched)">
-                    Falsches Passwort. Bitte noch einmal versuchen.
+                    Das Passwort muss mindestens 6 Zeichen lang sein.
                 </div>
             </div>
             <div class="formgroup">

@@ -43,4 +43,10 @@ export class LogincardComponent {
   passwordresetopen(){
     this.loginpage.passwordresetcard = true;
   }
+
+  guestLogin(){
+    this.userEmail = 'gast@mail.com'
+    this.userPassword= '123456'
+    this.userLogin();
+  }
 }
