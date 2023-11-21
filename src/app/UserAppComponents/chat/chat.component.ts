@@ -1,21 +1,39 @@
-import { Component } from '@angular/core';
+import {
+  AfterViewChecked,
+  Component,
+  ElementRef,
+  ViewChild,
+} from '@angular/core';
 import { ChatService } from 'src/app/services/chat.service';
 import { LocalStorageService } from 'src/app/services/localstorage.service';
 import { Message } from 'src/app/models/message.model';
 import { DataService } from 'src/app/services/data.service';
+
+interface MessageGroup {
+  label: string;
+  messages: Message[];
+}
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.sass'],
 })
-export class ChatComponent {
+export class ChatComponent implements AfterViewChecked {
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+
+  @ViewChild('chatContainer') private chatContainer!: ElementRef;
+
   groupName: string = '';
   channel: any;
   currentId: string = '';
   message: string = '';
   messages: Message[] = [];
   uid: string = '';
+  messageGroups: MessageGroup[] = [];
+
   constructor(
     private chatService: ChatService,
     private local: LocalStorageService,
@@ -42,6 +60,13 @@ export class ChatComponent {
     return data.user.uid;
   }
 
+  private scrollToBottom(): void {
+    try {
+      this.chatContainer.nativeElement.scrollTop =
+        this.chatContainer.nativeElement.scrollHeight;
+    } catch (err) {}
+  }
+
   sendMessage() {
     if (this.message != '') {
       this.chatService.sendMessage(this.currentId, this.getUid(), this.message);
@@ -56,6 +81,7 @@ export class ChatComponent {
         this.getUserInformation();
       });
     }
+    this.scrollToBottom();
   }
 
   async getUserInformation() {
@@ -70,7 +96,44 @@ export class ChatComponent {
     });
     const augmentedMessages = await Promise.all(messagePromises);
     this.messages = augmentedMessages;
+    this.messageGroups = this.processMessages(this.messages);
   }
+
+  processMessages(messages: Message[]): MessageGroup[] {
+    const groups: MessageGroup[] = [];
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const formatDate = (date: Date) => date.toISOString().split('T')[0];
+  
+    messages.forEach(message => {
+      const messageDate = new Date(message.date);
+      let label = formatDate(messageDate);
+  
+      if (formatDate(today) === label) {
+        label = 'Today';
+      } else if (formatDate(yesterday) === label) {
+        label = 'Yesterday';
+      }
+  
+      let group = groups.find(g => g.label === label);
+      if (!group) {
+        group = { label, messages: [] };
+        groups.push(group);
+      }
+      group.messages.push(message);
+    });
+  
+    // Sort groups based on date
+    return groups.sort((a, b) => {
+      if (a.label === 'Today') return 1;
+      if (b.label === 'Today') return -1;
+      if (a.label === 'Yesterday') return 1;
+      if (b.label === 'Yesterday') return -1;
+      return new Date(a.label) > new Date(b.label) ? 1 : -1;
+    });
+  }
+  
 
   messageSendFrom(senderid: string) {
     if (this.uid == senderid) {
@@ -80,3 +143,4 @@ export class ChatComponent {
     }
   }
 }
+

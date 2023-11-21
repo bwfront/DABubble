@@ -5,4 +5,5 @@ export interface Message {
   time: string;
   name: any;
   avatar: any;
+  displayDate?: string;
 }
