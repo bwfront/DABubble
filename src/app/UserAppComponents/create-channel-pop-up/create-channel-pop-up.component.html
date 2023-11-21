@@ -1,22 +1,52 @@
 <div class="createchannel-con">
     <div class="create-popup">
-        <div class="head">
+        <div class="head" *ngIf="!addUserForm">
             <div class="heading">Channel erstellen</div>
             <div (click)="closePopUp()">
                 <img src="assets/images/close.png" alt="close">
             </div>
         </div>
-        <div class="head-description">
+        <div class="head" *ngIf="addUserForm">
+            <div class="heading">Leute hinzufügen</div>
+            <div (click)="addUserForm = false">
+                <img src="assets/images/close.png" alt="close">
+            </div>
+        </div>
+        <div class="head-description" *ngIf="!addUserForm">
             Channel erstellen Channels dienen deinem Team zur Kommunikatio ob. Am besten sollen sie themenbezogen sein
             #marketing zum Beispiel.
         </div>
-        <form #channelForm="ngForm" (ngSubmit)="createChannel()">
+        <form #channelForm="ngForm" (ngSubmit)="addUserForm = true" *ngIf="!addUserForm">
             <div class="createform-text">Channel-Name</div>
-            <input type="text" placeholder="z.B. Kooperationsprojekte" name="channelName" [(ngModel)]="channel.name" required>
+            <input class="textinput" type="text" placeholder="z.B. Kooperationsprojekte" name="channelName"
+                [(ngModel)]="channel.name" required>
             <div class="createform-text">Beschreibung<span>(optional)</span></div>
-            <input type="text" placeholder="Dein Text hier" name="description" [(ngModel)]="channel.description">
+            <input class="textinput" type="text" placeholder="Dein Text hier" name="description"
+                [(ngModel)]="channel.description">
             <div class="login-button-con">
                 <button class="login" type="submit" [disabled]="!channelForm.valid">Erstellen</button>
+            </div>
+        </form>
+        <form #addUser="ngForm" (ngSubmit)="createChannel()" *ngIf="addUserForm">
+            <div class="addUserForm">
+                <div class="form-g">
+                    <input type="radio" id="option1" name="option" value="all" [(ngModel)]="selectedOption" required>
+                    <label for="option1">Alle Mitglieder hinzufügen</label><br>
+                </div>
+                <div class="form-g">
+                    <input type="radio" id="option2" name="option" value="ownAdded" [(ngModel)]="selectedOption" required>
+                    <label for="option2">Bestimmte Mitglieder hinzufügen</label><br>
+                </div>
+                <div *ngIf="selectedOption == 'ownAdded'">
+                    <input class="textinput" type="text" placeholder="Namen eingeben" name="channelName"
+                    [(ngModel)]="searchuser">
+                    <div class="users">
+                        <div class="user" *ngFor="let user of users" (click)="addUserToChannel(user.data.uid)"><div class="avatar"><img src="{{ user.data.avatarURl }}" alt=""></div> {{ user.data.realName }} <span *ngIf="uid === user.data.uid">(Du)</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="login-button-con">
+                <button class="login" type="submit" [disabled]="!addUser.valid">Erstellen</button>
             </div>
         </form>
     </div>
