@@ -9,11 +9,13 @@ import { Message } from '../models/message.model';
 })
 export class ChatService {
   private _openChannel = new BehaviorSubject<any>(null);
+  currentChannel: any[] = [];
 
   public readonly openChannel = this._openChannel.asObservable();
 
   public updateOpenChannel(channel: any) {
     this._openChannel.next(channel);
+    this.currentChannel = channel;
   }
 
   constructor(private firestore: AngularFirestore) {}
@@ -24,7 +26,7 @@ export class ChatService {
       text: messageText,
       date: this.getDate(),
       time: this.getTime(),
-      timestamp: new Date
+      timestamp: new Date(),
     };
     return this.firestore
       .collection('group_chats')
@@ -45,15 +47,14 @@ export class ChatService {
     return `${year}-${formattedMonth}-${formattedDay}`;
   }
 
-  getTime(){
-      const now = new Date();
-      const hours = now.getHours();
-      const minutes = now.getMinutes();
-      const formattedHours = hours.toString().padStart(2, '0');
-      const formattedMinutes = minutes.toString().padStart(2, '0');
-      return `${formattedHours}:${formattedMinutes}`;
-    }
-  
+  getTime() {
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    const formattedHours = hours.toString().padStart(2, '0');
+    const formattedMinutes = minutes.toString().padStart(2, '0');
+    return `${formattedHours}:${formattedMinutes}`;
+  }
 
   getMessages(chatId: string): Observable<Message[]> {
     return this.firestore

@@ -1,0 +1,57 @@
+<div class="createchannel-con">
+    <div class="create-popup">
+        <div class="head">
+            <div class="heading"># {{ name }}</div>
+            <div (click)="closePopUp()">
+                <img src="assets/images/close.png" alt="close">
+            </div>
+        </div>
+
+        <div *ngIf="!editName" class="edit-con">
+            <div class="edit-head">
+                <div class="createform-text">Kanal-Name</div>
+                <div class="edit-btn" (click)="editName = true">Bearbeiten</div>
+            </div>
+            <div class="value"># {{ name }}</div>
+        </div>
+        <div *ngIf="editName">
+            <div class="edit-head edit">
+                <div class="createform-text">Kanal-Name</div>
+                <div class="edit-btn" (click)="editName = false">Speichern</div>
+            </div>
+            <input class="textinput" type="text" placeholder="z.B. Kooperationsprojekte" name="channelName"
+                [(ngModel)]="name" required>
+        </div>
+
+        <div *ngIf="!editDescription" class="edit-con">
+            <div class="edit-head">
+                <div class="createform-text">Beschreibung<span>(optional)</span></div>
+                <div class="edit-btn" (click)="editDescription = true">Bearbeiten</div>
+            </div>
+            <div class="value">{{ description }}</div>
+            <div class="create-by" *ngIf="!editDescription">
+                <div class="createform-text">Erstell von</div>
+                <div class="name">Ersteller name</div>
+            </div>
+        </div>
+        <div *ngIf="editDescription">
+            <div class="edit-head edit">
+                <div class="createform-text">Beschreibung<span>(optional)</span></div>
+                <div class="edit-btn" (click)="editDescription = false">Speichern</div>
+            </div>
+            <input class="textinput" type="text" placeholder="Dein Text hier" name="description"
+                [(ngModel)]="description">
+        </div>
+        <div class="create-by" *ngIf="editDescription">
+            <div class="createform-text">Erstell von</div>
+            <div class="name">Ersteller name</div>
+        </div>
+
+
+
+        <div class="login-button-con">
+            <button class="login" (click)="leaveChannel()">Kanal verlassen</button>
+        </div>
+    </div>
+    <div class="bg" (click)="closePopUp()"></div>
+</div>

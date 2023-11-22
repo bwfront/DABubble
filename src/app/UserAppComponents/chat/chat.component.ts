@@ -34,6 +34,8 @@ export class ChatComponent implements AfterViewChecked {
   uid: string = '';
   messageGroups: MessageGroup[] = [];
 
+  openEditChannel: boolean = false;
+
   constructor(
     private chatService: ChatService,
     private local: LocalStorageService,

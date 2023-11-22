@@ -9,7 +9,6 @@ import { map } from 'rxjs/operators';
 export class ChannelService {
 
   constructor(private firestore: AngularFirestore) {
-    
   }
 
   fetchData(collection: string): Observable<any[]> {
@@ -27,10 +26,8 @@ export class ChannelService {
       created_at: new Date(),
       group_name: channel.name,
       description: channel.description,
-      participants: channel.participants
-    })
-    .then(() => {
-        console.log("Document successfully written!");
+      participants: channel.participants,
+      createdby: channel.createdby,
     })
     .catch((error) => {
         console.error("Error writing document: ", error);

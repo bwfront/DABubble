@@ -27,6 +27,7 @@ export class CreateChannelPopUpComponent {
     name: '',
     description: '',
     participants: [''],
+    createdby: this.getUid()
   };
   selectedOption: any;
   selectedUsers: User[] = [];

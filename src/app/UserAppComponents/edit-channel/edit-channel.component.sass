@@ -69,63 +69,38 @@
     position: absolute
     background-color: #00000030
 
-.addUserForm
-    width: 100%
-    display: flex
-    flex-direction: column
-    gap: 20px
-    .form-g
-        gap: 5px
-        align-items: center
-        display: flex
-.users
-    max-height: 150px
-    overflow-y: scroll
-.user
-    margin-left: 10px
-    margin-bottom: 10px
-    font-size: 18px
+.edit-con
+    padding: 10px 20px 20px 20px
+    border: 1px solid #ADB0D9
+    border-radius: 30px
+    margin: 10px 0
+
+.edit-head
     display: flex
     align-items: center
-    gap: 15px
-    cursor: pointer
-    padding: 6px 20px 0 20px
-    border-radius: 30px
-    &:hover
-        color: #535AF1
-        background-color: #ECEEFE
-    span
-        margin-left: -10px
-    .avatar
-        img
-            width: 50px
-            height: 50px
-            object-fit: cover
-            border-radius: 50%
-
-.select
-    cursor: unset
-    color: #000000
-    background-color: #ECEEFE
-    &:hover
-        color: #000000
-
-.selected-users
-    display: flex
-    gap: 10px
-    overflow-x: scroll
-    .remove-user
+    justify-content: space-between
+    .createform-text
+        font-size: 16px
+    .edit-btn
         cursor: pointer
-        color: #686868
-        font-weight: 500
-        margin-left: 4px
+        color: #797EF3
         &:hover
-            font-weight: 700
             color: #535AF1
-            
-.errorChannel
-    color: #ED1E79
 
+.edit
+    .createform-text
+        font-size: 18px
+
+.create-by
+    margin: 20px 0 10px 0
+    padding: 10px
+    border-top: 1px solid #ADB0D9
+    .name
+        cursor: pointer
+        font-size: 22px
+        color: #797EF3
+        &:hover
+            color: #535AF1
 
 @media  ( max-width: 485px )
     .create-popup

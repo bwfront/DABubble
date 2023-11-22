@@ -4,31 +4,33 @@
         <div class="head">Code learning</div>
         <div class="newmessage"></div>
     </div>
-    <div class="channels">
-        <div class="head">
-            <div class="left-head" (click)="channelOpen = !channelOpen">
-                <div class="arrow" [ngStyle]="{'transform': channelOpen ? 'rotate(0deg)' : 'rotate(270deg)'}"></div>
-                <div class="workspace"></div>
-                <div>Kanäle</div>
+    <div class="sroll">
+        <div class="channels">
+            <div class="head">
+                <div class="left-head" (click)="channelOpen = !channelOpen">
+                    <div class="arrow" [ngStyle]="{'transform': channelOpen ? 'rotate(0deg)' : 'rotate(270deg)'}"></div>
+                    <div class="workspace"></div>
+                    <div>Kanäle</div>
+                </div>
+                <div class="right-head" (click)="createChannelOpen()">
+                    +
+                </div>
             </div>
-            <div class="right-head" (click)="createChannelOpen()">
-                +
+            <div *ngIf="channelOpen">
+                <span class="channel" *ngFor="let channel of channels" (click)="openChannel(channel.group_name)"><div class="tag">#</div> {{ channel.group_name }}</span>
+                <div class="createchannel" (click)="createChannelOpen()"><div class="createimg"></div>Channel hinzufügen</div>
             </div>
-        </div>
-        <div *ngIf="channelOpen">
-            <span class="channel" *ngFor="let channel of channels" (click)="openChannel(channel.group_name)"><div class="tag">#</div> {{ channel.group_name }}</span>
-            <div class="createchannel" (click)="createChannelOpen()"><div class="createimg"></div>Channel hinzufügen</div>
-        </div>
-
-        <div class="head">
-            <div class="left-head" (click)="usersChannelOpen = !usersChannelOpen">
-                <div class="arrow" [ngStyle]="{'transform': usersChannelOpen ? 'rotate(0deg)' : 'rotate(270deg)'}"></div>
-                <div class="users"></div>
-                <div>Direktnachrichten</div>
+            
+            <div class="head">
+                <div class="left-head" (click)="usersChannelOpen = !usersChannelOpen">
+                    <div class="arrow" [ngStyle]="{'transform': usersChannelOpen ? 'rotate(0deg)' : 'rotate(270deg)'}"></div>
+                    <div class="users"></div>
+                    <div>Direktnachrichten</div>
+                </div>
             </div>
-        </div>
-        <div *ngIf="usersChannelOpen" class="users-con"  [ngClass]="{'users-con-channel': !channelOpen}">
-            <div class="user" *ngFor="let user of users"><div class="avatar"><img src="{{ user.data.avatarURl }}" alt=""></div> {{ user.data.realName }} <span *ngIf="uid === user.data.uid">(Du)</span></div>
+            <div *ngIf="usersChannelOpen" class="users-con"  [ngClass]="{'users-con-channel': !channelOpen}">
+                <div class="user" *ngFor="let user of users"><div class="avatar"><img src="{{ user.data.avatarURl }}" alt=""></div> {{ user.data.realName }} <span *ngIf="uid === user.data.uid">(Du)</span></div>
+            </div>
         </div>
     </div>
 </div>
