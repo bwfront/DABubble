@@ -20,6 +20,7 @@ export class CreateChannelPopUpComponent {
   addUserForm: boolean = false;
   searchuser: string = '';
   users: any[] = [];
+  channelExistError: boolean = false;
   filteredUsers: any[] = [];
   channels: any[] = [];
   channel = {
@@ -82,11 +83,22 @@ export class CreateChannelPopUpComponent {
   checkChannelExist() {
     for (let i = 0; i < this.channels.length; i++) {
       if (this.channels[i].group_name === this.channel.name) {
-        // Error einfügen Pop Up Service?
-        return false; // Wert wurde im Array gefunden, daher return false
+        return false;
       }
     }
-    return true; // Wert wurde nicht im Array gefunden, daher return true
+    return true;
+  }
+
+  openAddUserForm(){
+    if(this.checkChannelExist()){
+      this.addUserForm = true
+    }else{
+      this.channelExistError = true
+      setTimeout(() =>
+      {
+        this.channelExistError = false
+      }, 3000)
+    }
   }
 
   loadUsers() {

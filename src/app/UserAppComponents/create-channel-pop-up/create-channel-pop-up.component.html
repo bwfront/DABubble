@@ -1,7 +1,7 @@
 <div class="createchannel-con">
     <div class="create-popup">
         <div class="head" *ngIf="!addUserForm">
-            <div class="heading">Channel erstellen</div>
+            <div class="heading">Kanal erstellen</div>
             <div (click)="closePopUp()">
                 <img src="assets/images/close.png" alt="close">
             </div>
@@ -13,13 +13,14 @@
             </div>
         </div>
         <div class="head-description" *ngIf="!addUserForm">
-            Channel erstellen Channels dienen deinem Team zur Kommunikatio ob. Am besten sollen sie themenbezogen sein
+            Kanal erstellen Kanäle dienen deinem Team zur Kommunikatio ob. Am besten sollen sie themenbezogen sein
             #marketing zum Beispiel.
         </div>
-        <form #channelForm="ngForm" (ngSubmit)="addUserForm = true" *ngIf="!addUserForm">
-            <div class="createform-text">Channel-Name</div>
+        <form #channelForm="ngForm" (ngSubmit)="openAddUserForm()" *ngIf="!addUserForm">
+            <div class="createform-text">Kanal-Name</div>
             <input class="textinput" type="text" placeholder="z.B. Kooperationsprojekte" name="channelName"
                 [(ngModel)]="channel.name" required>
+                <span class="errorChannel" *ngIf="channelExistError">Dieser Kanal existiert bereits!</span>
             <div class="createform-text">Beschreibung<span>(optional)</span></div>
             <input class="textinput" type="text" placeholder="Dein Text hier" name="description"
                 [(ngModel)]="channel.description">
