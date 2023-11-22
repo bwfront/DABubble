@@ -4,6 +4,12 @@ import { ChannelService } from 'src/app/services/channel.service';
 import { LocalStorageService } from 'src/app/services/localstorage.service';
 import { Subscription } from 'rxjs';
 
+interface User {
+  uid: string;
+  avatarURl: string;
+  realName: string;
+}
+
 @Component({
   selector: 'app-create-channel-pop-up',
   templateUrl: './create-channel-pop-up.component.html',
@@ -14,6 +20,7 @@ export class CreateChannelPopUpComponent {
   addUserForm: boolean = false;
   searchuser: string = '';
   users: any[] = [];
+  filteredUsers: any[] = [];
   channels: any[] = [];
   channel = {
     name: '',
@@ -21,6 +28,7 @@ export class CreateChannelPopUpComponent {
     participants: [''],
   };
   selectedOption: any;
+  selectedUsers: User[] = [];
 
   private subscription: Subscription = new Subscription();
   constructor(
@@ -28,6 +36,23 @@ export class CreateChannelPopUpComponent {
     private channelService: ChannelService,
     private local: LocalStorageService
   ) {}
+
+
+  addUserToChannel(userData: User) {
+      if (!this.selectedUsers.find(user => user.uid === userData.uid)) {
+          this.selectedUsers.push(userData);
+          this.channel.participants.push(userData.uid)
+          this.filteredUsers = this.filteredUsers.filter(userDataUID => userDataUID.uid !== userData.uid);
+          this.searchuser = '';
+      }
+  }
+  
+  removeUser(userData: User) {
+      this.selectedUsers = this.selectedUsers.filter(user => user.uid !== userData.uid);
+      this.channel.participants = this.channel.participants.filter(userId => userId !== userData.uid);
+      this.filteredUsers.push(userData)
+  }
+
 
   getUid() {
     let data = this.local.get('currentUser');
@@ -40,9 +65,6 @@ export class CreateChannelPopUpComponent {
     this.loadChannels();
   }
 
-  addUserToChannel(uid: string) {
-    this.channel.participants.push(uid);
-  }
 
   createChannel() {
     if (this.checkChannelExist()) {
@@ -76,9 +98,26 @@ export class CreateChannelPopUpComponent {
   }
 
   checkUser(users: any[]) {
-    const filteredUsers = users.filter((u) => u.data.uid != this.uid);
-    console.log(filteredUsers);
+    const filteredUsers = users.map((u) => {
+      return {
+        uid: u.data.uid,
+        avatarURl: u.data.avatarURl,
+        realName: u.data.realName
+      };
+    }).filter(u => u.uid != this.uid);
     this.users = filteredUsers;
+    this.filterUsers();
+  }
+
+  filterUsers() {
+    if (!this.searchuser) {
+      this.filteredUsers = this.users.filter(u => !this.selectedUsers.some(su => su.uid === u.uid));
+    } else {
+      this.filteredUsers = this.users.filter(u => 
+        u.realName.toLowerCase().includes(this.searchuser.toLowerCase()) &&
+        !this.selectedUsers.some(su => su.uid === u.uid)
+      );
+    }
   }
 
   ngOnDestroy() {
