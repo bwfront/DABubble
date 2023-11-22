@@ -31,7 +31,7 @@
             <div class="value">{{ description }}</div>
             <div class="create-by" *ngIf="!editDescription">
                 <div class="createform-text">Erstell von</div>
-                <div class="name">Ersteller name</div>
+                <div class="name">{{ createdby }}</div>
             </div>
         </div>
         <div *ngIf="editDescription">

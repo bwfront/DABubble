@@ -56,6 +56,7 @@ export class CreateChannelPopUpComponent {
   }
 
 
+
   getUid() {
     let data = this.local.get('currentUser');
     return data.user.uid;
