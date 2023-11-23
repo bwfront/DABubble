@@ -3,6 +3,7 @@ import { ChatComponent } from '../chat/chat.component';
 import { ChatService } from 'src/app/services/chat.service';
 import { DataService } from 'src/app/services/data.service';
 import { ChannelService } from 'src/app/services/channel.service';
+import { LocalStorageService } from 'src/app/services/localstorage.service';
 
 @Component({
   selector: 'app-edit-channel',
@@ -21,7 +22,8 @@ export class EditChannelComponent {
     private chat: ChatComponent,
     private chatService: ChatService,
     private data: DataService,
-    private channel: ChannelService
+    private channel: ChannelService,
+    private local: LocalStorageService
   ) {}
 
   ngOnInit() {
@@ -37,7 +39,6 @@ export class EditChannelComponent {
   }
 
   async getUserCreatesBy(userId: string) {
-    console.log(userId);
     try {
       const user = await this.data.getUserRef(userId);
       this.createdby = user?.realName;
@@ -59,9 +60,15 @@ export class EditChannelComponent {
   }
 
   leaveChannel(){
-
+    this.channel.editParticipant(this.channelId, this.getUid(), false).then(() =>{
+      this.closePopUp()
+    })
   }
 
+  getUid() {
+    let data = this.local.get('currentUser');
+    return data.user.uid;
+  }
   closePopUp() {
     this.chat.openEditChannel = false;
   }

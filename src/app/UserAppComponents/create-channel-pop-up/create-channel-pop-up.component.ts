@@ -27,7 +27,7 @@ export class CreateChannelPopUpComponent {
     name: '',
     description: '',
     participants: [''],
-    createdby: this.getUid()
+    createdby: this.getUid(),
   };
   selectedOption: any;
   selectedUsers: User[] = [];
@@ -39,23 +39,26 @@ export class CreateChannelPopUpComponent {
     private local: LocalStorageService
   ) {}
 
-
   addUserToChannel(userData: User) {
-      if (!this.selectedUsers.find(user => user.uid === userData.uid)) {
-          this.selectedUsers.push(userData);
-          this.channel.participants.push(userData.uid)
-          this.filteredUsers = this.filteredUsers.filter(userDataUID => userDataUID.uid !== userData.uid);
-          this.searchuser = '';
-      }
+    if (!this.selectedUsers.find((user) => user.uid === userData.uid)) {
+      this.selectedUsers.push(userData);
+      this.channel.participants.push(userData.uid);
+      this.filteredUsers = this.filteredUsers.filter(
+        (userDataUID) => userDataUID.uid !== userData.uid
+      );
+      this.searchuser = '';
+    }
   }
-  
+
   removeUser(userData: User) {
-      this.selectedUsers = this.selectedUsers.filter(user => user.uid !== userData.uid);
-      this.channel.participants = this.channel.participants.filter(userId => userId !== userData.uid);
-      this.filteredUsers.push(userData)
+    this.selectedUsers = this.selectedUsers.filter(
+      (user) => user.uid !== userData.uid
+    );
+    this.channel.participants = this.channel.participants.filter(
+      (userId) => userId !== userData.uid
+    );
+    this.filteredUsers.push(userData);
   }
-
-
 
   getUid() {
     let data = this.local.get('currentUser');
@@ -68,17 +71,14 @@ export class CreateChannelPopUpComponent {
     this.loadChannels();
   }
 
-
   createChannel() {
     if (this.checkChannelExist()) {
-      if (this.selectedOption === 'all') {
-        this.channel.participants.push('all');
-      } else {
-        this.channel.participants.push(this.uid);
-      }
-      this.channelService.createChannel(this.channel).then(() => {
-        this.closePopUp();
-      });
+      this.channel.participants.push(this.uid);
+      this.channelService
+        .createChannel(this.channel, this.selectedOption)
+        .then(() => {
+          this.closePopUp();
+        });
     }
   }
 
@@ -91,15 +91,14 @@ export class CreateChannelPopUpComponent {
     return true;
   }
 
-  openAddUserForm(){
-    if(this.checkChannelExist()){
-      this.addUserForm = true
-    }else{
-      this.channelExistError = true
-      setTimeout(() =>
-      {
-        this.channelExistError = false
-      }, 3000)
+  openAddUserForm() {
+    if (this.checkChannelExist()) {
+      this.addUserForm = true;
+    } else {
+      this.channelExistError = true;
+      setTimeout(() => {
+        this.channelExistError = false;
+      }, 3000);
     }
   }
 
@@ -112,24 +111,29 @@ export class CreateChannelPopUpComponent {
   }
 
   checkUser(users: any[]) {
-    const filteredUsers = users.map((u) => {
-      return {
-        uid: u.data.uid,
-        avatarURl: u.data.avatarURl,
-        realName: u.data.realName
-      };
-    }).filter(u => u.uid != this.uid);
+    const filteredUsers = users
+      .map((u) => {
+        return {
+          uid: u.data.uid,
+          avatarURl: u.data.avatarURl,
+          realName: u.data.realName,
+        };
+      })
+      .filter((u) => u.uid != this.uid);
     this.users = filteredUsers;
     this.filterUsers();
   }
 
   filterUsers() {
     if (!this.searchuser) {
-      this.filteredUsers = this.users.filter(u => !this.selectedUsers.some(su => su.uid === u.uid));
+      this.filteredUsers = this.users.filter(
+        (u) => !this.selectedUsers.some((su) => su.uid === u.uid)
+      );
     } else {
-      this.filteredUsers = this.users.filter(u => 
-        u.realName.toLowerCase().includes(this.searchuser.toLowerCase()) &&
-        !this.selectedUsers.some(su => su.uid === u.uid)
+      this.filteredUsers = this.users.filter(
+        (u) =>
+          u.realName.toLowerCase().includes(this.searchuser.toLowerCase()) &&
+          !this.selectedUsers.some((su) => su.uid === u.uid)
       );
     }
   }
