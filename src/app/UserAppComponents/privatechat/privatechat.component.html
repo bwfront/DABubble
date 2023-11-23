@@ -1,7 +1,6 @@
 <div class="chat-con">
     <div class="chat-head">
-        <div class="chat-heading" (click)="openEditChannel = true"><span>#</span>{{ groupName }}<div class="arrowimg">
-            </div>
+        <div class="chat-heading"><img src="{{ avatarChat }}" alt="">{{ nameChat }}
         </div>
         <div class="users-con"></div>
     </div>
@@ -26,7 +25,7 @@
         </div>
     </div>
     <div class="input-chat">
-        <textarea type="text" placeholder="Nachricht an #{{ groupName }}" [(ngModel)]="message"></textarea>
+        <textarea type="text" placeholder="Nachricht an #{{ nameChat }}" [(ngModel)]="message"></textarea>
         <div class="chat-icons">
             <div class="left-icons"></div>
             <div class="send-icon" (click)="sendMessage()"></div>

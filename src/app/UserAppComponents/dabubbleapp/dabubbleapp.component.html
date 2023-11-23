@@ -18,7 +18,8 @@
             <app-chanel-menu class="channels"></app-chanel-menu>
         </div>
         <div class="chat">
-            <app-chat></app-chat>
+            <app-chat *ngIf="groupChat"></app-chat>
+            <app-privatechat *ngIf="!groupChat"></app-privatechat>
         </div>
         <div class="secondary-chat">
             <app-secondary-chat></app-secondary-chat>

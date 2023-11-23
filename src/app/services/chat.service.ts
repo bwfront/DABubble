@@ -20,7 +20,7 @@ export class ChatService {
 
   constructor(private firestore: AngularFirestore) {}
 
-  sendMessage(chatId: string, senderId: string, messageText: string) {
+  sendMessage(chatId: string, senderId: string, messageText: string, collection: string) {
     const message = {
       sender_id: senderId,
       text: messageText,
@@ -29,7 +29,7 @@ export class ChatService {
       timestamp: new Date(),
     };
     return this.firestore
-      .collection('group_chats')
+      .collection(collection)
       .doc(chatId)
       .collection('messages')
       .add(message)
@@ -56,9 +56,9 @@ export class ChatService {
     return `${formattedHours}:${formattedMinutes}`;
   }
 
-  getMessages(chatId: string): Observable<Message[]> {
+  getMessages(chatId: string, collection: string): Observable<Message[]> {
     return this.firestore
-      .collection('group_chats')
+      .collection(collection)
       .doc(chatId)
       .collection<Message>('messages', (ref) => ref.orderBy('timestamp', 'asc'))
       .snapshotChanges()

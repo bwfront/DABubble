@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div *ngIf="usersChannelOpen" class="users-con"  [ngClass]="{'users-con-channel': !channelOpen}">
-                <div class="user" *ngFor="let user of users"><div class="avatar"><img src="{{ user.data.avatarURl }}" alt=""></div> {{ user.data.realName }} <span *ngIf="uid === user.data.uid">(Du)</span></div>
+                <div class="user" *ngFor="let user of users" (click)="openPrivateChat(user.data.uid)"><div class="avatar"><img src="{{ user.data.avatarURl }}" alt=""></div> {{ user.data.realName }} <span *ngIf="uid === user.data.uid">(Du)</span></div>
             </div>
         </div>
     </div>

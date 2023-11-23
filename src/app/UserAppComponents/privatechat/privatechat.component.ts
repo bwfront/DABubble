@@ -18,18 +18,20 @@ interface MessageGroup {
   providedIn: 'root',
 })
 @Component({
-  selector: 'app-chat',
-  templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.sass'],
+  selector: 'app-privatechat',
+  templateUrl: './privatechat.component.html',
+  styleUrls: ['./privatechat.component.sass'],
 })
-export class ChatComponent implements AfterViewChecked {
+export class PrivatechatComponent implements AfterViewChecked {
   ngAfterViewChecked() {
     this.scrollToBottom();
   }
 
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
 
-  groupName: string = '';
+  nameChat: string = '';
+  avatarChat: string = ''
+  
   channel: any;
   currentId: string = '';
   message: string = '';
@@ -48,18 +50,29 @@ export class ChatComponent implements AfterViewChecked {
   ) {}
 
   ngOnInit() {
-    this.messages = [];
     this.chatService.openChannel.subscribe((channel) => {
-      if (channel) {
-        this.channel = channel;
-        this.groupName = channel.group_name;
-        this.currentId = channel.id;
-        this.loadMessages();
-      } else {
-        this.groupName = 'Erstellen Sie Ihren ersten Gruppenchat!';
-      }
+      this.setPrivateChatData(channel);
+      this.currentId = channel.id;
     });
     this.uid = this.getUid();
+    this.loadMessages();
+  }
+
+  setPrivateChatData(channel: any){
+    this.currentId = channel.id; // Update the current chat ID
+    this.getNameAvatar(channel);
+    this.loadMessages(); // Load messages for the new chat
+  }
+
+  getNameAvatar(channel: any){
+    channel.userIds.forEach((id: string)=> {
+      if(id != this.uid){
+        this.data.getUserRef(id).then((e) =>{
+          this.nameChat = e?.realName || '';
+          this.avatarChat = e?.avatarURl || '';
+        })
+      }
+    })
   }
 
   getUid() {
@@ -76,14 +89,15 @@ export class ChatComponent implements AfterViewChecked {
 
   sendMessage() {
     if (this.message != '') {
-      this.chatService.sendMessage(this.currentId, this.getUid(), this.message, 'group_chats');
+      this.chatService.sendMessage(this.currentId, this.getUid(), this.message, 'private_chats');
     }
     this.message = '';
   }
 
   loadMessages() {
     if (this.currentId) {
-      this.chatService.getMessages(this.currentId, 'group_chats').subscribe((messages) => {
+      this.messages = [];
+      this.chatService.getMessages(this.currentId, 'private_chats').subscribe((messages) => {
         this.messages = messages;
         this.getUserInformation();
       });
@@ -107,7 +121,7 @@ export class ChatComponent implements AfterViewChecked {
   }
 
   processMessages(messages: Message[]): MessageGroup[] {
-    const groups: MessageGroup[] = [];
+    let groups: MessageGroup[] = [];
     const today = new Date();
     const yesterday = new Date(today);
     yesterday.setDate(yesterday.getDate() - 1);
@@ -131,7 +145,6 @@ export class ChatComponent implements AfterViewChecked {
       group.messages.push(message);
     });
   
-    // Sort groups based on date
     return groups.sort((a, b) => {
       if (a.label === 'Today') return 1;
       if (b.label === 'Today') return -1;

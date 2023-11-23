@@ -4,6 +4,7 @@ import { ChannelService } from 'src/app/services/channel.service';
 import { DabubbleappComponent } from '../dabubbleapp/dabubbleapp.component';
 import { LocalStorageService } from 'src/app/services/localstorage.service';
 import { ChatService } from 'src/app/services/chat.service';
+import { PrivatechatComponent } from '../privatechat/privatechat.component';
 
 interface Channel {
   data: GroupChatData;
@@ -41,7 +42,8 @@ export class ChanelMenuComponent {
     private channelService: ChannelService,
     private dabubble: DabubbleappComponent,
     private local: LocalStorageService,
-    private chatService: ChatService
+    private chatService: ChatService,
+    private priateChat: PrivatechatComponent,
   ) {}
 
   ngOnInit() {
@@ -66,7 +68,7 @@ export class ChanelMenuComponent {
         }
       });
     });
-  
+
     if (this.channels.length > 0) {
       this.chatService.updateOpenChannel(this.channels[0]);
     } else {
@@ -74,12 +76,21 @@ export class ChanelMenuComponent {
     }
   }
 
-  openChannel(groupName: string){
-    this.channels.forEach(element => {
-      if(element.group_name == groupName){
+  openChannel(groupName: string) {
+    this.channels.forEach((element) => {
+      if (element.group_name == groupName) {
         this.chatService.updateOpenChannel(element);
+        this.dabubble.groupChat = true;
       }
     });
+  }
+
+  async openPrivateChat(userId: string) {
+    if (this.uid != userId) {
+      let element = await this.channelService.privateChat(this.uid, userId);
+      this.chatService.updateOpenChannel(element);
+      this.dabubble.groupChat = false;
+    }
   }
 
   loadUsers() {
