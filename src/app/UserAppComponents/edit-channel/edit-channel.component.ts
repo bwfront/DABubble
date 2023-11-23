@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ChatComponent } from '../chat/chat.component';
 import { ChatService } from 'src/app/services/chat.service';
 import { DataService } from 'src/app/services/data.service';
+import { ChannelService } from 'src/app/services/channel.service';
 
 @Component({
   selector: 'app-edit-channel',
@@ -19,10 +20,9 @@ export class EditChannelComponent {
   constructor(
     private chat: ChatComponent,
     private chatService: ChatService,
-    private data: DataService
+    private data: DataService,
+    private channel: ChannelService
   ) {}
-
-  leaveChannel() {}
 
   ngOnInit() {
     this.initChannelInfo();
@@ -46,8 +46,21 @@ export class EditChannelComponent {
     }
   }
 
-  changeChannelName() {}
-  changeChannelDescription() {}
+  changeChannelName() {
+    this.channel.updateChannelName(this.channelId, this.name).then(() =>{
+      this.editName = false
+    })
+  }
+
+  changeChannelDescription() {
+    this.channel.updateChannelDescription(this.channelId, this.description).then(() =>{
+      this.editDescription = false
+    })
+  }
+
+  leaveChannel(){
+
+  }
 
   closePopUp() {
     this.chat.openEditChannel = false;

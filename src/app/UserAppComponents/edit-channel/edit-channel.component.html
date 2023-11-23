@@ -17,7 +17,7 @@
         <div *ngIf="editName">
             <div class="edit-head edit">
                 <div class="createform-text">Kanal-Name</div>
-                <div class="edit-btn" (click)="editName = false">Speichern</div>
+                <div class="edit-btn" (click)="changeChannelName()">Speichern</div>
             </div>
             <input class="textinput" type="text" placeholder="z.B. Kooperationsprojekte" name="channelName"
                 [(ngModel)]="name" required>
@@ -37,18 +37,15 @@
         <div *ngIf="editDescription">
             <div class="edit-head edit">
                 <div class="createform-text">Beschreibung<span>(optional)</span></div>
-                <div class="edit-btn" (click)="editDescription = false">Speichern</div>
+                <div class="edit-btn" (click)="changeChannelDescription()">Speichern</div>
             </div>
             <input class="textinput" type="text" placeholder="Dein Text hier" name="description"
                 [(ngModel)]="description">
         </div>
         <div class="create-by" *ngIf="editDescription">
             <div class="createform-text">Erstell von</div>
-            <div class="name">Ersteller name</div>
+            <div class="name">{{ createdby }}</div>
         </div>
-
-
-
         <div class="login-button-con">
             <button class="login" (click)="leaveChannel()">Kanal verlassen</button>
         </div>
