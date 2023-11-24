@@ -9,6 +9,7 @@ import { ChatService } from 'src/app/services/chat.service';
 import { LocalStorageService } from 'src/app/services/localstorage.service';
 import { Message } from 'src/app/models/message.model';
 import { DataService } from 'src/app/services/data.service';
+import { DabubbleappComponent } from '../dabubbleapp/dabubbleapp.component';
 
 interface MessageGroup {
   label: string;
@@ -44,7 +45,8 @@ export class ChatComponent implements AfterViewChecked {
   constructor(
     private chatService: ChatService,
     private local: LocalStorageService,
-    private data: DataService
+    private data: DataService,
+    private dabubble: DabubbleappComponent
   ) {}
 
   ngOnInit() {
@@ -130,8 +132,7 @@ export class ChatComponent implements AfterViewChecked {
       }
       group.messages.push(message);
     });
-  
-    // Sort groups based on date
+
     return groups.sort((a, b) => {
       if (a.label === 'Today') return 1;
       if (b.label === 'Today') return -1;
@@ -140,7 +141,6 @@ export class ChatComponent implements AfterViewChecked {
       return new Date(a.label) > new Date(b.label) ? 1 : -1;
     });
   }
-  
 
   messageSendFrom(senderid: string) {
     if (this.uid == senderid) {
@@ -148,6 +148,9 @@ export class ChatComponent implements AfterViewChecked {
     } else {
       return false;
     }
+  }
+  closeChat(){
+    this.dabubble.openChat();
   }
 }
 

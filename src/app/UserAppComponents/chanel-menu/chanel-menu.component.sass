@@ -9,6 +9,14 @@
     max-height: calc( 100% - 50px )
     overflow-y: scroll
     overflow-x: hidden
+    &::-webkit-scrollbar-track
+        background: transparent
+    &::-webkit-scrollbar-thumb
+        background: #535AF1
+        border-radius: 10px
+    &::-webkit-scrollbar
+        width: 5px 
+
 .header
     display: flex
     justify-content: space-between
@@ -20,7 +28,6 @@
     .head
         font-size: 24px
         font-weight: 700
-        margin-left: -80px
     .newmessage
         background-image: url('/assets/images/channel/edit_square.png')
         width: 30px
@@ -115,7 +122,6 @@
         .createimg
             background-image: url('/assets/images/channel/add_circle_hover.png')
 
-
 .user
     margin-left: 10px
     margin-bottom: 10px
@@ -138,10 +144,14 @@
             object-fit: cover
             border-radius: 50%
 
-@media  ( max-width: 485px )
+@media  ( max-width: 750px )
     .channels-con
         height: calc( 100vh - 190px )
         border-radius: 30px 30px 0 0
     .header
         .head
             margin: 0
+
+@media  ( max-width: 370px )
+    .channels-con
+        height: calc( 100vh - 160px )

@@ -9,6 +9,7 @@ import { ChatService } from 'src/app/services/chat.service';
 import { LocalStorageService } from 'src/app/services/localstorage.service';
 import { Message } from 'src/app/models/message.model';
 import { DataService } from 'src/app/services/data.service';
+import { DabubbleappComponent } from '../dabubbleapp/dabubbleapp.component';
 
 interface MessageGroup {
   label: string;
@@ -46,7 +47,8 @@ export class PrivatechatComponent implements AfterViewChecked {
   constructor(
     private chatService: ChatService,
     private local: LocalStorageService,
-    private data: DataService
+    private data: DataService,
+    private dabubble: DabubbleappComponent
   ) {}
 
   ngOnInit() {
@@ -59,9 +61,9 @@ export class PrivatechatComponent implements AfterViewChecked {
   }
 
   setPrivateChatData(channel: any){
-    this.currentId = channel.id; // Update the current chat ID
+    this.currentId = channel.id;
     this.getNameAvatar(channel);
-    this.loadMessages(); // Load messages for the new chat
+    this.loadMessages();
   }
 
   getNameAvatar(channel: any){
@@ -161,6 +163,10 @@ export class PrivatechatComponent implements AfterViewChecked {
     } else {
       return false;
     }
+  }
+
+  closeChat(){
+    this.dabubble.openChat();
   }
 }
 

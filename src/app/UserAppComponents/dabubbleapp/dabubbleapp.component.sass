@@ -31,22 +31,31 @@
     width: 100%
     .channels
         //z-index: 100
-        width: 340px
+        width: 300px
     .chat
         margin-left: -60px
-        width: calc( 100% - 830px )
+        width: calc( 100% - 790px )
 .popup
     z-index: 1000 !important
     position: absolute
     width: 100vw
     height: 100vh
 
-@media  ( max-width: 485px )
+@media ( max-width: 1300px )
+    .chat
+        width: calc( 100% - 380px ) !important
+    .secondary-chat
+        display: none
+
+@media  ( max-width: 750px )
     .dabubble-content
         .channels
             position: absolute
             left: 0
             width: calc( 100% - 30px ) !important
+        .chat
+            width: calc( 100vw ) !important
+
 
 @media  ( max-width: 370px )
 .logo-con

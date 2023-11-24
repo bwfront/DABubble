@@ -11,13 +11,13 @@
         <app-profile (click)="profilePopUpOpen = !profilePopUpOpen"></app-profile>
     </div>
     <div class="dabubble-content">
-        <div class="profile-popup" *ngIf="profilePopUpOpen">
+        <div class="profile-popup" *ngIf="profilePopUpOpen" style="z-index: 2">
             <app-pop-up-menu></app-pop-up-menu>
         </div>
-        <div class="channels">
+        <div class="channels" [ngStyle]="{'display': !channelActive ? 'none' : 'block'}">
             <app-chanel-menu class="channels"></app-chanel-menu>
         </div>
-        <div class="chat">
+        <div class="chat" [ngStyle]="{'display': !chatActive ? 'none' : 'block'}">
             <app-chat *ngIf="groupChat"></app-chat>
             <app-privatechat *ngIf="!groupChat"></app-privatechat>
         </div>

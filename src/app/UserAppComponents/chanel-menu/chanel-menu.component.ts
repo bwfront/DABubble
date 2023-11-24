@@ -4,7 +4,6 @@ import { ChannelService } from 'src/app/services/channel.service';
 import { DabubbleappComponent } from '../dabubbleapp/dabubbleapp.component';
 import { LocalStorageService } from 'src/app/services/localstorage.service';
 import { ChatService } from 'src/app/services/chat.service';
-import { PrivatechatComponent } from '../privatechat/privatechat.component';
 
 interface Channel {
   data: GroupChatData;
@@ -12,17 +11,17 @@ interface Channel {
 
 interface GroupChatData {
   chat_id: string;
-  created_at: string; // String representation of a timestamp
+  created_at: string;
   group_name: string;
-  participants: string[]; // Array of user IDs as strings
+  participants: string[];
   messages: Message[];
 }
 
 interface Message {
-  message_id: string; // Assuming you have a message_id field
+  message_id: string;
   sender_id: string;
   text: string;
-  timestamp: string; // or Date if you convert the timestamp
+  timestamp: string;
 }
 
 @Component({
@@ -43,7 +42,6 @@ export class ChanelMenuComponent {
     private dabubble: DabubbleappComponent,
     private local: LocalStorageService,
     private chatService: ChatService,
-    private priateChat: PrivatechatComponent,
   ) {}
 
   ngOnInit() {
@@ -81,6 +79,7 @@ export class ChanelMenuComponent {
       if (element.group_name == groupName) {
         this.chatService.updateOpenChannel(element);
         this.dabubble.groupChat = true;
+        this.dabubble.openChat();
       }
     });
   }
@@ -90,6 +89,7 @@ export class ChanelMenuComponent {
       let element = await this.channelService.privateChat(this.uid, userId);
       this.chatService.updateOpenChannel(element);
       this.dabubble.groupChat = false;
+      this.dabubble.openChat();
     }
   }
 
