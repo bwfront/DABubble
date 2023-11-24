@@ -31,8 +31,8 @@ export class PrivatechatComponent implements AfterViewChecked {
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
 
   nameChat: string = '';
-  avatarChat: string = ''
-  
+  avatarChat: string = '';
+
   channel: any;
   currentId: string = '';
   message: string = '';
@@ -60,21 +60,23 @@ export class PrivatechatComponent implements AfterViewChecked {
     this.loadMessages();
   }
 
-  setPrivateChatData(channel: any){
+  setPrivateChatData(channel: any) {
     this.currentId = channel.id;
     this.getNameAvatar(channel);
     this.loadMessages();
   }
 
-  getNameAvatar(channel: any){
-    channel.userIds.forEach((id: string)=> {
-      if(id != this.uid){
-        this.data.getUserRef(id).then((e) =>{
-          this.nameChat = e?.realName || '';
-          this.avatarChat = e?.avatarURl || '';
-        })
-      }
-    })
+  getNameAvatar(channel: any) {
+    if (channel.userIds) {
+      channel.userIds.forEach((id: string) => {
+        if (id != this.uid) {
+          this.data.getUserRef(id).then((e) => {
+            this.nameChat = e?.realName || '';
+            this.avatarChat = e?.avatarURl || '';
+          });
+        }
+      });
+    }
   }
 
   getUid() {
@@ -91,7 +93,12 @@ export class PrivatechatComponent implements AfterViewChecked {
 
   sendMessage() {
     if (this.message != '') {
-      this.chatService.sendMessage(this.currentId, this.getUid(), this.message, 'private_chats');
+      this.chatService.sendMessage(
+        this.currentId,
+        this.getUid(),
+        this.message,
+        'private_chats'
+      );
     }
     this.message = '';
   }
@@ -99,10 +106,12 @@ export class PrivatechatComponent implements AfterViewChecked {
   loadMessages() {
     if (this.currentId) {
       this.messages = [];
-      this.chatService.getMessages(this.currentId, 'private_chats').subscribe((messages) => {
-        this.messages = messages;
-        this.getUserInformation();
-      });
+      this.chatService
+        .getMessages(this.currentId, 'private_chats')
+        .subscribe((messages) => {
+          this.messages = messages;
+          this.getUserInformation();
+        });
     }
     this.scrollToBottom();
   }
@@ -128,25 +137,25 @@ export class PrivatechatComponent implements AfterViewChecked {
     const yesterday = new Date(today);
     yesterday.setDate(yesterday.getDate() - 1);
     const formatDate = (date: Date) => date.toISOString().split('T')[0];
-  
-    messages.forEach(message => {
+
+    messages.forEach((message) => {
       const messageDate = new Date(message.date);
       let label = formatDate(messageDate);
-  
+
       if (formatDate(today) === label) {
         label = 'Today';
       } else if (formatDate(yesterday) === label) {
         label = 'Yesterday';
       }
-  
-      let group = groups.find(g => g.label === label);
+
+      let group = groups.find((g) => g.label === label);
       if (!group) {
         group = { label, messages: [] };
         groups.push(group);
       }
       group.messages.push(message);
     });
-  
+
     return groups.sort((a, b) => {
       if (a.label === 'Today') return 1;
       if (b.label === 'Today') return -1;
@@ -155,7 +164,6 @@ export class PrivatechatComponent implements AfterViewChecked {
       return new Date(a.label) > new Date(b.label) ? 1 : -1;
     });
   }
-  
 
   messageSendFrom(senderid: string) {
     if (this.uid == senderid) {
@@ -165,8 +173,7 @@ export class PrivatechatComponent implements AfterViewChecked {
     }
   }
 
-  closeChat(){
+  closeChat() {
     this.dabubble.openChat();
   }
 }
-

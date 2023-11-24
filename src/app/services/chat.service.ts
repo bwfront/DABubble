@@ -20,7 +20,12 @@ export class ChatService {
 
   constructor(private firestore: AngularFirestore) {}
 
-  sendMessage(chatId: string, senderId: string, messageText: string, collection: string) {
+  sendMessage(
+    chatId: string,
+    senderId: string,
+    messageText: string,
+    collection: string
+  ) {
     const message = {
       sender_id: senderId,
       text: messageText,
@@ -33,7 +38,6 @@ export class ChatService {
       .doc(chatId)
       .collection('messages')
       .add(message)
-      .then(() => console.log('Message sent'))
       .catch((error) => console.error('Error sending message:', error));
   }
 

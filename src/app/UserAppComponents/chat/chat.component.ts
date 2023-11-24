@@ -78,17 +78,24 @@ export class ChatComponent implements AfterViewChecked {
 
   sendMessage() {
     if (this.message != '') {
-      this.chatService.sendMessage(this.currentId, this.getUid(), this.message, 'group_chats');
+      this.chatService.sendMessage(
+        this.currentId,
+        this.getUid(),
+        this.message,
+        'group_chats'
+      );
     }
     this.message = '';
   }
 
   loadMessages() {
     if (this.currentId) {
-      this.chatService.getMessages(this.currentId, 'group_chats').subscribe((messages) => {
-        this.messages = messages;
-        this.getUserInformation();
-      });
+      this.chatService
+        .getMessages(this.currentId, 'group_chats')
+        .subscribe((messages) => {
+          this.messages = messages;
+          this.getUserInformation();
+        });
     }
     this.scrollToBottom();
   }
@@ -114,18 +121,18 @@ export class ChatComponent implements AfterViewChecked {
     const yesterday = new Date(today);
     yesterday.setDate(yesterday.getDate() - 1);
     const formatDate = (date: Date) => date.toISOString().split('T')[0];
-  
-    messages.forEach(message => {
+
+    messages.forEach((message) => {
       const messageDate = new Date(message.date);
       let label = formatDate(messageDate);
-  
+
       if (formatDate(today) === label) {
         label = 'Today';
       } else if (formatDate(yesterday) === label) {
         label = 'Yesterday';
       }
-  
-      let group = groups.find(g => g.label === label);
+
+      let group = groups.find((g) => g.label === label);
       if (!group) {
         group = { label, messages: [] };
         groups.push(group);
@@ -149,7 +156,7 @@ export class ChatComponent implements AfterViewChecked {
       return false;
     }
   }
-  closeChat(){
+  closeChat() {
     this.dabubble.openChat();
   }
 }
