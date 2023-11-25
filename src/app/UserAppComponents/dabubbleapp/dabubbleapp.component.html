@@ -14,6 +14,9 @@
         <div class="profile-popup" *ngIf="profilePopUpOpen" style="z-index: 2">
             <app-pop-up-menu></app-pop-up-menu>
         </div>
+        <div class="profile-popup" *ngIf="usersProfilePopUpOpen" style="z-index: 2">
+            <app-users-profile-pop-up></app-users-profile-pop-up>
+        </div>
         <div class="channels" [ngStyle]="{'display': !channelActive ? 'none' : 'block'}">
             <app-chanel-menu class="channels"></app-chanel-menu>
         </div>

@@ -8,10 +8,14 @@ import { Component, HostListener } from '@angular/core';
 export class DabubbleappComponent {
   profilePopUpOpen: boolean = false;
   createChannelOpen: boolean = false;
+  usersProfilePopUpOpen: boolean = false;
+
   groupChat: boolean = true;
   chatActive: boolean = true;
   channelActive: boolean = true;
   windowWidth: number = 0;
+
+
 
   ngOnInit() {
     this.checkWindowSize();
@@ -33,7 +37,7 @@ export class DabubbleappComponent {
     }
   }
 
-  openChat(){
+  openChat() {
     if (this.windowWidth < 751) {
       this.chatActive = !this.chatActive;
       this.channelActive = !this.channelActive;

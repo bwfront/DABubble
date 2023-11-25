@@ -1,0 +1,19 @@
+<div class="userProfile-con">
+
+    <div class="profile-menu">
+        <div class="popup-profile-header">
+            <div class="heading">Profil</div>
+            <div class="close" (click)="closeProfile()"><img src="assets/images/close.png" alt="close"></div>
+        </div>
+        <div class="popup-profile-content">
+            <div class="avatar-con"><img class="avatar" src="{{ userAvatar }}" alt="avatar"></div>
+            <div class="name">{{ userName }}</div>
+            <div class="status"><img src="assets/images/profile/online_status.png" alt="status">Aktiv</div>
+            <div class="mail-con">
+                <div class="mail-head"><img src="assets/images/login/mail.png" alt="mail">E-Mail-Adresse</div>
+                <div class="mail">mail</div>
+            </div>
+        </div>
+    </div>
+    <div class="bg" (click)="closeProfile()"></div>
+</div>

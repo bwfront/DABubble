@@ -10,6 +10,9 @@ import { LocalStorageService } from 'src/app/services/localstorage.service';
 import { Message } from 'src/app/models/message.model';
 import { DataService } from 'src/app/services/data.service';
 import { DabubbleappComponent } from '../dabubbleapp/dabubbleapp.component';
+import { PopUpMenuComponent } from '../pop-up-menu/pop-up-menu.component';
+import { UsersProfilePopUpComponent } from '../users-profile-pop-up/users-profile-pop-up.component';
+import { UserProfileService } from 'src/app/services/userprofile.service';
 
 interface MessageGroup {
   label: string;
@@ -46,7 +49,8 @@ export class ChatComponent implements AfterViewChecked {
     private chatService: ChatService,
     private local: LocalStorageService,
     private data: DataService,
-    private dabubble: DabubbleappComponent
+    private dabubble: DabubbleappComponent,
+    private userProfileSevice: UserProfileService,
   ) {}
 
   ngOnInit() {
@@ -158,6 +162,11 @@ export class ChatComponent implements AfterViewChecked {
   }
   closeChat() {
     this.dabubble.openChat();
+  }
+
+  openUserProfile(uid: string){
+    this.dabubble.usersProfilePopUpOpen = true
+    this.userProfileSevice.getUserProfile(uid);
   }
 }
 
