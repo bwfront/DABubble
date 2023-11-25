@@ -5,6 +5,7 @@ export type UserData = {
   realName: string;
   avatarURl: string;
   uid: string;
+  email: string;
 };
 
 @Injectable({
@@ -22,7 +23,8 @@ export class DataService {
         return {
           realName: data.realName,
           avatarURl: data.avatarURl,
-          uid: data.uid
+          uid: data.uid,
+          email: data.email
         };
       } else {
         console.log('No User Found');

@@ -1,5 +1,4 @@
 import { Component, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UserProfileService } from 'src/app/services/userprofile.service';
 import { DabubbleappComponent } from '../dabubbleapp/dabubbleapp.component';
@@ -12,14 +11,13 @@ import { DabubbleappComponent } from '../dabubbleapp/dabubbleapp.component';
 export class UsersProfilePopUpComponent implements OnDestroy {
   userName: string = '';
   userAvatar: string = '';
+  userMail: string = '';
   private userProfileSubscription: Subscription;
 
   constructor(
-    private router: Router,
     private userProfileService: UserProfileService,
     private dabubble: DabubbleappComponent
   ) {
-    // Subscribe to the UserProfileService
     this.userProfileSubscription = this.userProfileService.getUserProfileObservable().subscribe(user => {
       if (user) {
         this.setUserData(user);
@@ -30,6 +28,7 @@ export class UsersProfilePopUpComponent implements OnDestroy {
   setUserData(user: any) {
     this.userAvatar = user.avatarURl;
     this.userName = user.realName;
+    this.userMail = user.email
   }
 
   closeProfile() {
@@ -37,7 +36,10 @@ export class UsersProfilePopUpComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    // Unsubscribe to avoid memory leaks
     this.userProfileSubscription.unsubscribe();
+  }
+
+  sendMessage(){
+    
   }
 }

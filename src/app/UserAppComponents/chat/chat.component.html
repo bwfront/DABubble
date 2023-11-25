@@ -13,7 +13,6 @@
             </div>
             <div *ngFor="let message of group.messages" class="message"
                 [ngClass]="{'message-you': messageSendFrom(message.sender_id)}">
-
                 <div class="avatar"><img src="{{ message.avatar }}" alt="avatar"></div>
                 <div class="message-content" [ngClass]="{'message-content-you': messageSendFrom(message.sender_id)}">
                     <div class="name-time" [ngClass]="{'name-time-you': messageSendFrom(message.sender_id)}">

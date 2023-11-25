@@ -10,7 +10,6 @@ import {
   sendPasswordResetEmail,
   confirmPasswordReset,
   updateEmail,
-  sendEmailVerification,
 } from '@angular/fire/auth';
 import { doc, setDoc, Firestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
