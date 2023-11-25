@@ -69,6 +69,7 @@ export class PrivatechatComponent implements AfterViewChecked {
   }
 
   getNameAvatar(channel: any) {
+    this.uid = this.getUid();
     if (channel.userIds) {
       channel.userIds.forEach((id: string) => {
         if (id != this.uid) {

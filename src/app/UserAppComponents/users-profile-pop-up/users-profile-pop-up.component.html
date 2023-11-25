@@ -13,6 +13,9 @@
                 <div class="mail-head"><img src="assets/images/login/mail.png" alt="mail">E-Mail-Adresse</div>
                 <div class="mail">{{ userMail }}</div>
             </div>
+            <div class="login-button-con">
+                <button class="login" (click)="sendMessage()"><img src="assets/images/profile/mode_comment.png">Nachricht</button>
+            </div>
         </div>
     </div>
     <div class="bg" (click)="closeProfile()"></div>
