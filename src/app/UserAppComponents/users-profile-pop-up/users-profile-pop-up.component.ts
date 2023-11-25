@@ -17,6 +17,7 @@ export class UsersProfilePopUpComponent implements OnDestroy {
   userMail: string = '';
   uid: string = '';
   otherId: string = '';
+  guest: boolean = false;
   private userProfileSubscription: Subscription;
 
   constructor(
@@ -41,6 +42,7 @@ export class UsersProfilePopUpComponent implements OnDestroy {
     this.userMail = user.email;
     this.otherId = user.uid;
     this.getUid();
+    this.checkIfGuest();
   }
 
   closeProfile() {
@@ -56,6 +58,14 @@ export class UsersProfilePopUpComponent implements OnDestroy {
     this.uid = data.user.uid;
   }
 
+  checkIfGuest(){
+    if(this.otherId === '1aVY765xdhSNcbygAZYyUm0eaBg2'){
+      this.guest = true;
+    }else{
+      this.guest = false;
+    }
+  }
+  
   async sendMessage() {
     if (this.uid != this.otherId) {
       let element = await this.channelService.privateChat(this.uid, this.otherId);

@@ -6,9 +6,9 @@
     </div>
     <div class="popup-profile-content" *ngIf="!editProfile">
         <div class="avatar-con"><img class="avatar" src="{{ avatarURl }}" alt="avatar"></div>
-        <div class="name">{{ name }}<div class="edit" (click)="editProfile = true">Bearbeiten</div></div>
+        <div class="name">{{ name }}<div class="edit" (click)="editProfile = true" *ngIf="!guest">Bearbeiten</div></div>
         <div class="status"><img src="assets/images/profile/online_status.png" alt="status">Aktiv</div>
-        <div class="mail-con">
+        <div class="mail-con" *ngIf="!guest">
             <div class="mail-head"><img src="assets/images/login/mail.png" alt="mail">E-Mail-Adresse</div>
             <div class="mail">{{ mail }}</div>
         </div>

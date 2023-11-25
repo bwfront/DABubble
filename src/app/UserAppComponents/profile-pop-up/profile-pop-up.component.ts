@@ -19,6 +19,8 @@ export class ProfilePopUpComponent {
   token: string = '';
   uid: string = '';
 
+  guest: boolean = false
+
   editProfile: boolean = false;
 
   constructor(
@@ -29,6 +31,15 @@ export class ProfilePopUpComponent {
     private auth: AuthService
   ) {}
 
+
+  checkIfGuest(){
+    if(this.uid === '1aVY765xdhSNcbygAZYyUm0eaBg2'){
+      this.guest = true;
+    }else{
+      this.guest = false;
+    }
+  }
+  
   ngOnInit() {
     this.getUserData();
   }
@@ -48,6 +59,7 @@ export class ProfilePopUpComponent {
         this.avatarURl = user.avatarURl;
       }
     });
+    this.checkIfGuest()
   }
 
   changeUserInfo() {
