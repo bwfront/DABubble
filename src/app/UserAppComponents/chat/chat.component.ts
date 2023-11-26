@@ -11,6 +11,7 @@ import { Message } from 'src/app/models/message.model';
 import { DataService } from 'src/app/services/data.service';
 import { DabubbleappComponent } from '../dabubbleapp/dabubbleapp.component';
 import { UserProfileService } from 'src/app/services/userprofile.service';
+import { user } from '@angular/fire/auth';
 
 interface MessageGroup {
   label: string;
@@ -43,12 +44,14 @@ export class ChatComponent implements AfterViewChecked {
 
   openEditChannel: boolean = false;
 
+  avatImg: string[] = [];
+
   constructor(
     private chatService: ChatService,
     private local: LocalStorageService,
     private data: DataService,
     private dabubble: DabubbleappComponent,
-    private userProfileSevice: UserProfileService,
+    private userProfileSevice: UserProfileService
   ) {}
 
   ngOnInit() {
@@ -58,12 +61,25 @@ export class ChatComponent implements AfterViewChecked {
         this.channel = channel;
         this.groupName = channel.group_name;
         this.currentId = channel.id;
+        this.setAvatImg(channel.participants);
+
         this.loadMessages();
       } else {
         this.groupName = 'Erstellen Sie Ihren ersten Gruppenchat!';
       }
     });
     this.uid = this.getUid();
+  }
+
+  setAvatImg(users: string[]) {
+    this.avatImg = [];
+    for (let i = 0; i < 3; i++) {
+      this.data.getUserRef(users[i]).then((e) => {
+        if (e) {
+          this.avatImg.push(e.avatarURl);
+        }
+      });
+    }
   }
 
   getUid() {
@@ -162,9 +178,8 @@ export class ChatComponent implements AfterViewChecked {
     this.dabubble.openChat();
   }
 
-  openUserProfile(uid: string){
-    this.dabubble.usersProfilePopUpOpen = true
+  openUserProfile(uid: string) {
+    this.dabubble.usersProfilePopUpOpen = true;
     this.userProfileSevice.getUserProfile(uid);
   }
 }
-

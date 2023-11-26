@@ -4,7 +4,13 @@
             </div>
         </div>
         <div class="back" (click)="closeChat()">zurück</div>
-        <div class="users-con"></div>
+        <div class="users-con">
+            <div class="users">
+                <img class="avat" *ngFor="let avat of avatImg" src="{{ avat }}">
+                <div>10</div>
+            </div>
+            <div class="add"></div>
+        </div>
     </div>
     <div class="chat" #chatContainer>
         <div *ngFor="let group of messageGroups">
