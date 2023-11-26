@@ -45,6 +45,7 @@ export class ChatComponent implements AfterViewChecked {
   openEditChannel: boolean = false;
 
   avatImg: string[] = [];
+  avatLength: number = 0;
 
   constructor(
     private chatService: ChatService,
@@ -62,7 +63,6 @@ export class ChatComponent implements AfterViewChecked {
         this.groupName = channel.group_name;
         this.currentId = channel.id;
         this.setAvatImg(channel.participants);
-
         this.loadMessages();
       } else {
         this.groupName = 'Erstellen Sie Ihren ersten Gruppenchat!';
@@ -72,13 +72,16 @@ export class ChatComponent implements AfterViewChecked {
   }
 
   setAvatImg(users: string[]) {
+    this.avatLength = users.length;
     this.avatImg = [];
     for (let i = 0; i < 3; i++) {
-      this.data.getUserRef(users[i]).then((e) => {
-        if (e) {
-          this.avatImg.push(e.avatarURl);
-        }
-      });
+      if (users[i]) {
+        this.data.getUserRef(users[i]).then((e) => {
+          if (e) {
+            this.avatImg.push(e.avatarURl);
+          }
+        });
+      }
     }
   }
 
