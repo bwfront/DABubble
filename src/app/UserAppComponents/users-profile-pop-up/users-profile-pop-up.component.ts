@@ -73,6 +73,12 @@ export class UsersProfilePopUpComponent implements OnDestroy {
       this.dabubble.groupChat = false;
       this.dabubble.openChat();
       this.closeProfile()
+    }else{
+      let element = await this.channelService.openPrivateNotes(this.uid)
+      this.chatService.updateOpenChannel(element);
+      this.dabubble.groupChat = false;
+      this.dabubble.openChat();
+      this.closeProfile()
     }
   }
 }

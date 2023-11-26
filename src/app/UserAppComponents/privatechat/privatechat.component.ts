@@ -44,7 +44,7 @@ export class PrivatechatComponent implements AfterViewChecked {
   groupChat: boolean = true;
 
   openEditChannel: boolean = false;
-
+  notes: boolean =  false;
   constructor(
     private chatService: ChatService,
     private local: LocalStorageService,
@@ -66,7 +66,6 @@ export class PrivatechatComponent implements AfterViewChecked {
 
   setPrivateChatData(channel: any) {
     if (!channel || !channel.id) {
-      console.error("Channel data is undefined or doesn't have an ID");
       return;
     }
     this.currentId = channel.id;
@@ -80,10 +79,9 @@ export class PrivatechatComponent implements AfterViewChecked {
         this.nameChat = e?.realName || '';
         this.avatarChat = e?.avatarURl || '';
       });
+      this.notes = true;
     }
-  
     if (!channel.user && channel.userIds) {
-      console.log('teasdasdst');
       channel.userIds.forEach((id: string) => {
         if (id != this.uid) {
           this.otherUser = id;
@@ -93,6 +91,7 @@ export class PrivatechatComponent implements AfterViewChecked {
           });
         }
       });
+      this.notes = false;
     }
   }
 
@@ -195,7 +194,12 @@ export class PrivatechatComponent implements AfterViewChecked {
   }
 
   openUserProfile(uid: string) {
-    this.dabubble.usersProfilePopUpOpen = true;
-    this.userProfileSevice.getUserProfile(uid);
+    if(!this.notes){
+      this.dabubble.usersProfilePopUpOpen = true;
+      this.userProfileSevice.getUserProfile(uid);
+    }else{
+      this.dabubble.usersProfilePopUpOpen = true;
+      this.userProfileSevice.getUserProfile(this.uid);
+    }
   }
 }
