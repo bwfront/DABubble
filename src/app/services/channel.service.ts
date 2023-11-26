@@ -1,14 +1,12 @@
 import { Injectable, inject } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Observable } from 'rxjs';
-import { elementAt, map, take } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import {
   Firestore,
   addDoc,
   collection,
-  doc,
   getDocs,
-  onSnapshot,
 } from '@angular/fire/firestore';
 
 interface Channel {
@@ -131,19 +129,13 @@ export class ChannelService {
 
   async privateChat(uid: string, secuid: string) {
     let private_chats = await this.fetchPrivateChat();
-    let chatExists = false;
-    let chatelement;
-    private_chats.forEach((chat: any) => {
-      if (chat.userIds.includes(uid) && chat.userIds.includes(secuid)) {
-        chatExists = true;
-        chatelement = chat;
-      }
-    });
-    if (!chatExists) {
-      return this.createPrivateChat(uid, secuid);
+    for (let chat of private_chats) {
+        if (uid !== secuid && chat.userIds.includes(uid) && chat.userIds.includes(secuid)) {
+            return chat;
+        }
     }
-    return chatelement;
-  }
+    return this.createPrivateChat(uid, secuid);
+}
 
   async fetchPrivateChat() {
     const colRef = collection(this.fire, 'private_chats');
@@ -169,4 +161,31 @@ export class ChannelService {
         console.log('konnte nicht erstellet werden');
       });
   }
+
+  async openPrivateNotes(uid: string) {
+    const notes = await this.fetchPrivateChat();
+    for (const note of notes) {
+        if (note.user == uid) {
+            return note;
+        }
+    }
+    return this.createPrivateNotes(uid);
+}
+
+  async createPrivateNotes(uid: string) {
+    const colRef = collection(this.fire, 'private_chats');
+    let privatechat = {
+      user: uid,
+      userIds: [uid],
+      created_at: new Date(),
+    };
+    await addDoc(colRef, privatechat)
+      .then(() => {
+        return colRef.id;
+      })
+      .catch(() => {
+        console.log('konnte nicht erstellet werden');
+      });
+  }
+
 }

@@ -85,8 +85,13 @@ export class ChanelMenuComponent {
   }
 
   async openPrivateChat(userId: string) {
-    if (this.uid != userId) {
-      let element = await this.channelService.privateChat(this.uid, userId);
+    if(userId != this.uid){
+      let element = await this.channelService.privateChat(this.uid, userId)
+      this.chatService.updateOpenChannel(element);
+      this.dabubble.groupChat = false;
+      this.dabubble.openChat();
+    }else{
+      let element = await this.channelService.openPrivateNotes(this.uid)
       this.chatService.updateOpenChannel(element);
       this.dabubble.groupChat = false;
       this.dabubble.openChat();

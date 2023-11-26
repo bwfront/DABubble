@@ -33,7 +33,7 @@ export class PrivatechatComponent implements AfterViewChecked {
 
   nameChat: string = '';
   avatarChat: string = '';
-  otherUser: string = ''
+  otherUser: string = '';
   channel: any;
   currentId: string = '';
   message: string = '';
@@ -50,27 +50,40 @@ export class PrivatechatComponent implements AfterViewChecked {
     private local: LocalStorageService,
     private data: DataService,
     private dabubble: DabubbleappComponent,
-    private userProfileSevice: UserProfileService,
+    private userProfileSevice: UserProfileService
   ) {}
 
   ngOnInit() {
     this.chatService.openChannel.subscribe((channel) => {
-      this.setPrivateChatData(channel);
-      this.currentId = channel.id;
+      if (channel && channel.id) {
+        this.setPrivateChatData(channel);
+        this.currentId = channel.id;
+      }
     });
     this.uid = this.getUid();
     this.loadMessages();
   }
 
   setPrivateChatData(channel: any) {
+    if (!channel || !channel.id) {
+      console.error("Channel data is undefined or doesn't have an ID");
+      return;
+    }
     this.currentId = channel.id;
     this.getNameAvatar(channel);
     this.loadMessages();
   }
 
   getNameAvatar(channel: any) {
-    this.uid = this.getUid();
-    if (channel.userIds) {
+    if(channel.user){
+      this.data.getUserRef(channel.user).then((e) => {
+        this.nameChat = e?.realName || '';
+        this.avatarChat = e?.avatarURl || '';
+      });
+    }
+  
+    if (!channel.user && channel.userIds) {
+      console.log('teasdasdst');
       channel.userIds.forEach((id: string) => {
         if (id != this.uid) {
           this.otherUser = id;
@@ -181,8 +194,8 @@ export class PrivatechatComponent implements AfterViewChecked {
     this.dabubble.openChat();
   }
 
-  openUserProfile(uid: string){
-    this.dabubble.usersProfilePopUpOpen = true
+  openUserProfile(uid: string) {
+    this.dabubble.usersProfilePopUpOpen = true;
     this.userProfileSevice.getUserProfile(uid);
   }
 }
