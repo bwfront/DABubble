@@ -30,6 +30,7 @@ export class DabubbleappComponent {
     this.windowWidth = window.innerWidth;
     if (this.windowWidth < 751) {
       this.chatActive = false;
+      this.channelActive = true;
     }
     if (this.windowWidth > 750) {
       this.chatActive = true;
