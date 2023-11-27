@@ -1,0 +1,161 @@
+.createchannel-con
+    display: flex
+    justify-content: center
+    align-items: center
+    height: 100%
+    animation: opcaityIn 255ms ease-in-out
+    opacity: 1
+    margin-right: 60px
+@keyframes opcaityIn
+    0%
+        opacity: 0
+    100%
+        opacity: 1
+
+.create-popup
+    width: 514px
+    padding: 30px
+    border-radius: 30px
+    background-color: #ffffff
+    z-index: 1
+
+.head
+    display: flex
+    justify-content: space-between
+    align-items: center
+    margin-bottom: 20px
+    .heading
+        color: #000
+        font-size: 24px
+        margin: 0
+    img
+        padding: 5px
+        border-radius: 50%
+        cursor: pointer
+        &:hover
+            background-color: #ECEEFE
+.head-description
+    font-size: 18px
+.channel
+    color: #535AF1
+.createform-text
+    margin: 10px 0
+    font-size: 18px
+    font-weight: 700
+    span
+        font-size: 17px
+        color: #686868
+        margin-left: 4px
+        font-weight: 400
+
+.textinput
+    width: calc( 100% - 36px )
+    padding: 14px 18px
+    border: 1px solid #ADB0D9
+    outline-color: #ADB0D9
+    border-radius: 30px
+    font-size: 16px
+    margin: 5px 0
+
+.login-button-con
+    margin-top: 20px
+    justify-content: flex-end
+
+.bg
+    width: 100%
+    height: 100%
+    left: -30px
+    top: -30px
+    position: absolute
+    background-color: #00000030
+
+.edit-con
+    padding: 10px 20px 20px 20px
+    border: 1px solid #ADB0D9
+    border-radius: 30px
+    margin: 10px 0
+
+.edit-head
+    display: flex
+    align-items: center
+    justify-content: space-between
+    .createform-text
+        font-size: 16px
+    .edit-btn
+        cursor: pointer
+        color: #797EF3
+        &:hover
+            color: #535AF1
+
+.edit
+    .createform-text
+        font-size: 18px
+
+.create-by
+    margin: 20px 0 10px 0
+    padding: 10px
+    border-top: 1px solid #ADB0D9
+    .name
+        cursor: pointer
+        font-size: 22px
+        color: #797EF3
+        &:hover
+            color: #535AF1
+
+.users
+    max-height: 150px
+    overflow-y: scroll
+.user
+    margin-left: 10px
+    margin-bottom: 10px
+    font-size: 18px
+    display: flex
+    align-items: center
+    gap: 15px
+    cursor: pointer
+    padding: 6px 20px 0 20px
+    border-radius: 30px
+    &:hover
+        color: #535AF1
+        background-color: #ECEEFE
+    span
+        margin-left: -10px
+    .avatar
+        img
+            width: 50px
+            height: 50px
+            object-fit: cover
+            border-radius: 50%
+
+.select
+    cursor: unset
+    color: #000000
+    background-color: #ECEEFE
+    &:hover
+        color: #000000
+
+.selected-users
+    display: flex
+    gap: 10px
+    overflow-x: scroll
+    .remove-user
+        cursor: pointer
+        color: #686868
+        font-weight: 500
+        margin-left: 4px
+        &:hover
+            font-weight: 700
+            color: #535AF1
+            
+.errorChannel
+    color: #ED1E79
+
+
+@media  ( max-width: 485px )
+    .create-popup
+        width: calc(100% - 60px) !important
+        left: -30px
+        top: -30px
+        position: absolute
+        height: 100vh
+        border-radius: 0px

@@ -1,0 +1,32 @@
+<div class="createchannel-con">
+    <div class="create-popup">
+        <div class="head">
+            <div class="heading">Leute Hinzufügen</div>
+            <div (click)="closePopUp()">
+                <img src="assets/images/close.png" alt="close">
+            </div>
+        </div>
+        <div class="channel"># {{ name }}</div>
+        <div>
+            <input class="textinput" type="text" placeholder="Namen eingeben" name="channelName"
+            [(ngModel)]="searchuser" (ngModelChange)="filterUsers()">
+        <div class="selected-users">
+            <div class="user select" *ngFor="let selectedUser of selectedUsers">
+                <div class="avatar"><img src="{{ selectedUser.avatarURl }}" alt=""></div>
+                {{ selectedUser.realName }}
+                <span class="remove-user" (click)="removeUser(selectedUser)">X</span>
+            </div>
+        </div>
+        <div class="users">
+            <div class="user" *ngFor="let user of filteredUsers" (click)="addUserToChannel(user)">
+              <div class="avatar"><img src="{{ user.avatarURl }}" alt=""></div>
+              {{ user.realName }} <span *ngIf="uid === user.uid">(Du)</span>
+            </div>
+          </div>
+        </div>
+        <div class="login-button-con">
+            <button class="login">Hinzufügen</button>
+        </div>
+    </div>
+    <div class="bg" (click)="closePopUp()"></div>
+</div>

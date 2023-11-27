@@ -43,6 +43,7 @@ export class ChatComponent implements AfterViewChecked {
   groupChat: boolean = true;
 
   openEditChannel: boolean = false;
+  openAddUser: boolean = false;
 
   avatImg: string[] = [];
   avatLength: number = 0;

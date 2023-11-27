@@ -31,6 +31,7 @@ import { SecondaryChatComponent } from './UserAppComponents/secondary-chat/secon
 import { EditChannelComponent } from './UserAppComponents/edit-channel/edit-channel.component';
 import { PrivatechatComponent } from './UserAppComponents/privatechat/privatechat.component';
 import { UsersProfilePopUpComponent } from './UserAppComponents/users-profile-pop-up/users-profile-pop-up.component';
+import { AddUsersPopUpComponent } from './UserAppComponents/add-users-pop-up/add-users-pop-up.component';
 
 const firebaseConfig = {
   projectId: 'dabubble-1a43e',
@@ -64,6 +65,7 @@ const firebaseConfig = {
     EditChannelComponent,
     PrivatechatComponent,
     UsersProfilePopUpComponent,
+    AddUsersPopUpComponent,
   ],
   imports: [
     BrowserModule,
