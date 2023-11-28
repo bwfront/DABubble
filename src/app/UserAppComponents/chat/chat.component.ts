@@ -11,7 +11,7 @@ import { Message } from 'src/app/models/message.model';
 import { DataService } from 'src/app/services/data.service';
 import { DabubbleappComponent } from '../dabubbleapp/dabubbleapp.component';
 import { UserProfileService } from 'src/app/services/userprofile.service';
-import { user } from '@angular/fire/auth';
+import { AddUsersPopUpComponent } from '../add-users-pop-up/add-users-pop-up.component';
 
 interface MessageGroup {
   label: string;
@@ -43,7 +43,10 @@ export class ChatComponent implements AfterViewChecked {
   groupChat: boolean = true;
 
   openEditChannel: boolean = false;
-  openAddUser: boolean = false;
+
+  openAddUserPop: boolean = false;
+  addUser: boolean = false;
+  showUser: boolean = false;
 
   avatImg: string[] = [];
   avatLength: number = 0;
@@ -53,7 +56,7 @@ export class ChatComponent implements AfterViewChecked {
     private local: LocalStorageService,
     private data: DataService,
     private dabubble: DabubbleappComponent,
-    private userProfileSevice: UserProfileService
+    private userProfileSevice: UserProfileService,
   ) {}
 
   ngOnInit() {
@@ -70,6 +73,15 @@ export class ChatComponent implements AfterViewChecked {
       }
     });
     this.uid = this.getUid();
+  }
+
+  openAddUserPopUp(){
+    this.addUser = true;
+    this.openAddUserPop = true;
+  }
+  openShowUserPopUp(){
+    this.showUser = true;
+    this.openAddUserPop = true;
   }
 
   setAvatImg(users: string[]) {

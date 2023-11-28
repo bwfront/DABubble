@@ -48,6 +48,39 @@
         margin-left: 4px
         font-weight: 400
 
+.second
+    width: 330px
+.all
+    max-height: 50vh !important
+    &::-webkit-scrollbar-track
+        background: transparent
+    &::-webkit-scrollbar-thumb
+        background: #535AF1
+        border-radius: 10px
+    &::-webkit-scrollbar
+        width: 5px
+
+.addbutton
+    display: flex
+    gap: 10px
+    font-size: 18px
+    align-items: center
+    cursor: pointer
+    .add
+        cursor: pointer
+        width: 18px
+        height: 18px
+        padding: 8px 8px 9px 9px
+        border-radius: 20px
+        background-color: #ECEEFE
+        background-image: url(/assets/images/chat/person_add.png)
+        background-repeat: no-repeat
+        background-position: center
+    &:hover
+        color: #797EF3
+        .add
+            background-image: url(/assets/images/chat/person_add_hover.png)
+
 .textinput
     width: calc( 100% - 36px )
     padding: 14px 18px
@@ -105,6 +138,13 @@
 .users
     max-height: 150px
     overflow-y: scroll
+    &::-webkit-scrollbar-track
+        background: transparent
+    &::-webkit-scrollbar-thumb
+        background: #535AF1
+        border-radius: 10px
+    &::-webkit-scrollbar
+        width: 5px
 .user
     margin-left: 10px
     margin-bottom: 10px
@@ -138,6 +178,15 @@
     display: flex
     gap: 10px
     overflow-x: scroll
+    &::-webkit-scrollbar-track
+        background: transparent
+    &::-webkit-scrollbar-thumb
+        background: #535AF1
+        border-radius: 10px
+    &::-webkit-scrollbar
+        width: 5px
+        height: 5px
+
     .remove-user
         cursor: pointer
         color: #686868
@@ -146,10 +195,9 @@
         &:hover
             font-weight: 700
             color: #535AF1
-            
+
 .errorChannel
     color: #ED1E79
-
 
 @media  ( max-width: 485px )
     .create-popup

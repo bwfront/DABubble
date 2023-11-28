@@ -1,5 +1,5 @@
 <div class="createchannel-con">
-    <div class="create-popup">
+    <div class="create-popup" *ngIf="addUsers">
         <div class="head">
             <div class="heading">Leute Hinzufügen</div>
             <div (click)="closePopUp()">
@@ -27,6 +27,23 @@
         <div class="login-button-con">
             <button class="login" (click)="saveUsers()">Hinzufügen</button>
         </div>
+    </div>
+    <div class="create-popup second" *ngIf="showUsers">
+        <div class="head">
+            <div class="heading">Mitglieder</div>
+            <div (click)="closePopUp()">
+                <img src="assets/images/close.png" alt="close">
+            </div>
+        </div>
+        <div>
+        <div class="users all">
+            <div class="user" *ngFor="let user of selectedUsers" (click)="addUserToChannel(user)">
+              <div class="avatar"><img src="{{ user.avatarURl }}" alt=""></div>
+              {{ user.realName }} <span *ngIf="uid === user.uid">(Du)</span>
+            </div>
+          </div>
+        </div>
+        <div class="addbutton" (click)="openAddUser()"><div class="add"></div>Mitglieder Hinzufügen</div>
     </div>
     <div class="bg" (click)="closePopUp()"></div>
 </div>

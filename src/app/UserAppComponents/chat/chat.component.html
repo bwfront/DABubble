@@ -5,11 +5,11 @@
         </div>
         <div class="back" (click)="closeChat()">zurück</div>
         <div class="users-con">
-            <div class="users">
+            <div class="users" (click)="openShowUserPopUp()">
                 <img class="avat" *ngFor="let avat of avatImg" src="{{ avat }}">
                 <div>{{ avatLength }}</div>
             </div>
-            <div class="add" (click)="openAddUser = true"></div>
+            <div class="add" (click)="openAddUserPopUp()"></div>
         </div>
     </div>
     <div class="chat" #chatContainer>
@@ -41,7 +41,7 @@
     <div class="edit-popup" *ngIf="openEditChannel">
         <app-edit-channel></app-edit-channel>
     </div>
-    <div class="edit-popup" *ngIf="openAddUser">
-        <app-add-users-pop-up></app-add-users-pop-up>
+    <div class="edit-popup" *ngIf="openAddUserPop">
+        <app-add-users-pop-up [addUsers]="addUser" [showUsers]="showUser"></app-add-users-pop-up>
     </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Injectable, Input } from '@angular/core';
 import { ChatComponent } from '../chat/chat.component';
 import { LocalStorageService } from 'src/app/services/localstorage.service';
 import { ChannelService } from 'src/app/services/channel.service';
@@ -32,6 +32,9 @@ export class AddUsersPopUpComponent {
     createdby: this.getUid(),
   };
   currentChannel: any;
+
+  @Input() showUsers: boolean = false;
+  @Input() addUsers: boolean = false;
   private subscription: Subscription = new Subscription();
   constructor(
     private chat: ChatComponent,
@@ -60,7 +63,14 @@ export class AddUsersPopUpComponent {
   }
 
   closePopUp() {
-    this.chat.openAddUser = false;
+    this.chat.showUser = false;
+    this.chat.addUser = false;
+    this.chat.openAddUserPop = false;
+  }
+
+  openAddUser(){
+    this.chat.showUser = false;
+    this.chat.addUser = true;
   }
 
   getUid() {

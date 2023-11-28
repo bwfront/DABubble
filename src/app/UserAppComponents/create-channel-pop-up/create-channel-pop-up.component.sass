@@ -81,6 +81,14 @@
 .users
     max-height: 150px
     overflow-y: scroll
+    &::-webkit-scrollbar-track
+        background: transparent
+    &::-webkit-scrollbar-thumb
+        background: #535AF1
+        border-radius: 10px
+    &::-webkit-scrollbar
+        width: 5px
+        height: 5px
 .user
     margin-left: 10px
     margin-bottom: 10px
@@ -114,6 +122,14 @@
     display: flex
     gap: 10px
     overflow-x: scroll
+    &::-webkit-scrollbar-track
+        background: transparent
+    &::-webkit-scrollbar-thumb
+        background: #535AF1
+        border-radius: 10px
+    &::-webkit-scrollbar
+        width: 5px
+        height: 5px
     .remove-user
         cursor: pointer
         color: #686868
@@ -122,10 +138,9 @@
         &:hover
             font-weight: 700
             color: #535AF1
-            
+
 .errorChannel
     color: #ED1E79
-
 
 @media  ( max-width: 485px )
     .create-popup
