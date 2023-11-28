@@ -37,7 +37,7 @@
         </div>
         <div>
         <div class="users all">
-            <div class="user" *ngFor="let user of selectedUsers" (click)="addUserToChannel(user)">
+            <div class="user" *ngFor="let user of selectedUsers" (click)="profilePopUp(user.uid)">
               <div class="avatar"><img src="{{ user.avatarURl }}" alt=""></div>
               {{ user.realName }} <span *ngIf="uid === user.uid">(Du)</span>
             </div>

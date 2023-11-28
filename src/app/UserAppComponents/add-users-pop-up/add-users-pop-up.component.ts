@@ -5,6 +5,8 @@ import { ChannelService } from 'src/app/services/channel.service';
 import { Subscription } from 'rxjs';
 import { ChatService } from 'src/app/services/chat.service';
 import { DataService } from 'src/app/services/data.service';
+import { UserProfileService } from 'src/app/services/userprofile.service';
+import { DabubbleappComponent } from '../dabubbleapp/dabubbleapp.component';
 
 interface User {
   uid: string;
@@ -41,7 +43,9 @@ export class AddUsersPopUpComponent {
     private channelService: ChannelService,
     private local: LocalStorageService,
     private chatService: ChatService,
-    private data: DataService
+    private data: DataService,
+    private userProfileSevice: UserProfileService,
+    private dabubble: DabubbleappComponent
   ) {}
 
   ngOnInit() {
@@ -73,6 +77,10 @@ export class AddUsersPopUpComponent {
     this.chat.addUser = true;
   }
 
+  profilePopUp(uid: string){
+      this.dabubble.usersProfilePopUpOpen = true;
+      this.userProfileSevice.getUserProfile(uid);
+  }
   getUid() {
     let data = this.local.get('currentUser');
     return data.user.uid;
