@@ -3,6 +3,8 @@ import { ChatComponent } from '../chat/chat.component';
 import { LocalStorageService } from 'src/app/services/localstorage.service';
 import { ChannelService } from 'src/app/services/channel.service';
 import { Subscription } from 'rxjs';
+import { ChatService } from 'src/app/services/chat.service';
+import { DataService } from 'src/app/services/data.service';
 
 interface User {
   uid: string;
@@ -29,21 +31,38 @@ export class AddUsersPopUpComponent {
     participants: [] as string[],
     createdby: this.getUid(),
   };
+  currentChannel: any;
   private subscription: Subscription = new Subscription();
   constructor(
     private chat: ChatComponent,
     private channelService: ChannelService,
-    private local: LocalStorageService
+    private local: LocalStorageService,
+    private chatService: ChatService,
+    private data: DataService
   ) {}
 
   ngOnInit() {
     this.loadUsers();
     this.uid = this.getUid();
+    this.currentChannel = this.chatService.currentChannel;
+    this.name = this.currentChannel.group_name;
+    this.currentParticipants();
+  }
+
+  currentParticipants() {
+    this.currentChannel.participants.forEach((element: string) => {
+      this.data.getUserRef(element).then((user) => {
+        if (user) {
+          this.addUserToChannel(user);
+        }
+      });
+    });
   }
 
   closePopUp() {
     this.chat.openAddUser = false;
   }
+
   getUid() {
     let data = this.local.get('currentUser');
     return data.user.uid;
@@ -104,5 +123,13 @@ export class AddUsersPopUpComponent {
       .filter((u) => u.uid != this.uid);
     this.users = filteredUsers;
     this.filterUsers();
+  }
+
+  saveUsers() {
+    this.channelService.updateChannelParticipants(
+      this.currentChannel.id,
+      this.channel.participants
+    );
+    this.closePopUp();
   }
 }

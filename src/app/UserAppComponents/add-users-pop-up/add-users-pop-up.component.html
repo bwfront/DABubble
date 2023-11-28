@@ -14,7 +14,7 @@
             <div class="user select" *ngFor="let selectedUser of selectedUsers">
                 <div class="avatar"><img src="{{ selectedUser.avatarURl }}" alt=""></div>
                 {{ selectedUser.realName }}
-                <span class="remove-user" (click)="removeUser(selectedUser)">X</span>
+                <span *ngIf="selectedUser.uid != uid" class="remove-user" (click)="removeUser(selectedUser)">X</span>
             </div>
         </div>
         <div class="users">
@@ -25,7 +25,7 @@
           </div>
         </div>
         <div class="login-button-con">
-            <button class="login">Hinzufügen</button>
+            <button class="login" (click)="saveUsers()">Hinzufügen</button>
         </div>
     </div>
     <div class="bg" (click)="closePopUp()"></div>
