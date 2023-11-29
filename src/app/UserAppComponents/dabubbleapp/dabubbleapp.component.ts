@@ -14,7 +14,7 @@ export class DabubbleappComponent {
   chatActive: boolean = true;
   channelActive: boolean = true;
   windowWidth: number = 0;
-
+  movedChannel: boolean = false;
 
 
   ngOnInit() {

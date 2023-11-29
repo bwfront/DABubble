@@ -56,7 +56,7 @@ export class ChatComponent implements AfterViewChecked {
     private local: LocalStorageService,
     private data: DataService,
     private dabubble: DabubbleappComponent,
-    private userProfileSevice: UserProfileService,
+    private userProfileSevice: UserProfileService
   ) {}
 
   ngOnInit() {
@@ -75,11 +75,11 @@ export class ChatComponent implements AfterViewChecked {
     this.uid = this.getUid();
   }
 
-  openAddUserPopUp(){
+  openAddUserPopUp() {
     this.addUser = true;
     this.openAddUserPop = true;
   }
-  openShowUserPopUp(){
+  openShowUserPopUp() {
     this.showUser = true;
     this.openAddUserPop = true;
   }

@@ -31,16 +31,60 @@
     margin-top: 20px
     width: 100%
     .channels
-        //z-index: 100
         width: 300px
+        margin-right: 80px
     .chat
-        margin-left: -60px
-        width: calc( 100% - 790px )
+        transition: all 1s ease
+        flex-grow: 1
+        flex-basis: 0%
+
+    .secondary-chat
+        width: 400px
+        margin-left: 20px
+
 .popup
     z-index: 1000 !important
     position: absolute
     width: 100vw
     height: 100vh
+
+.minimize-channel-con
+    transform: rotate(270deg)
+    position: absolute
+    left: -156px
+    bottom: 240px
+    background-color: #fff
+    padding: 15px 20px 10px 20px
+    border-radius: 0 0 30px 30px
+    box-shadow: 0px 7px 7px 0px #00000020
+    .text
+        margin: 0
+        font-size: 24px
+    .con
+        cursor: pointer
+        display: flex
+        align-items: center
+        gap: 5px
+        .img
+            transform: rotate(90deg)
+            width: 24px
+            height: 24px
+            background-image: url(/assets/images/minimize/isOut.png)
+            background-repeat: no-repeat
+            object-fit: contain
+    .in
+        padding: 20px 0 0 0
+        .img
+            background-image: url(/assets/images/minimize/isIn.png)
+    &:hover
+        .text
+            color: #797ef3
+            font-weight: 500
+        .img
+            background-image: url(/assets/images/minimize/isOut-hover.png) !important
+        .in
+            .img
+                background-image: url(/assets/images/minimize/isIn-hover.png) !important
 
 @media ( max-width: 1300px )
     .chat
@@ -57,7 +101,6 @@
         .chat
             width: calc( 100vw ) !important
 
-
 @media  ( max-width: 485px )
     .popup
         position: relative
@@ -70,4 +113,3 @@
     .logo-text
         font-size: 23px
         font-weight: 600
-
