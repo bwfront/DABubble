@@ -27,11 +27,9 @@ export class DataService {
           email: data.email
         };
       } else {
-        console.log('No User Found');
         return null;
       }
     } catch (error) {
-      console.error('Error fetching user data:', error);
       throw error;
     }
   }

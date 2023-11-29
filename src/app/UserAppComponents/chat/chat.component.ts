@@ -67,10 +67,7 @@ export class ChatComponent implements AfterViewChecked {
     this.chatService.openChannel.subscribe((channel) => {
       if (channel) {
         this.loadChannel(channel)
-        this.createbyId = channel.createdby;
-        console.log(this.createbyId);
-        console.log(this.uid);
-        
+        this.createbyId = channel.createdby; 
       }
     });
   }

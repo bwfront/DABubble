@@ -5,7 +5,7 @@ import { LoginpageComponent } from './UserAuthComponents/loginpage/loginpage.com
 import { DabubbleappComponent } from './UserAppComponents/dabubbleapp/dabubbleapp.component';
 
 const routes: Routes = [
-
+  
   { path: '', component: LoginpageComponent },
   { path: 'newpassword/:action', component: NewpasswordComponent },
   { path: 'dabubble', component: DabubbleappComponent },
@@ -13,6 +13,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
+  
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
