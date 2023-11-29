@@ -189,10 +189,6 @@ export class PrivatechatComponent implements AfterViewChecked {
     }
   }
 
-  closeChat() {
-    this.dabubble.openChat();
-  }
-
   openUserProfile(uid: string) {
     if(!this.notes){
       this.dabubble.usersProfilePopUpOpen = true;

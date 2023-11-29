@@ -3,7 +3,6 @@
         <div class="chat-heading" (click)="openEditChannel = true"><span>#</span>{{ groupName }}<div class="arrowimg">
             </div>
         </div>
-        <div class="back" (click)="closeChat()">zurück</div>
         <div class="users-con">
             <div class="users" (click)="openShowUserPopUp()">
                 <img class="avat" *ngFor="let avat of avatImg" src="{{ avat }}">

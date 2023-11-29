@@ -85,6 +85,13 @@
         .in
             .img
                 background-image: url(/assets/images/minimize/isIn-hover.png) !important
+.mobile
+    display: none
+    .img
+        width: 18px !important
+        height: 18px !important
+    .text
+        font-size: 18px !important
 
 @media ( max-width: 1300px )
     .chat
@@ -99,8 +106,15 @@
             left: 0
             width: calc( 100% - 30px ) !important
         .chat
-            width: calc( 100vw ) !important
-
+            width: 100vw !important
+    .out, .in
+        display: none !important
+    .mobile
+        display: unset
+    .minimize-channel-con
+        margin-top: 70px
+        left: -110px
+        padding: 0px 15px 5px 10px !important
 @media  ( max-width: 485px )
     .popup
         position: relative

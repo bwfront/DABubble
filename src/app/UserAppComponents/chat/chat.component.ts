@@ -190,10 +190,7 @@ export class ChatComponent implements AfterViewChecked {
       return false;
     }
   }
-  closeChat() {
-    this.dabubble.openChat();
-  }
-
+  
   openUserProfile(uid: string) {
     this.dabubble.usersProfilePopUpOpen = true;
     this.userProfileSevice.getUserProfile(uid);

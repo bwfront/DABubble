@@ -2,7 +2,6 @@
     <div class="chat-head">
         <div class="chat-heading" (click)="openUserProfile(otherUser)"><img src="{{ avatarChat }}" alt=""><div>{{ nameChat }}
         <span *ngIf="notes">(Du)</span></div></div>
-        <div class="back" (click)="closeChat()">zurück</div>
         <div class="users-con"></div>
     </div>
     <div class="chat" #chatContainer>

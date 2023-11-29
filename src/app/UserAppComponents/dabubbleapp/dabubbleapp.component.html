@@ -29,11 +29,15 @@
         </div>
     </div>
     <div class="minimize-channel-con">
-        <div class="con" (click)="channelActive = false;" *ngIf="channelActive">
+        <div class="con out" (click)="channelActive = false;" *ngIf="channelActive">
             <div class="text">Workspace-Menü schließen</div>
             <div class="img"></div>
         </div>
         <div class="con in" (click)="channelActive = true;" *ngIf="!channelActive">
+            <div class="text">Workspace-Menü öffnen</div>
+            <div class="img"></div>
+        </div>
+        <div class="con mobile" (click)="openChat()" *ngIf="!channelActive">
             <div class="text">Workspace-Menü öffnen</div>
             <div class="img"></div>
         </div>
