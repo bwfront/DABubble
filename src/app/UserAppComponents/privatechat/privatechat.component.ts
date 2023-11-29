@@ -57,7 +57,7 @@ export class PrivatechatComponent implements AfterViewChecked {
     this.chatService.openChannel.subscribe((channel) => {
       if (channel && channel.id) {
         this.setPrivateChatData(channel);
-        this.currentId = channel.id;
+        this.currentId = channel.id;  
       }
     });
     this.uid = this.getUid();
@@ -147,39 +147,53 @@ export class PrivatechatComponent implements AfterViewChecked {
     this.messageGroups = this.processMessages(this.messages);
   }
 
+  private formatDate(date: Date): string {
+    return date.toISOString().split('T')[0];
+  }
+
+  private getLabel(messageDate: Date, today: Date, yesterday: Date): string {
+    let label = this.formatDate(messageDate);
+    if (this.formatDate(today) === label) {
+      return 'Today';
+    } else if (this.formatDate(yesterday) === label) {
+      return 'Yesterday';
+    }
+    return label;
+  }
+
+  private findOrCreateGroup(groups: MessageGroup[], label: string): MessageGroup {
+    let group = groups.find(g => g.label === label);
+    if (!group) {
+      group = { label, messages: [] };
+      groups.push(group);
+    }
+    return group;
+  }
+
+  private sortGroups(a: MessageGroup, b: MessageGroup): number {
+    if (a.label === 'Heute') return 1;
+    if (b.label === 'Heute') return -1;
+    if (a.label === 'Gestern') return 1;
+    if (b.label === 'Gestern') return -1;
+    return new Date(a.label) > new Date(b.label) ? 1 : -1;
+  }
+
   processMessages(messages: Message[]): MessageGroup[] {
-    let groups: MessageGroup[] = [];
+    const groups: MessageGroup[] = [];
     const today = new Date();
     const yesterday = new Date(today);
     yesterday.setDate(yesterday.getDate() - 1);
-    const formatDate = (date: Date) => date.toISOString().split('T')[0];
 
     messages.forEach((message) => {
       const messageDate = new Date(message.date);
-      let label = formatDate(messageDate);
-
-      if (formatDate(today) === label) {
-        label = 'Today';
-      } else if (formatDate(yesterday) === label) {
-        label = 'Yesterday';
-      }
-
-      let group = groups.find((g) => g.label === label);
-      if (!group) {
-        group = { label, messages: [] };
-        groups.push(group);
-      }
+      const label = this.getLabel(messageDate, today, yesterday);
+      const group = this.findOrCreateGroup(groups, label);
       group.messages.push(message);
     });
 
-    return groups.sort((a, b) => {
-      if (a.label === 'Today') return 1;
-      if (b.label === 'Today') return -1;
-      if (a.label === 'Yesterday') return 1;
-      if (b.label === 'Yesterday') return -1;
-      return new Date(a.label) > new Date(b.label) ? 1 : -1;
-    });
+    return groups.sort(this.sortGroups);
   }
+
 
   messageSendFrom(senderid: string) {
     if (this.uid == senderid) {

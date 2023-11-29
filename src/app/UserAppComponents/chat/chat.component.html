@@ -29,6 +29,11 @@
                 </div>
             </div>
         </div>
+        <div class="startChat-con">
+            <div class="name"># {{ groupName }}</div>
+            <div class="start-text" *ngIf="uid == createbyId">Du hast diesen Channel heute erstellt. Das ist der Anfang des Channels.</div>
+            <div class="start-text" *ngIf="uid != createbyId">{{ createby }} hat diesen Channel {{ createAt }} erstellt. Das ist der Anfang des Channels.</div>
+        </div>
     </div>
     <div class="input-chat">
         <textarea type="text" placeholder="Nachricht an #{{ groupName }}" [(ngModel)]="message"></textarea>

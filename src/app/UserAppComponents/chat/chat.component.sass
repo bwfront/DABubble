@@ -5,10 +5,11 @@
     height: calc( 100% - 291px )
     overflow-y: scroll
     overflow-x: hidden
-    padding: 30px
+    padding: 60px 30px 0px 30px
     display: flex
-    flex-direction: column
+    flex-direction: column-reverse
     gap: 20px
+    justify-content: flex-start
     &::-webkit-scrollbar-track
         background: transparent
     &::-webkit-scrollbar-thumb
@@ -16,6 +17,14 @@
         border-radius: 10px
     &::-webkit-scrollbar
         width: 5px
+
+.startChat-con
+    .name
+        font-size: 24px
+        font-weight: 700
+    .start-text
+        color: #686868
+        font-size: 20px
 .edit-popup
     position: absolute
     top: 30px

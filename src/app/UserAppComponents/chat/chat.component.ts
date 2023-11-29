@@ -38,6 +38,9 @@ export class ChatComponent implements AfterViewChecked {
   messages: Message[] = [];
   uid: string = '';
   messageGroups: MessageGroup[] = [];
+  createAt: string = '';
+  createby: string = '';
+  createbyId: string = '';
 
   groupChat: boolean = true;
 
@@ -60,18 +63,39 @@ export class ChatComponent implements AfterViewChecked {
 
   ngOnInit() {
     this.messages = [];
+    this.uid = this.getUid();
     this.chatService.openChannel.subscribe((channel) => {
       if (channel) {
-        this.channel = channel;
-        this.groupName = channel.group_name;
-        this.currentId = channel.id;
-        this.setAvatImg(channel.participants);
-        this.loadMessages();
-      } else {
-        this.groupName = 'Erstellen Sie Ihren ersten Gruppenchat!';
+        this.loadChannel(channel)
+        this.createbyId = channel.createdby;
+        console.log(this.createbyId);
+        console.log(this.uid);
+        
       }
     });
-    this.uid = this.getUid();
+  }
+
+  loadChannel(channel: any){
+    this.channel = channel;
+    this.groupName = channel.group_name;
+    this.currentId = channel.id;
+    this.createAt = this.formatDateFromTimestamp(
+      channel.created_at.seconds,
+      channel.created_at.nanoseconds
+    );
+    this.getUserCreatesBy(channel.createdby);
+    this.setAvatImg(channel.participants);
+    this.loadMessages();
+  }
+  async getUserCreatesBy(userId: string) {
+    try {
+      const user = await this.data.getUserRef(userId);
+      if (user) {
+        this.createby = user?.realName;
+      }
+    } catch (error) {
+      this.createby = 'Nutzer nicht hinterlegt.';
+    }
   }
 
   openAddUserPopUp() {
@@ -134,6 +158,21 @@ export class ChatComponent implements AfterViewChecked {
     }
     this.scrollToBottom();
   }
+  formatDateFromTimestamp(seconds: number, nanoseconds: number): string {
+    const timestamp = seconds * 1000 + nanoseconds / 1000000;
+    const date = new Date(timestamp);
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const formattedDate = date.toLocaleDateString('de-DE');
+    if (date.toDateString() === today.toDateString()) {
+      return 'Heute';
+    } else if (date.toDateString() === yesterday.toDateString()) {
+      return 'Gestern';
+    } else {
+      return 'am ' + formattedDate;
+    }
+  }
 
   async getUserInformation() {
     const messagePromises = this.messages.map(async (message) => {
@@ -150,38 +189,54 @@ export class ChatComponent implements AfterViewChecked {
     this.messageGroups = this.processMessages(this.messages);
   }
 
+  private formatDate(date: Date): string {
+    return date.toISOString().split('T')[0];
+  }
+
+  private getLabel(messageDate: Date, today: Date, yesterday: Date): string {
+    let label = this.formatDate(messageDate);
+    if (this.formatDate(today) === label) {
+      return 'Today';
+    } else if (this.formatDate(yesterday) === label) {
+      return 'Yesterday';
+    }
+    return label;
+  }
+
+  private findOrCreateGroup(
+    groups: MessageGroup[],
+    label: string
+  ): MessageGroup {
+    let group = groups.find((g) => g.label === label);
+    if (!group) {
+      group = { label, messages: [] };
+      groups.push(group);
+    }
+    return group;
+  }
+
+  private sortGroups(a: MessageGroup, b: MessageGroup): number {
+    if (a.label === 'Heute') return 1;
+    if (b.label === 'Heute') return -1;
+    if (a.label === 'Gestern') return 1;
+    if (b.label === 'Gestern') return -1;
+    return new Date(a.label) > new Date(b.label) ? 1 : -1;
+  }
+
   processMessages(messages: Message[]): MessageGroup[] {
     const groups: MessageGroup[] = [];
     const today = new Date();
     const yesterday = new Date(today);
     yesterday.setDate(yesterday.getDate() - 1);
-    const formatDate = (date: Date) => date.toISOString().split('T')[0];
 
     messages.forEach((message) => {
       const messageDate = new Date(message.date);
-      let label = formatDate(messageDate);
-
-      if (formatDate(today) === label) {
-        label = 'Today';
-      } else if (formatDate(yesterday) === label) {
-        label = 'Yesterday';
-      }
-
-      let group = groups.find((g) => g.label === label);
-      if (!group) {
-        group = { label, messages: [] };
-        groups.push(group);
-      }
+      const label = this.getLabel(messageDate, today, yesterday);
+      const group = this.findOrCreateGroup(groups, label);
       group.messages.push(message);
     });
 
-    return groups.sort((a, b) => {
-      if (a.label === 'Today') return 1;
-      if (b.label === 'Today') return -1;
-      if (a.label === 'Yesterday') return 1;
-      if (b.label === 'Yesterday') return -1;
-      return new Date(a.label) > new Date(b.label) ? 1 : -1;
-    });
+    return groups.sort(this.sortGroups);
   }
 
   messageSendFrom(senderid: string) {

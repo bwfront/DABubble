@@ -5,14 +5,6 @@
         <div class="users-con"></div>
     </div>
     <div class="chat" #chatContainer>
-        <div class="startChat-con">
-            <div class="start-head">
-                <img src="{{ avatarChat }}" alt="avatar">
-                <div class="name">{{ nameChat }}</div>
-            </div>
-            <div class="start-text" *ngIf="notes"><span class="note">Dieser Raum ist nur für dich da.</span> Mache dir Notizen, liste deine To-dos auf oder bewahre Links und Dateien griffbereit auf. Du kannst hier auch gerne Dinge mit dir selbst besprechen.</div>
-            <div class="start-text" *ngIf="!notes">Diese Unterhaltung findet nur zwischen <span (click)="openUserProfile(otherUser)" class="name">{{'@'}}{{ nameChat }}</span> und dir statt.</div>
-        </div>
         <div *ngFor="let group of messageGroups">
             <div class="date">
                 <div class="date-label">{{ group.label }}</div>
@@ -29,6 +21,14 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="startChat-con">
+            <div class="start-head">
+                <img src="{{ avatarChat }}" alt="avatar">
+                <div class="name">{{ nameChat }}</div>
+            </div>
+            <div class="start-text" *ngIf="notes"><span class="note">Dieser Raum ist nur für dich da.</span> Mache dir Notizen, liste deine To-dos auf oder bewahre Links und Dateien griffbereit auf. Du kannst hier auch gerne Dinge mit dir selbst besprechen.</div>
+            <div class="start-text" *ngIf="!notes">Diese Unterhaltung findet nur zwischen <span (click)="openUserProfile(otherUser)" class="name">{{'@'}}{{ nameChat }}</span> und dir statt.</div>
         </div>
     </div>
     <div class="input-chat">
