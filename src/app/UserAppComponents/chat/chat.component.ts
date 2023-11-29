@@ -11,7 +11,6 @@ import { Message } from 'src/app/models/message.model';
 import { DataService } from 'src/app/services/data.service';
 import { DabubbleappComponent } from '../dabubbleapp/dabubbleapp.component';
 import { UserProfileService } from 'src/app/services/userprofile.service';
-import { AddUsersPopUpComponent } from '../add-users-pop-up/add-users-pop-up.component';
 
 interface MessageGroup {
   label: string;
@@ -85,15 +84,17 @@ export class ChatComponent implements AfterViewChecked {
   }
 
   setAvatImg(users: string[]) {
-    this.avatLength = users.length;
-    this.avatImg = [];
-    for (let i = 0; i < 3; i++) {
-      if (users[i]) {
-        this.data.getUserRef(users[i]).then((e) => {
-          if (e) {
-            this.avatImg.push(e.avatarURl);
-          }
-        });
+    if (users) {
+      this.avatLength = users.length;
+      this.avatImg = [];
+      for (let i = 0; i < 3; i++) {
+        if (users[i]) {
+          this.data.getUserRef(users[i]).then((e) => {
+            if (e) {
+              this.avatImg.push(e.avatarURl);
+            }
+          });
+        }
       }
     }
   }
@@ -190,7 +191,7 @@ export class ChatComponent implements AfterViewChecked {
       return false;
     }
   }
-  
+
   openUserProfile(uid: string) {
     this.dabubble.usersProfilePopUpOpen = true;
     this.userProfileSevice.getUserProfile(uid);

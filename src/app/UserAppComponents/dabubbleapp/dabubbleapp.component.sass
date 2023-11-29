@@ -86,7 +86,7 @@
             .img
                 background-image: url(/assets/images/minimize/isIn-hover.png) !important
 .mobile
-    display: none
+    display: none !important
     .img
         width: 18px !important
         height: 18px !important
@@ -110,11 +110,12 @@
     .out, .in
         display: none !important
     .mobile
-        display: unset
+        display: flex !important
     .minimize-channel-con
         margin-top: 70px
         left: -110px
         padding: 0px 15px 5px 10px !important
+
 @media  ( max-width: 485px )
     .popup
         position: relative
