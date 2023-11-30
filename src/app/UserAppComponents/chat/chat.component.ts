@@ -41,17 +41,19 @@ export class ChatComponent implements AfterViewChecked {
   createAt: string = '';
   createby: string = '';
   createbyId: string = '';
-
   groupChat: boolean = true;
-
   openEditChannel: boolean = false;
-
   openAddUserPop: boolean = false;
   addUser: boolean = false;
   showUser: boolean = false;
-
   avatImg: string[] = [];
   avatLength: number = 0;
+
+  editMessagePopUp: boolean = false;
+  editTextArea: boolean = false;
+  editMessageText: string = '';
+  currentEditMessage: any;
+
 
   constructor(
     private chatService: ChatService,
@@ -70,6 +72,19 @@ export class ChatComponent implements AfterViewChecked {
         this.createbyId = channel.createdby; 
       }
     });
+  }
+  
+  openEditText(message: any){
+    this.currentEditMessage = message;
+    this.editMessageText = message.text;
+    this.editMessagePopUp = false;
+    this.editTextArea = true;
+  }
+
+  sendEditMessage(){
+    console.log('message-id', this.currentEditMessage.id);
+    console.log('chatId-id', this.currentId);
+    console.log(this.editMessageText);
   }
 
   loadChannel(channel: any){
@@ -150,6 +165,8 @@ export class ChatComponent implements AfterViewChecked {
         .getMessages(this.currentId, 'group_chats')
         .subscribe((messages) => {
           this.messages = messages;
+          console.log(messages);
+          
           this.getUserInformation();
         });
     }
