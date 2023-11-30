@@ -53,10 +53,10 @@
             <div class="send-icon" (click)="sendMessage()"></div>
         </div>
     </div>
-    
+
     <div class="error" *ngIf="errorEdit">Die Nachricht darf nicht Leer sein.</div>
     <div class="input-chat" *ngIf="editTextArea">
-        <textarea type="text" placeholder="Nachricht an #{{ groupName }}" [(ngModel)]="editMessageText"></textarea>
+        <textarea type="text" placeholder="Nachricht an Bearbeiten" [(ngModel)]="editMessageText"></textarea>
         <div class="buttons">
             <div class="btn btn2" (click)="editTextArea = false">Schließen</div>
             <div class="btn" (click)="sendEditMessage()">Speichern</div>

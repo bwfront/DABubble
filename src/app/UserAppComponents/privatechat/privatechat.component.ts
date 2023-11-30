@@ -40,11 +40,15 @@ export class PrivatechatComponent implements AfterViewChecked {
   messages: Message[] = [];
   uid: string = '';
   messageGroups: MessageGroup[] = [];
-
   groupChat: boolean = true;
-
   openEditChannel: boolean = false;
   notes: boolean =  false;
+
+  editMessagePopUp: boolean = false;
+  editTextArea: boolean = false;
+  editMessageText: string = '';
+  currentEditMessage: any;
+  errorEdit: boolean = false;
   constructor(
     private chatService: ChatService,
     private local: LocalStorageService,
@@ -63,6 +67,31 @@ export class PrivatechatComponent implements AfterViewChecked {
     this.uid = this.getUid();
     this.loadMessages();
   }
+
+  openEditText(message: any){
+    this.currentEditMessage = message;
+    this.editMessageText = message.text;
+    this.editMessagePopUp = false;
+    this.editTextArea = true;
+  }
+
+  sendEditMessage(){
+    if(this.editMessageText != ''){
+      this.chatService.editMessage('private_chats', this.currentId, this.currentEditMessage.id, this.editMessageText)
+      this.editTextArea = false;
+    }else{
+      this.errorEditMessage()
+    }
+  }
+
+  errorEditMessage(){
+    this.errorEdit = true;
+    setTimeout(() => {
+      this.errorEdit = false;
+    }, 3000);
+  }
+
+
 
   setPrivateChatData(channel: any) {
     if (!channel || !channel.id) {
