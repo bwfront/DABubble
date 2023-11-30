@@ -82,9 +82,8 @@ export class ChatComponent implements AfterViewChecked {
   }
 
   sendEditMessage(){
-    console.log('message-id', this.currentEditMessage.id);
-    console.log('chatId-id', this.currentId);
-    console.log(this.editMessageText);
+    this.chatService.editMessage('group_chats', this.currentId, this.currentEditMessage.id, this.editMessageText)
+    this.editTextArea = false;
   }
 
   loadChannel(channel: any){

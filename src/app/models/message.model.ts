@@ -6,4 +6,5 @@ export interface Message {
   name: any;
   avatar: any;
   displayDate?: string;
+  edit: boolean;
 }

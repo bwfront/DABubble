@@ -76,4 +76,8 @@ export class ChatService {
         )
       );
   }
+  editMessage(collection: string, chatId: string, messageId: string, newMessage: string){
+    const messageDoc = this.firestore.collection(collection).doc(chatId).collection('messages').doc(messageId);
+    return messageDoc.update({text: newMessage, edit: true});
+  }
 }

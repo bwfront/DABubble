@@ -31,6 +31,7 @@
                     <div class="name-time" [ngClass]="{'name-time-you': messageSendFrom(message.sender_id)}">
                         <div class="name" (click)="openUserProfile(message.sender_id)">{{ message.name }}</div>
                         <div class="time"> {{ message.time }}</div>
+                        <div class="time" *ngIf="message.edit">(Bearbeitet)</div>
                     </div>
                     <div class="msg" [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">{{message.text}}
                     </div>
@@ -55,7 +56,7 @@
     <div class="input-chat" *ngIf="editTextArea">
         <textarea type="text" placeholder="Nachricht an #{{ groupName }}" [(ngModel)]="editMessageText"></textarea>
         <div class="buttons">
-            <div class="btn">Schließen</div>
+            <div class="btn" (click)="editTextArea = false">Schließen</div>
             <div class="btn" (click)="sendEditMessage()">Speichern</div>
         </div>
     </div>
