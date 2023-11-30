@@ -17,7 +17,12 @@ export class LogincardComponent {
   userEmail: string = '';
   userPassword: string = '';
 
-  constructor(private authService: AuthService, private loginpage: LoginpageComponent, private local: LocalStorageService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private loginpage: LoginpageComponent,
+    private local: LocalStorageService,
+    private router: Router
+  ) {}
 
   userLogin() {
     if (this.userEmail && this.userPassword) {
@@ -25,28 +30,28 @@ export class LogincardComponent {
         .signIn(this.userEmail, this.userPassword)
         .then((userCredential) => {
           this.router.navigate(['/dabubble']);
-          this.local.set('currentUser', userCredential)
+          this.local.set('currentUser', userCredential);
         })
         .catch((error) => {
           this.loginError = true;
-          setTimeout(() =>{
+          setTimeout(() => {
             this.loginError = false;
-          },3000)
+          }, 3000);
         });
     }
   }
 
-  googleLogin(){
-    this.authService.byGoogle()
+  googleLogin() {
+    this.authService.byGoogle();
   }
 
-  passwordresetopen(){
+  passwordresetopen() {
     this.loginpage.passwordresetcard = true;
   }
 
-  guestLogin(){
-    this.userEmail = 'gast@mail.com'
-    this.userPassword= '123456'
+  guestLogin() {
+    this.userEmail = 'gast@mail.com';
+    this.userPassword = '123456';
     this.userLogin();
   }
 }

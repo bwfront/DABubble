@@ -11,6 +11,10 @@
             </div>
             <div *ngFor="let message of group.messages" class="message"
                 [ngClass]="{'message-you': messageSendFrom(message.sender_id)}">
+                <div class="reactions">
+                    <div class="reaction emoji"></div>
+                    <div class="reaction option" *ngIf="messageSendFrom(message.sender_id)"></div>
+                </div>
                 <div class="avatar"><img src="{{ message.avatar }}" alt=""></div>
                 <div class="message-content" [ngClass]="{'message-content-you': messageSendFrom(message.sender_id)}">
                     <div class="name-time" [ngClass]="{'name-time-you': messageSendFrom(message.sender_id)}">
