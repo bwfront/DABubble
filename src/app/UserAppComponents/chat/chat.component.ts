@@ -53,6 +53,7 @@ export class ChatComponent implements AfterViewChecked {
   editTextArea: boolean = false;
   editMessageText: string = '';
   currentEditMessage: any;
+  errorEdit: boolean = false;
 
 
   constructor(
@@ -82,8 +83,19 @@ export class ChatComponent implements AfterViewChecked {
   }
 
   sendEditMessage(){
-    this.chatService.editMessage('group_chats', this.currentId, this.currentEditMessage.id, this.editMessageText)
-    this.editTextArea = false;
+    if(this.editMessageText != ''){
+      this.chatService.editMessage('group_chats', this.currentId, this.currentEditMessage.id, this.editMessageText)
+      this.editTextArea = false;
+    }else{
+      this.errorEditMessage()
+    }
+  }
+
+  errorEditMessage(){
+    this.errorEdit = true;
+    setTimeout(() => {
+      this.errorEdit = false;
+    }, 3000);
   }
 
   loadChannel(channel: any){
