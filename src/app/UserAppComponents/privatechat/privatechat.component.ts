@@ -60,7 +60,10 @@ export class PrivatechatComponent implements AfterViewChecked {
     private userProfileSevice: UserProfileService
   ) {}
 
-  private calculatePickerPosition(event: MouseEvent): { top: string, left: string } {
+  private calculatePickerPosition(event: MouseEvent): {
+    top: string;
+    left: string;
+  } {
     const button = event.target as HTMLElement;
     const rect = button.getBoundingClientRect();
     let top = rect.top + rect.height;
@@ -88,9 +91,9 @@ export class PrivatechatComponent implements AfterViewChecked {
     this.showEmojiPicker = true;
   }
 
-  quickReact(emoji: any, message: any){
+  quickReact(emoji: any, message: any) {
     this.currentEditMessage = message;
-    this.onEmojiSelect(emoji)
+    this.onEmojiSelect(emoji);
   }
 
   hasUserReacted(reaction: any): boolean {
@@ -211,14 +214,37 @@ export class PrivatechatComponent implements AfterViewChecked {
       this.messages = [];
       this.chatService
         .getMessages(this.currentId, 'private_chats')
-        .subscribe((messages) => {
+        .subscribe(async (messages) => {
           this.messages = messages;
+          await this.loadUserNamesForReactions(this.messages);
           this.getUserInformation();
+          this.disableAutoScroll = false;
+          this.scrollToBottom();
         });
     }
-    this.scrollToBottom();
   }
 
+  async loadUserNamesForReactions(messages: Message[]) {
+    console.log(this.messages);
+    for (const message of messages) {
+      for (const reaction of message.reactions) {
+        const userNames = await Promise.all(
+          reaction.from.map((uid: any) => this.getUserName(uid))
+        );
+        reaction.userNames = userNames;
+      }
+    }
+  }
+
+  async getUserName(uid: string): Promise<string> {
+    const userData = await this.data.getUserRef(uid);
+    return userData?.realName || 'Unbekannter Benutzer';
+  }
+
+  hasCurrentUserReacted(reactionFrom: string[]): boolean {
+    return reactionFrom.includes(this.uid);
+  }
+  
   async getUserInformation() {
     const messagePromises = this.messages.map(async (message) => {
       try {

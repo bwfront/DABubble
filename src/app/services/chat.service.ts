@@ -105,39 +105,51 @@ export class ChatService {
     return messageData;
   }
 
-  private processReactions(existingReactions: any[], reaction: any, from: string) {
+  private processReactions(
+    existingReactions: any[],
+    reaction: any,
+    from: string
+  ) {
     let userHasReacted = false;
     let userReactionType = null;
-    existingReactions.forEach(reactionObj => {
-        if (reactionObj.from.includes(from)) {
-            userHasReacted = true;
-            userReactionType = reactionObj.react;
-        }
+    existingReactions.forEach((reactionObj) => {
+      if (reactionObj.from.includes(from)) {
+        userHasReacted = true;
+        userReactionType = reactionObj.react;
+      }
     });
     if (userHasReacted) {
-        existingReactions = existingReactions.map(reactionObj => {
-            return {
-                react: reactionObj.react,
-                from: reactionObj.from.filter((f: any) => f !== from)
-            };
-        }).filter(reactionObj => reactionObj.from.length > 0);
-        if (userReactionType !== reaction) {
-            this.addOrUpdateReaction(existingReactions, reaction, from);
-        }
-    } else {
+      existingReactions = existingReactions
+        .map((reactionObj) => {
+          return {
+            react: reactionObj.react,
+            from: reactionObj.from.filter((f: any) => f !== from),
+          };
+        })
+        .filter((reactionObj) => reactionObj.from.length > 0);
+      if (userReactionType !== reaction) {
         this.addOrUpdateReaction(existingReactions, reaction, from);
+      }
+    } else {
+      this.addOrUpdateReaction(existingReactions, reaction, from);
     }
     return existingReactions;
-}
+  }
 
-private addOrUpdateReaction(existingReactions: any[], reaction: any, from: string) {
-    const reactionIndex = existingReactions.findIndex((r: any) => r.react === reaction);
+  private addOrUpdateReaction(
+    existingReactions: any[],
+    reaction: any,
+    from: string
+  ) {
+    const reactionIndex = existingReactions.findIndex(
+      (r: any) => r.react === reaction
+    );
     if (reactionIndex !== -1) {
-        existingReactions[reactionIndex].from.push(from);
+      existingReactions[reactionIndex].from.push(from);
     } else {
-        existingReactions.push({ react: reaction, from: [from] });
+      existingReactions.push({ react: reaction, from: [from] });
     }
-}
+  }
 
   reactToMessage(
     collection: string,

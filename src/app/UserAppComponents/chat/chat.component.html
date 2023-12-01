@@ -42,7 +42,43 @@
                             <div class="user-reaction" (click)="quickReact(reaction.react, message)"
                                 [ngClass]="{'reaction-active': hasUserReacted(reaction)}"
                                 *ngFor="let reaction of message.reactions">{{ reaction.react }} <span>{{
-                                    reaction.from.length }}</span></div>
+                                    reaction.from.length }}</span>
+                                <div class="hover-reaction-con">
+                                    <div class="emoji">{{ reaction.react }}</div>
+                                    <div class="users" *ngIf="reaction.from.length === 1">
+                                        <span *ngIf="hasCurrentUserReacted(reaction.from); else otherSingleUser">
+                                            Du
+                                        </span>
+                                        <ng-template #otherSingleUser>
+                                            {{ reaction.userNames[0] }}
+                                        </ng-template>
+                                    </div>
+                                    <div class="users" *ngIf="reaction.from.length === 2">
+                                        <span *ngIf="hasCurrentUserReacted(reaction.from)">
+                                            Du und {{ reaction.userNames[0] === this.uid ? reaction.userNames[1] :
+                                            reaction.userNames[0] }}
+                                        </span>
+                                        <span *ngIf="!hasCurrentUserReacted(reaction.from)">
+                                            {{ reaction.userNames.join(' und ') }}
+                                        </span>
+                                    </div>
+                                    <div class="users" *ngIf="reaction.from.length > 2">
+                                        <span *ngIf="hasCurrentUserReacted(reaction.from)">
+                                            Du und {{ reaction.from.length - 1 }} weitere
+                                        </span>
+                                        <span *ngIf="!hasCurrentUserReacted(reaction.from)">
+                                            {{ reaction.userNames[0] }} und {{ reaction.from.length - 1 }} weitere
+                                        </span>
+                                    </div>
+                                    <div class="text"
+                                        *ngIf="reaction.from.length === 1 && hasCurrentUserReacted(reaction.from)">hast
+                                        reagiert</div>
+                                    <div class="text"
+                                        *ngIf="reaction.from.length === 1 && !hasCurrentUserReacted(reaction.from)">hat
+                                        reagiert</div>
+                                    <div class="text" *ngIf="reaction.from.length > 1">haben reagiert</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
