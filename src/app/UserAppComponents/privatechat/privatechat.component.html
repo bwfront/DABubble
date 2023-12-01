@@ -39,8 +39,6 @@
             <div class="start-text" *ngIf="!notes">Diese Unterhaltung findet nur zwischen <span (click)="openUserProfile(otherUser)" class="name">{{'@'}}{{ nameChat }}</span> und dir statt.</div>
         </div>
     </div>
-
-
     <div class="input-chat" *ngIf="!editTextArea">
         <textarea type="text" placeholder="Nachricht an {{ nameChat }}" [(ngModel)]="message"></textarea>
         <div class="chat-icons">
@@ -48,7 +46,6 @@
             <div class="send-icon" (click)="sendMessage()"></div>
         </div>
     </div>
-
     <div class="error" *ngIf="errorEdit">Die Nachricht darf nicht Leer sein.</div>
     <div class="input-chat" *ngIf="editTextArea">
         <textarea type="text" placeholder="Nachricht an Bearbeiten" [(ngModel)]="editMessageText"></textarea>

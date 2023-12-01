@@ -25,6 +25,7 @@ interface MessageGroup {
   styleUrls: ['./chat.component.sass'],
 })
 export class ChatComponent implements AfterViewChecked {
+  
   ngAfterViewChecked() {
     this.scrollToBottom();
   }
@@ -48,13 +49,16 @@ export class ChatComponent implements AfterViewChecked {
   showUser: boolean = false;
   avatImg: string[] = [];
   avatLength: number = 0;
-
   editMessagePopUp: boolean = false;
   editTextArea: boolean = false;
   editMessageText: string = '';
   currentEditMessage: any;
   errorEdit: boolean = false;
 
+  showEmojiPicker = false;
+  pickerPosition = { top: '0px', left: '0px' };
+
+  disableAutoScroll: boolean = false;
 
   constructor(
     private chatService: ChatService,
@@ -69,36 +73,84 @@ export class ChatComponent implements AfterViewChecked {
     this.uid = this.getUid();
     this.chatService.openChannel.subscribe((channel) => {
       if (channel) {
-        this.loadChannel(channel)
-        this.createbyId = channel.createdby; 
+        this.loadChannel(channel);
+        this.createbyId = channel.createdby;
       }
     });
   }
-  
-  openEditText(message: any){
+
+  openEmojiPicker(event: MouseEvent, message: any) {
+    this.currentEditMessage = message;
+    this.disableAutoScroll = true;
+    const button = event.target as HTMLElement;
+    const rect = button.getBoundingClientRect();
+    let top = rect.top + rect.height;
+    let left = rect.left;
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+    const pickerWidth = 365;
+    const pickerHeight = 350;
+    if (left + pickerWidth > windowWidth) {
+      left = windowWidth - pickerWidth;
+    }
+    if (top + pickerHeight > windowHeight) {
+      top = rect.top - pickerHeight;
+    }
+    if (left < 0) {
+      left = 0;
+    }
+    this.pickerPosition = {
+      top: `${top}px`,
+      left: `${left}px`,
+    };
+    this.showEmojiPicker = true;
+  }
+
+  onEmojiSelect(event: any) {
+    console.log(event.emoji.native);
+    this.chatService.reactToMessage(
+      'group_chats',
+      this.currentId,
+      this.currentEditMessage.id,
+      event.emoji.native,
+      this.uid
+    );
+    this.showEmojiPicker = false;
+  }
+
+  closeEmojiPicker() {
+    this.showEmojiPicker = false;
+  }
+
+  openEditText(message: any) {
     this.currentEditMessage = message;
     this.editMessageText = message.text;
     this.editMessagePopUp = false;
     this.editTextArea = true;
   }
 
-  sendEditMessage(){
-    if(this.editMessageText != ''){
-      this.chatService.editMessage('group_chats', this.currentId, this.currentEditMessage.id, this.editMessageText)
+  sendEditMessage() {
+    if (this.editMessageText != '') {
+      this.chatService.editMessage(
+        'group_chats',
+        this.currentId,
+        this.currentEditMessage.id,
+        this.editMessageText
+      );
       this.editTextArea = false;
-    }else{
-      this.errorEditMessage()
+    } else {
+      this.errorEditMessage();
     }
   }
 
-  errorEditMessage(){
+  errorEditMessage() {
     this.errorEdit = true;
     setTimeout(() => {
       this.errorEdit = false;
     }, 3000);
   }
 
-  loadChannel(channel: any){
+  loadChannel(channel: any) {
     this.channel = channel;
     this.groupName = channel.group_name;
     this.currentId = channel.id;
@@ -153,8 +205,10 @@ export class ChatComponent implements AfterViewChecked {
 
   private scrollToBottom(): void {
     try {
-      this.chatContainer.nativeElement.scrollTop =
-        this.chatContainer.nativeElement.scrollHeight;
+      if (!this.disableAutoScroll) {
+        this.chatContainer.nativeElement.scrollTop =
+          this.chatContainer.nativeElement.scrollHeight;
+      }
     } catch (err) {}
   }
 
@@ -176,11 +230,10 @@ export class ChatComponent implements AfterViewChecked {
         .getMessages(this.currentId, 'group_chats')
         .subscribe((messages) => {
           this.messages = messages;
-          console.log(messages);
-          
           this.getUserInformation();
         });
     }
+    this.disableAutoScroll = false;
     this.scrollToBottom();
   }
   formatDateFromTimestamp(seconds: number, nanoseconds: number): string {

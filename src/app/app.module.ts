@@ -32,6 +32,7 @@ import { EditChannelComponent } from './UserAppComponents/edit-channel/edit-chan
 import { PrivatechatComponent } from './UserAppComponents/privatechat/privatechat.component';
 import { UsersProfilePopUpComponent } from './UserAppComponents/users-profile-pop-up/users-profile-pop-up.component';
 import { AddUsersPopUpComponent } from './UserAppComponents/add-users-pop-up/add-users-pop-up.component';
+import { PickerModule } from '@ctrl/ngx-emoji-mart';
 
 const firebaseConfig = {
   projectId: 'dabubble-1a43e',
@@ -76,6 +77,7 @@ const firebaseConfig = {
     RouterLink,
     FormsModule,
     AngularFireStorageModule,
+    PickerModule,
     AngularFireModule.initializeApp(firebaseConfig),
     provideFirebaseApp(() =>
       initializeApp({

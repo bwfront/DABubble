@@ -19,7 +19,7 @@
             <div *ngFor="let message of group.messages" class="message"
                 [ngClass]="{'message-you': messageSendFrom(message.sender_id)}">
                 <div class="reactions">
-                    <div class="reaction emoji"></div>
+                    <div class="reaction emoji" (click)="openEmojiPicker($event, message)"></div>
                     <div class="reaction answer"></div>
                     <div class="reaction option" (click)="editMessagePopUp = !editMessagePopUp"
                         *ngIf="messageSendFrom(message.sender_id)"></div>
@@ -53,7 +53,6 @@
             <div class="send-icon" (click)="sendMessage()"></div>
         </div>
     </div>
-
     <div class="error" *ngIf="errorEdit">Die Nachricht darf nicht Leer sein.</div>
     <div class="input-chat" *ngIf="editTextArea">
         <textarea type="text" placeholder="Nachricht an Bearbeiten" [(ngModel)]="editMessageText"></textarea>
@@ -62,11 +61,16 @@
             <div class="btn" (click)="sendEditMessage()">Speichern</div>
         </div>
     </div>
-
     <div class="edit-popup" *ngIf="openEditChannel">
         <app-edit-channel></app-edit-channel>
     </div>
     <div class="edit-popup" *ngIf="openAddUserPop">
         <app-add-users-pop-up [addUsers]="addUser" [showUsers]="showUser"></app-add-users-pop-up>
+    </div>
+    <div *ngIf="showEmojiPicker" class="overlay" (click)="closeEmojiPicker()"></div>
+    <div *ngIf="showEmojiPicker"
+        [ngStyle]="{'position': 'absolute', 'top': pickerPosition.top, 'left': pickerPosition.left}"
+        style="z-index: 1001;">
+        <emoji-mart [showPreview]="false" (emojiClick)="onEmojiSelect($event)"></emoji-mart>
     </div>
 </div>

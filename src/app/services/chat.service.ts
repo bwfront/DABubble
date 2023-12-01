@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { BehaviorSubject, Observable, map } from 'rxjs';
-
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
 import { Message } from '../models/message.model';
 
 @Injectable({
@@ -76,8 +77,63 @@ export class ChatService {
         )
       );
   }
-  editMessage(collection: string, chatId: string, messageId: string, newMessage: string){
-    const messageDoc = this.firestore.collection(collection).doc(chatId).collection('messages').doc(messageId);
-    return messageDoc.update({text: newMessage, edit: true});
+
+  editMessage(
+    collection: string,
+    chatId: string,
+    messageId: string,
+    newMessage: string
+  ) {
+    const messageDoc = this.firestore
+      .collection(collection)
+      .doc(chatId)
+      .collection('messages')
+      .doc(messageId);
+    return messageDoc.update({ text: newMessage, edit: true });
   }
+
+  private async getMessageDoc(transaction: firebase.firestore.Transaction, messageDocRef: firebase.firestore.DocumentReference) {
+    const messageDoc = await transaction.get(messageDocRef);
+    const messageData = messageDoc.data();
+    if (!messageData) {
+      throw new Error("Message not found");
+    }
+    return messageData;
+  }
+
+  private processReactions(existingReactions: any[], reaction: any, from: string) {
+    const existingReactionIndex = existingReactions.findIndex(r => r.from === from);
+    if (existingReactionIndex !== -1) {
+      if (existingReactions[existingReactionIndex].react === reaction) {
+        return existingReactions.filter((_, index) => index !== existingReactionIndex);
+      } else {
+        existingReactions[existingReactionIndex].react = reaction;
+      }
+    } else {
+      existingReactions.push({ from, react: reaction });
+    }
+    return existingReactions;
+  }
+
+  reactToMessage(
+    collection: string,
+    chatId: string,
+    messageId: string,
+    reaction: any,
+    from: string
+  ) {
+    const messageDocRef = this.firestore
+      .collection(collection)
+      .doc(chatId)
+      .collection('messages')
+      .doc(messageId).ref;
+
+    return this.firestore.firestore.runTransaction(async (transaction) => {
+      const messageData = await this.getMessageDoc(transaction, messageDocRef);
+      const updatedReactions = this.processReactions(messageData['reactions'] || [], reaction, from);
+      transaction.update(messageDocRef, { reactions: updatedReactions });
+    });
+  }
+
+  
 }

@@ -42,7 +42,7 @@ export class PrivatechatComponent implements AfterViewChecked {
   messageGroups: MessageGroup[] = [];
   groupChat: boolean = true;
   openEditChannel: boolean = false;
-  notes: boolean =  false;
+  notes: boolean = false;
 
   editMessagePopUp: boolean = false;
   editTextArea: boolean = false;
@@ -61,37 +61,40 @@ export class PrivatechatComponent implements AfterViewChecked {
     this.chatService.openChannel.subscribe((channel) => {
       if (channel && channel.id) {
         this.setPrivateChatData(channel);
-        this.currentId = channel.id;  
+        this.currentId = channel.id;
       }
     });
     this.uid = this.getUid();
     this.loadMessages();
   }
 
-  openEditText(message: any){
+  openEditText(message: any) {
     this.currentEditMessage = message;
     this.editMessageText = message.text;
     this.editMessagePopUp = false;
     this.editTextArea = true;
   }
 
-  sendEditMessage(){
-    if(this.editMessageText != ''){
-      this.chatService.editMessage('private_chats', this.currentId, this.currentEditMessage.id, this.editMessageText)
+  sendEditMessage() {
+    if (this.editMessageText != '') {
+      this.chatService.editMessage(
+        'private_chats',
+        this.currentId,
+        this.currentEditMessage.id,
+        this.editMessageText
+      );
       this.editTextArea = false;
-    }else{
-      this.errorEditMessage()
+    } else {
+      this.errorEditMessage();
     }
   }
 
-  errorEditMessage(){
+  errorEditMessage() {
     this.errorEdit = true;
     setTimeout(() => {
       this.errorEdit = false;
     }, 3000);
   }
-
-
 
   setPrivateChatData(channel: any) {
     if (!channel || !channel.id) {
@@ -103,7 +106,7 @@ export class PrivatechatComponent implements AfterViewChecked {
   }
 
   getNameAvatar(channel: any) {
-    if(channel.user){
+    if (channel.user) {
       this.data.getUserRef(channel.user).then((e) => {
         this.nameChat = e?.realName || '';
         this.avatarChat = e?.avatarURl || '';
@@ -190,8 +193,11 @@ export class PrivatechatComponent implements AfterViewChecked {
     return label;
   }
 
-  private findOrCreateGroup(groups: MessageGroup[], label: string): MessageGroup {
-    let group = groups.find(g => g.label === label);
+  private findOrCreateGroup(
+    groups: MessageGroup[],
+    label: string
+  ): MessageGroup {
+    let group = groups.find((g) => g.label === label);
     if (!group) {
       group = { label, messages: [] };
       groups.push(group);
@@ -223,7 +229,6 @@ export class PrivatechatComponent implements AfterViewChecked {
     return groups.sort(this.sortGroups);
   }
 
-
   messageSendFrom(senderid: string) {
     if (this.uid == senderid) {
       return true;
@@ -233,10 +238,10 @@ export class PrivatechatComponent implements AfterViewChecked {
   }
 
   openUserProfile(uid: string) {
-    if(!this.notes){
+    if (!this.notes) {
       this.dabubble.usersProfilePopUpOpen = true;
       this.userProfileSevice.getUserProfile(uid);
-    }else{
+    } else {
       this.dabubble.usersProfilePopUpOpen = true;
       this.userProfileSevice.getUserProfile(this.uid);
     }
