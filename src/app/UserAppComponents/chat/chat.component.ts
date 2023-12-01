@@ -25,7 +25,7 @@ interface MessageGroup {
   styleUrls: ['./chat.component.sass'],
 })
 export class ChatComponent implements AfterViewChecked {
-  
+
   ngAfterViewChecked() {
     this.scrollToBottom();
   }
@@ -79,9 +79,7 @@ export class ChatComponent implements AfterViewChecked {
     });
   }
 
-  openEmojiPicker(event: MouseEvent, message: any) {
-    this.currentEditMessage = message;
-    this.disableAutoScroll = true;
+  private calculatePickerPosition(event: MouseEvent): { top: string, left: string } {
     const button = event.target as HTMLElement;
     const rect = button.getBoundingClientRect();
     let top = rect.top + rect.height;
@@ -90,6 +88,7 @@ export class ChatComponent implements AfterViewChecked {
     const windowHeight = window.innerHeight;
     const pickerWidth = 365;
     const pickerHeight = 350;
+  
     if (left + pickerWidth > windowWidth) {
       left = windowWidth - pickerWidth;
     }
@@ -99,10 +98,14 @@ export class ChatComponent implements AfterViewChecked {
     if (left < 0) {
       left = 0;
     }
-    this.pickerPosition = {
-      top: `${top}px`,
-      left: `${left}px`,
-    };
+  
+    return { top: `${top}px`, left: `${left}px` };
+  }
+
+  openEmojiPicker(event: MouseEvent, message: any) {
+    this.currentEditMessage = message;
+    this.disableAutoScroll = true;
+    this.pickerPosition = this.calculatePickerPosition(event);
     this.showEmojiPicker = true;
   }
 

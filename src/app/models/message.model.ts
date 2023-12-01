@@ -7,4 +7,5 @@ export interface Message {
   avatar: any;
   displayDate?: string;
   edit: boolean;
+  reactions: any;
 }

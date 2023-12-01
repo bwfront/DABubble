@@ -33,6 +33,7 @@ export class ChatService {
       date: this.getDate(),
       time: this.getTime(),
       timestamp: new Date(),
+      reactions: [],
     };
     return this.firestore
       .collection(collection)
@@ -92,28 +93,52 @@ export class ChatService {
     return messageDoc.update({ text: newMessage, edit: true });
   }
 
-  private async getMessageDoc(transaction: firebase.firestore.Transaction, messageDocRef: firebase.firestore.DocumentReference) {
+  private async getMessageDoc(
+    transaction: firebase.firestore.Transaction,
+    messageDocRef: firebase.firestore.DocumentReference
+  ) {
     const messageDoc = await transaction.get(messageDocRef);
     const messageData = messageDoc.data();
     if (!messageData) {
-      throw new Error("Message not found");
+      throw new Error('Message not found');
     }
     return messageData;
   }
 
   private processReactions(existingReactions: any[], reaction: any, from: string) {
-    const existingReactionIndex = existingReactions.findIndex(r => r.from === from);
-    if (existingReactionIndex !== -1) {
-      if (existingReactions[existingReactionIndex].react === reaction) {
-        return existingReactions.filter((_, index) => index !== existingReactionIndex);
-      } else {
-        existingReactions[existingReactionIndex].react = reaction;
-      }
+    let userHasReacted = false;
+    let userReactionType = null;
+    existingReactions.forEach(reactionObj => {
+        if (reactionObj.from.includes(from)) {
+            userHasReacted = true;
+            userReactionType = reactionObj.react;
+        }
+    });
+    if (userHasReacted) {
+        existingReactions = existingReactions.map(reactionObj => {
+            return {
+                react: reactionObj.react,
+                from: reactionObj.from.filter((f: any) => f !== from)
+            };
+        }).filter(reactionObj => reactionObj.from.length > 0);
+        if (userReactionType !== reaction) {
+            this.addOrUpdateReaction(existingReactions, reaction, from);
+        }
     } else {
-      existingReactions.push({ from, react: reaction });
+        this.addOrUpdateReaction(existingReactions, reaction, from);
     }
     return existingReactions;
-  }
+}
+
+private addOrUpdateReaction(existingReactions: any[], reaction: any, from: string) {
+    const reactionIndex = existingReactions.findIndex((r: any) => r.react === reaction);
+    if (reactionIndex !== -1) {
+        existingReactions[reactionIndex].from.push(from);
+    } else {
+        existingReactions.push({ react: reaction, from: [from] });
+    }
+}
+
 
   reactToMessage(
     collection: string,
@@ -130,10 +155,12 @@ export class ChatService {
 
     return this.firestore.firestore.runTransaction(async (transaction) => {
       const messageData = await this.getMessageDoc(transaction, messageDocRef);
-      const updatedReactions = this.processReactions(messageData['reactions'] || [], reaction, from);
+      const updatedReactions = this.processReactions(
+        messageData['reactions'] || [],
+        reaction,
+        from
+      );
       transaction.update(messageDocRef, { reactions: updatedReactions });
     });
   }
-
-  
 }
