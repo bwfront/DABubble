@@ -57,7 +57,6 @@ export class ChatComponent implements AfterViewChecked {
 
   showEmojiPicker = false;
   pickerPosition = { top: '0px', left: '0px' };
-
   disableAutoScroll: boolean = false;
 
   constructor(
@@ -88,7 +87,6 @@ export class ChatComponent implements AfterViewChecked {
     const windowHeight = window.innerHeight;
     const pickerWidth = 365;
     const pickerHeight = 350;
-  
     if (left + pickerWidth > windowWidth) {
       left = windowWidth - pickerWidth;
     }
@@ -98,7 +96,6 @@ export class ChatComponent implements AfterViewChecked {
     if (left < 0) {
       left = 0;
     }
-  
     return { top: `${top}px`, left: `${left}px` };
   }
 
@@ -109,13 +106,21 @@ export class ChatComponent implements AfterViewChecked {
     this.showEmojiPicker = true;
   }
 
-  onEmojiSelect(event: any) {
-    console.log(event.emoji.native);
+  quickReact(emoji: any, message: any){
+    this.currentEditMessage = message;
+    this.onEmojiSelect(emoji)
+  }
+
+  hasUserReacted(reaction: any): boolean {
+    return reaction.from.includes(this.uid);
+  }
+
+  onEmojiSelect(emoji: any) {
     this.chatService.reactToMessage(
       'group_chats',
       this.currentId,
       this.currentEditMessage.id,
-      event.emoji.native,
+      emoji,
       this.uid
     );
     this.showEmojiPicker = false;

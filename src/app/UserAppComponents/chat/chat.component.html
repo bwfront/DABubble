@@ -18,17 +18,17 @@
             </div>
             <div *ngFor="let message of group.messages" class="message"
                 [ngClass]="{'message-you': messageSendFrom(message.sender_id)}">
-                    <div class="reactions">
-                        <div class="reaction emoji" (click)="openEmojiPicker($event, message)"></div>
-                        <div class="reaction answer"></div>
-                        <div class="reaction option" (click)="editMessagePopUp = !editMessagePopUp"
-                            *ngIf="messageSendFrom(message.sender_id)"></div>
-                        <div class="edit-message-popup" (click)="openEditText(message)"
-                            *ngIf="editMessagePopUp && messageSendFrom(message.sender_id)">Nachricht bearbeiten</div>
-                    </div>
-                    <div class="avatar"><img src="{{ message.avatar }}" alt="avatar"></div>
-                    <div>
-                        <div class="message-content"
+                <div class="reactions">
+                    <div class="reaction emoji" (click)="openEmojiPicker($event, message)"></div>
+                    <div class="reaction answer"></div>
+                    <div class="reaction option" (click)="editMessagePopUp = !editMessagePopUp"
+                        *ngIf="messageSendFrom(message.sender_id)"></div>
+                    <div class="edit-message-popup" (click)="openEditText(message)"
+                        *ngIf="editMessagePopUp && messageSendFrom(message.sender_id)">Nachricht bearbeiten</div>
+                </div>
+                <div class="avatar"><img src="{{ message.avatar }}" alt="avatar"></div>
+                <div>
+                    <div class="message-content"
                         [ngClass]="{'message-content-you': messageSendFrom(message.sender_id)}">
                         <div class="name-time" [ngClass]="{'name-time-you': messageSendFrom(message.sender_id)}">
                             <div class="name" (click)="openUserProfile(message.sender_id)">{{ message.name }}</div>
@@ -37,8 +37,12 @@
                         </div>
                         <div class="msg" [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">{{message.text}}
                         </div>
-                        <div class="reaction-con">
-                            <div class="reaction" *ngFor="let reaction of message.reactions">{{ reaction.react }}</div>
+                        <div class="reaction-con" [ngClass]="{'reaction-you': !messageSendFrom(message.sender_id)}">
+                            <div class="button" (click)="openEmojiPicker($event, message)"></div>
+                            <div class="user-reaction" (click)="quickReact(reaction.react, message)"
+                                [ngClass]="{'reaction-active': hasUserReacted(reaction)}"
+                                *ngFor="let reaction of message.reactions">{{ reaction.react }} <span>{{
+                                    reaction.from.length }}</span></div>
                         </div>
                     </div>
                 </div>
@@ -77,6 +81,6 @@
     <div *ngIf="showEmojiPicker"
         [ngStyle]="{'position': 'absolute', 'top': pickerPosition.top, 'left': pickerPosition.left}"
         style="z-index: 1001;">
-        <emoji-mart [showPreview]="false" (emojiClick)="onEmojiSelect($event)"></emoji-mart>
+        <emoji-mart [showPreview]="false" (emojiClick)="onEmojiSelect($event.emoji.native)"></emoji-mart>
     </div>
 </div>

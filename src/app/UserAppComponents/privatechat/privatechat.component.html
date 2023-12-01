@@ -1,7 +1,10 @@
 <div class="chat-con">
     <div class="chat-head">
-        <div class="chat-heading" (click)="openUserProfile(otherUser)"><img src="{{ avatarChat }}" alt=""><div>{{ nameChat }}
-        <span *ngIf="notes">(Du)</span></div></div>
+        <div class="chat-heading" (click)="openUserProfile(otherUser)"><img src="{{ avatarChat }}" alt="">
+            <div>{{ nameChat }}
+                <span *ngIf="notes">(Du)</span>
+            </div>
+        </div>
         <div class="users-con"></div>
     </div>
     <div class="chat" #chatContainer>
@@ -12,20 +15,32 @@
             <div *ngFor="let message of group.messages" class="message"
                 [ngClass]="{'message-you': messageSendFrom(message.sender_id)}">
                 <div class="reactions">
-                    <div class="reaction emoji"></div>
+                    <div class="reaction emoji" (click)="openEmojiPicker($event, message)"></div>
                     <div class="reaction option" (click)="editMessagePopUp = !editMessagePopUp"
                         *ngIf="messageSendFrom(message.sender_id)"></div>
                     <div class="edit-message-popup" (click)="openEditText(message)"
                         *ngIf="editMessagePopUp && messageSendFrom(message.sender_id)">Nachricht bearbeiten</div>
                 </div>
                 <div class="avatar"><img src="{{ message.avatar }}" alt=""></div>
-                <div class="message-content" [ngClass]="{'message-content-you': messageSendFrom(message.sender_id)}">
-                    <div class="name-time" [ngClass]="{'name-time-you': messageSendFrom(message.sender_id)}">
-                        <div class="name" (click)="!messageSendFrom(message.sender_id) ? openUserProfile(otherUser) : openUserProfile(uid)">{{ message.name }}</div>
-                        <div class="time"> {{ message.time }}</div>
-                        <div class="time" *ngIf="message.edit">(Bearbeitet)</div>
-                    </div>
-                    <div class="msg" [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">{{message.text}}
+                <div>
+                    <div class="message-content"
+                        [ngClass]="{'message-content-you': messageSendFrom(message.sender_id)}">
+                        <div class="name-time" [ngClass]="{'name-time-you': messageSendFrom(message.sender_id)}">
+                            <div class="name"
+                                (click)="!messageSendFrom(message.sender_id) ? openUserProfile(otherUser) : openUserProfile(uid)">
+                                {{ message.name }}</div>
+                            <div class="time"> {{ message.time }}</div>
+                            <div class="time" *ngIf="message.edit">(Bearbeitet)</div>
+                        </div>
+                        <div class="msg" [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">{{message.text}}
+                        </div>
+                        <div class="reaction-con" [ngClass]="{'reaction-you': !messageSendFrom(message.sender_id)}">
+                            <div class="button" (click)="openEmojiPicker($event, message)"></div>
+                            <div class="user-reaction" (click)="quickReact(reaction.react, message)"
+                                [ngClass]="{'reaction-active': hasUserReacted(reaction)}"
+                                *ngFor="let reaction of message.reactions">{{ reaction.react }} <span>{{
+                                    reaction.from.length }}</span></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -35,8 +50,11 @@
                 <img src="{{ avatarChat }}" alt="avatar">
                 <div class="name">{{ nameChat }}</div>
             </div>
-            <div class="start-text" *ngIf="notes"><span class="note">Dieser Raum ist nur für dich da.</span> Mache dir Notizen, liste deine To-dos auf oder bewahre Links und Dateien griffbereit auf. Du kannst hier auch gerne Dinge mit dir selbst besprechen.</div>
-            <div class="start-text" *ngIf="!notes">Diese Unterhaltung findet nur zwischen <span (click)="openUserProfile(otherUser)" class="name">{{'@'}}{{ nameChat }}</span> und dir statt.</div>
+            <div class="start-text" *ngIf="notes"><span class="note">Dieser Raum ist nur für dich da.</span> Mache dir
+                Notizen, liste deine To-dos auf oder bewahre Links und Dateien griffbereit auf. Du kannst hier auch
+                gerne Dinge mit dir selbst besprechen.</div>
+            <div class="start-text" *ngIf="!notes">Diese Unterhaltung findet nur zwischen <span
+                    (click)="openUserProfile(otherUser)" class="name">{{'@'}}{{ nameChat }}</span> und dir statt.</div>
         </div>
     </div>
     <div class="input-chat" *ngIf="!editTextArea">
@@ -53,5 +71,11 @@
             <div class="btn btn2" (click)="editTextArea = false">Schließen</div>
             <div class="btn" (click)="sendEditMessage()">Speichern</div>
         </div>
+    </div>
+    <div *ngIf="showEmojiPicker" class="overlay" (click)="closeEmojiPicker()"></div>
+    <div *ngIf="showEmojiPicker"
+        [ngStyle]="{'position': 'absolute', 'top': pickerPosition.top, 'left': pickerPosition.left}"
+        style="z-index: 1001;">
+        <emoji-mart [showPreview]="false" (emojiClick)="onEmojiSelect($event.emoji.native)"></emoji-mart>
     </div>
 </div>

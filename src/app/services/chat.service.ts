@@ -139,7 +139,6 @@ private addOrUpdateReaction(existingReactions: any[], reaction: any, from: strin
     }
 }
 
-
   reactToMessage(
     collection: string,
     chatId: string,

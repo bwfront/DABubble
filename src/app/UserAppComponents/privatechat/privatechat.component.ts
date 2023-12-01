@@ -43,12 +43,15 @@ export class PrivatechatComponent implements AfterViewChecked {
   groupChat: boolean = true;
   openEditChannel: boolean = false;
   notes: boolean = false;
-
   editMessagePopUp: boolean = false;
   editTextArea: boolean = false;
   editMessageText: string = '';
   currentEditMessage: any;
   errorEdit: boolean = false;
+
+  showEmojiPicker = false;
+  pickerPosition = { top: '0px', left: '0px' };
+  disableAutoScroll: boolean = false;
   constructor(
     private chatService: ChatService,
     private local: LocalStorageService,
@@ -56,6 +59,58 @@ export class PrivatechatComponent implements AfterViewChecked {
     private dabubble: DabubbleappComponent,
     private userProfileSevice: UserProfileService
   ) {}
+
+  private calculatePickerPosition(event: MouseEvent): { top: string, left: string } {
+    const button = event.target as HTMLElement;
+    const rect = button.getBoundingClientRect();
+    let top = rect.top + rect.height;
+    let left = rect.left;
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+    const pickerWidth = 365;
+    const pickerHeight = 350;
+    if (left + pickerWidth > windowWidth) {
+      left = windowWidth - pickerWidth;
+    }
+    if (top + pickerHeight > windowHeight) {
+      top = rect.top - pickerHeight;
+    }
+    if (left < 0) {
+      left = 0;
+    }
+    return { top: `${top}px`, left: `${left}px` };
+  }
+
+  openEmojiPicker(event: MouseEvent, message: any) {
+    this.currentEditMessage = message;
+    this.disableAutoScroll = true;
+    this.pickerPosition = this.calculatePickerPosition(event);
+    this.showEmojiPicker = true;
+  }
+
+  quickReact(emoji: any, message: any){
+    this.currentEditMessage = message;
+    this.onEmojiSelect(emoji)
+  }
+
+  hasUserReacted(reaction: any): boolean {
+    return reaction.from.includes(this.uid);
+  }
+
+  onEmojiSelect(emoji: any) {
+    this.chatService.reactToMessage(
+      'private_chats',
+      this.currentId,
+      this.currentEditMessage.id,
+      emoji,
+      this.uid
+    );
+    this.showEmojiPicker = false;
+  }
+
+  closeEmojiPicker() {
+    this.showEmojiPicker = false;
+  }
 
   ngOnInit() {
     this.chatService.openChannel.subscribe((channel) => {
