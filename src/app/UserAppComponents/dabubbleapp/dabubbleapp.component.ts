@@ -32,10 +32,13 @@ export class DabubbleappComponent {
     if (this.windowWidth < 751) {
       this.chatActive = false;
       this.channelActive = true;
+      this.threadActive = false;
     }
     if (this.windowWidth > 750) {
-      this.chatActive = true;
-      this.channelActive = true;
+      if (!this.threadActive) {
+        this.chatActive = true;
+        this.channelActive = true;
+      }
     }
   }
 
@@ -44,5 +47,19 @@ export class DabubbleappComponent {
       this.chatActive = !this.chatActive;
       this.channelActive = !this.channelActive;
     }
+  }
+
+  openThread() {
+    if (this.windowWidth < 1300) {
+      this.chatActive = !this.chatActive;
+    } 
+      this.threadActive = true;
+  }
+  
+  closeThread() {
+    if (this.windowWidth < 1300) {
+      this.chatActive = true;
+    }
+    this.threadActive = false;
   }
 }

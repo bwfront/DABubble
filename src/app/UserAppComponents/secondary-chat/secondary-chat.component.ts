@@ -145,7 +145,7 @@ export class SecondaryChatComponent implements AfterViewChecked {
   }
 
   closeThread() {
-    this.dabubble.threadActive = false;
+    this.dabubble.closeThread();
   }
 
   messageSendFrom(senderid: string) {

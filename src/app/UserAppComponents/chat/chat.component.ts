@@ -85,7 +85,7 @@ export class ChatComponent implements AfterViewChecked {
       groupName: this.groupName,
     }
     this.threadService.setSelectedMessage(message, channelInfo);
-    this.dabubble.threadActive = true;
+    this.dabubble.openThread();
   }
 
   async loadUserNamesForReactions(messages: Message[]) {

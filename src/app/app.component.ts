@@ -27,7 +27,7 @@ export class AppComponent implements OnInit {
   }
 
   private updateBodyOverflow() {
-    if (this.router.url === '/dabubble') {
+    if (this.router.url != '/') {
       document.body.style.overflow = 'hidden';
     } else {
       if (window.innerWidth <= 650 || window.innerHeight <= 955) {
