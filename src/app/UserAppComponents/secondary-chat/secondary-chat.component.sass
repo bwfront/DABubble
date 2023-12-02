@@ -4,6 +4,24 @@
     border-radius: 30px
     background-color: #fff
 
+.chat
+    width: 100%
+    height: calc( 100% - 291px )
+    overflow-y: scroll
+    overflow-x: hidden
+    padding: 60px 0 0 0
+    display: flex
+    flex-direction: column-reverse
+    gap: 20px
+    justify-content: flex-start
+    &::-webkit-scrollbar-track
+        background: transparent
+    &::-webkit-scrollbar-thumb
+        background: #535AF1
+        border-radius: 10px
+    &::-webkit-scrollbar
+        width: 5px
+
 .close
     img
         cursor: pointer
@@ -26,3 +44,28 @@
             font-weight: 700
         .currentName
             color: #797EF3
+
+.threadmessage
+    padding: 10px 30px 10px 30px
+    background-color: #ECEEFE
+    .msg
+        color: #000
+        background-color: #fff
+        max-width: 50%
+.msg-you
+    max-width: 80%
+
+.answer-count
+    color: #797EF3
+    margin-left: 30px
+    display: flex
+    position: relative
+    margin-bottom: 10px
+    .answer
+        border: none
+        position: absolute
+        margin-top: -11px
+    .line
+        border-bottom: 1px solid #797EF3
+        width: calc( 100% - 130px )
+        margin-left: 110px

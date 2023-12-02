@@ -16,7 +16,7 @@ export class DabubbleappComponent {
   windowWidth: number = 0;
   movedChannel: boolean = false;
 
-  threadActive: boolean = true
+  threadActive: boolean = false;
 
   ngOnInit() {
     this.checkWindowSize();

@@ -2,12 +2,13 @@
     <div class="chat-con">
         <div class="chat-head">
             <div class="title">
-                <div class="thread">Thread</div><div class="currentName"># {{ currentChannel.groupName }}</div>
+                <div class="thread">Thread</div>
+                <div class="currentName"># {{ currentChannel.groupName }}</div>
             </div>
             <div class="close" (click)="closeThread()"><img src="assets/images/close.png" alt="close"></div>
         </div>
         <div class="chat" #chatContainer>
-            <div *ngFor="let message of messages" class="message"
+            <div *ngFor="let message of replies" class="message"
                 [ngClass]="{'message-you': messageSendFrom(message.sender_id)}">
                 <div class="reactions">
                     <div class="reaction emoji" (click)="openEmojiPicker($event, message)"></div>
@@ -25,7 +26,8 @@
                             <div class="time"> {{ message.time }}</div>
                             <div class="time" *ngIf="message.edit">(Bearbeitet)</div>
                         </div>
-                        <div class="msg" [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">{{message.text}}
+                        <div class="msg" [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">
+                            {{message.text}}
                         </div>
                         <div class="reaction-con" [ngClass]="{'reaction-you': !messageSendFrom(message.sender_id)}">
                             <div class="button" (click)="openEmojiPicker($event, message)"></div>
@@ -61,10 +63,12 @@
                                         </span>
                                     </div>
                                     <div class="text"
-                                        *ngIf="reaction.from.length === 1 && hasCurrentUserReacted(reaction.from)">hast
+                                        *ngIf="reaction.from.length === 1 && hasCurrentUserReacted(reaction.from)">
+                                        hast
                                         reagiert</div>
                                     <div class="text"
-                                        *ngIf="reaction.from.length === 1 && !hasCurrentUserReacted(reaction.from)">hat
+                                        *ngIf="reaction.from.length === 1 && !hasCurrentUserReacted(reaction.from)">
+                                        hat
                                         reagiert</div>
                                     <div class="text" *ngIf="reaction.from.length > 1">haben reagiert</div>
                                 </div>
@@ -73,6 +77,25 @@
                     </div>
                 </div>
             </div>
+            <div class="answer-count"><div class="answer">{{ repliesLength }} Antworten</div><div class="line"></div>
+            </div>
+            <div class="message threadmessage"
+            [ngClass]="{'message-you': messageSendFrom(selectedMessage.sender_id)}">
+            <div class="avatar"><img src="{{ selectedMessage.avatar }}" alt="avatar"></div>
+            <div>
+                <div class="message-content" [ngClass]="{'message-content-you': messageSendFrom(selectedMessage.sender_id)}">
+                    <div class="name-time" [ngClass]="{'name-time-you': messageSendFrom(selectedMessage.sender_id)}">
+                        <div class="name" (click)="openUserProfile(selectedMessage.sender_id)">{{ selectedMessage.name }}</div>
+                        <div class="time"> {{ selectedMessage.time }}</div>
+                        <div class="time" *ngIf="selectedMessage.edit">(Bearbeitet)</div>
+                    </div>
+                    <div class="msg" [ngClass]="{'msg-you': messageSendFrom(selectedMessage.sender_id)}">
+                        {{selectedMessage.text}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
         </div>
         <div class="input-chat" *ngIf="!editTextArea">
             <textarea type="text" placeholder="Antworten..." [(ngModel)]="message"></textarea>
