@@ -8,4 +8,5 @@ export interface Message {
   displayDate?: string;
   edit: boolean;
   reactions: any;
+  thread: any;
 }

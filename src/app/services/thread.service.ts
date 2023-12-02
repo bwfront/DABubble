@@ -44,6 +44,15 @@ export class ThreadService {
       );
   }
 
+  fetchSingleReplies(chatId: string, messageId: string){
+    return this.firestore
+    .collection('group_chats')
+    .doc(chatId)
+    .collection('messages')
+    .doc(messageId)
+    .collection('thread').valueChanges();;
+  }
+
   private processReactions(
     existingReactions: any[],
     reaction: any,
@@ -126,5 +135,21 @@ export class ThreadService {
       );
       transaction.update(messageDocRef, { reactions: updatedReactions });
     });
+  }
+
+  editMessage(
+    chatId: string,
+    messageId: string,
+    threadId: string,
+    newMessage: string
+  ) {
+    const messageDoc = this.firestore
+    .collection('group_chats')
+    .doc(chatId)
+    .collection('messages')
+    .doc(messageId)
+    .collection('thread')
+    .doc(threadId);
+    return messageDoc.update({ text: newMessage, edit: true });
   }
 }

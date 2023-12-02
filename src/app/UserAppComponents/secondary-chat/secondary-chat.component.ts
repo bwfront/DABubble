@@ -20,7 +20,7 @@ import { ChatService } from 'src/app/services/chat.service';
 })
 export class SecondaryChatComponent implements AfterViewChecked {
   ngAfterViewChecked() {
-    if(!this.disableAutoScroll){
+    if (!this.disableAutoScroll) {
       this.scrollToBottom();
     }
   }
@@ -121,7 +121,6 @@ export class SecondaryChatComponent implements AfterViewChecked {
   }
 
   sortRepliesByTimestamp() {
-    console.log('Replies vor dem Sortieren:', this.replies);
     if (!this.replies || this.replies.length === 0) {
       return;
     }
@@ -236,9 +235,26 @@ export class SecondaryChatComponent implements AfterViewChecked {
     this.showEmojiPicker = false;
   }
 
-  openEditText(message: any) {}
+  openEditText(message: any) {
+    this.currentEditMessage = message;
+    this.editMessageText = message.text;
+    this.editMessagePopUp = false;
+    this.editTextArea = true;
+  }
 
-  sendEditMessage() {}
+  sendEditMessage() {
+    if (this.editMessageText != '') {
+      this.threadS.editMessage(
+        this.currentChannel.currentId,
+        this.selectedMessage.id,
+        this.currentEditMessage.id,
+        this.editMessageText
+      );
+      this.editTextArea = false;
+    } else {
+      this.errorEditMessage();
+    }
+  }
 
   errorEditMessage() {
     this.errorEdit = true;

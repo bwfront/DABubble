@@ -38,6 +38,8 @@
                         <div class="msg" [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">{{message.text}}
                         </div>
                         <div class="reaction-con" [ngClass]="{'reaction-you': !messageSendFrom(message.sender_id)}">
+                            <div class="answer-count" *ngIf="message.thread.length != 0" (click)="openThread(message)">
+                                {{ message.thread.length }} Antworten</div>
                             <div class="button" (click)="openEmojiPicker($event, message)"></div>
                             <div class="user-reaction" (click)="quickReact(reaction.react, message)"
                                 [ngClass]="{'reaction-active': hasUserReacted(reaction)}"

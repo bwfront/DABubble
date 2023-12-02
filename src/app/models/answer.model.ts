@@ -5,7 +5,5 @@ export interface Answer {
     time: string
     timestamp: Date;
     edit: boolean;
-    reactions: [];    
-
-
+    reactions: [];
 }

@@ -271,12 +271,23 @@ export class ChatComponent implements AfterViewChecked {
         .getMessages(this.currentId, 'group_chats')
         .subscribe(async (messages) => {
           this.messages = messages;
+          await this.loadThreadsForMessage()
           await this.loadUserNamesForReactions(this.messages);
           this.getUserInformation();
           this.disableAutoScroll = false;
           this.scrollToBottom();
         });
-    }
+    }  
+  }
+
+  proccesMessages: any
+  async loadThreadsForMessage() {
+   this.proccesMessages = this.messages
+    this.proccesMessages.forEach((message: any, index: any) => {
+      this.threadService.fetchSingleReplies(this.currentId, message.id).subscribe(threads => {
+        this.messages[index].thread = threads;
+      });
+    });
   }
 
   formatDateFromTimestamp(seconds: number, nanoseconds: number): string {
