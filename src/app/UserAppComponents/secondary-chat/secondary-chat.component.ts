@@ -20,7 +20,9 @@ import { ChatService } from 'src/app/services/chat.service';
 })
 export class SecondaryChatComponent implements AfterViewChecked {
   ngAfterViewChecked() {
-    this.scrollToBottom();
+    if(!this.disableAutoScroll){
+      this.scrollToBottom();
+    }
   }
 
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
@@ -73,20 +75,23 @@ export class SecondaryChatComponent implements AfterViewChecked {
   }
 
   sendMessage() {
-    const answer: Answer = {
-      sender_id: this.uid,
-      text: this.message,
-      date: this.chatService.getDate(),
-      time: this.chatService.getTime(),
-      timestamp: new Date(),
-      edit: false,
-      reactions: [],
-    };
-    this.threadS.sendMessage(
-      this.currentChannel.currentId,
-      this.selectedMessage.id,
-      answer
-    );
+    if (this.message != '') {
+      const answer: Answer = {
+        sender_id: this.uid,
+        text: this.message,
+        date: this.chatService.getDate(),
+        time: this.chatService.getTime(),
+        timestamp: new Date(),
+        edit: false,
+        reactions: [],
+      };
+      this.threadS.sendMessage(
+        this.currentChannel.currentId,
+        this.selectedMessage.id,
+        answer
+      );
+    }
+    this.message = '';
   }
 
   loadReplies(chatId: string, messageId: string) {
@@ -94,7 +99,7 @@ export class SecondaryChatComponent implements AfterViewChecked {
       this.fetchedReplies = data;
       await this.loadUserNamesForReactions(this.fetchedReplies);
       this.getUserInformation();
-      this.disableAutoScroll = false;
+      this.disableAutoScroll = true;
       this.scrollToBottom();
     });
   }
@@ -122,9 +127,11 @@ export class SecondaryChatComponent implements AfterViewChecked {
     }
     this.replies.sort((a: any, b: any) => {
       const dateA = new Date(
-        a.timestamp.seconds * 1000 + a.timestamp.nanoseconds / 1000000);
+        a.timestamp.seconds * 1000 + a.timestamp.nanoseconds / 1000000
+      );
       const dateB = new Date(
-        b.timestamp.seconds * 1000 + b.timestamp.nanoseconds / 1000000);
+        b.timestamp.seconds * 1000 + b.timestamp.nanoseconds / 1000000
+      );
       return dateB.getTime() - dateA.getTime();
     });
   }
@@ -210,11 +217,20 @@ export class SecondaryChatComponent implements AfterViewChecked {
     this.onEmojiSelect(emoji);
   }
 
+  onEmojiSelect(emoji: any) {
+    this.disableAutoScroll = true;
+    this.threadS.reactToMessage(
+      this.currentChannel.currentId,
+      this.selectedMessage.id,
+      this.currentEditMessage.id,
+      emoji,
+      this.uid
+    );
+    this.showEmojiPicker = false;
+  }
   hasUserReacted(reaction: any): boolean {
     return reaction.from.includes(this.uid);
   }
-
-  onEmojiSelect(emoji: any) {}
 
   closeEmojiPicker() {
     this.showEmojiPicker = false;
