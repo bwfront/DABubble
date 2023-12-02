@@ -11,6 +11,7 @@ import { Message } from 'src/app/models/message.model';
 import { DataService } from 'src/app/services/data.service';
 import { DabubbleappComponent } from '../dabubbleapp/dabubbleapp.component';
 import { UserProfileService } from 'src/app/services/userprofile.service';
+import { ThreadService } from 'src/app/services/thread.service';
 
 interface MessageGroup {
   label: string;
@@ -63,7 +64,8 @@ export class ChatComponent implements AfterViewChecked {
     private local: LocalStorageService,
     private data: DataService,
     private dabubble: DabubbleappComponent,
-    private userProfileSevice: UserProfileService
+    private userProfileSevice: UserProfileService,
+    private threadService: ThreadService
   ) {}
 
   ngOnInit() {
@@ -77,8 +79,16 @@ export class ChatComponent implements AfterViewChecked {
     });
   }
 
+  openThread(message: any) {
+    const channelInfo = {
+      currentId: this.currentId,
+      groupName: this.groupName,
+    }
+    this.threadService.setSelectedMessage(message, channelInfo);
+    this.dabubble.threadActive = true;
+  }
+
   async loadUserNamesForReactions(messages: Message[]) {
-    console.log(this.messages);
     for (const message of messages) {
       for (const reaction of message.reactions) {
         const userNames = await Promise.all(

@@ -24,7 +24,7 @@
             <app-chat *ngIf="groupChat"></app-chat>
             <app-privatechat *ngIf="!groupChat"></app-privatechat>
         </div>
-        <div class="secondary-chat">
+        <div class="secondary-chat" *ngIf="threadActive && groupChat">
             <app-secondary-chat></app-secondary-chat>
         </div>
     </div>

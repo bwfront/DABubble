@@ -225,7 +225,6 @@ export class PrivatechatComponent implements AfterViewChecked {
   }
 
   async loadUserNamesForReactions(messages: Message[]) {
-    console.log(this.messages);
     for (const message of messages) {
       for (const reaction of message.reactions) {
         const userNames = await Promise.all(

@@ -20,7 +20,7 @@
                 [ngClass]="{'message-you': messageSendFrom(message.sender_id)}">
                 <div class="reactions">
                     <div class="reaction emoji" (click)="openEmojiPicker($event, message)"></div>
-                    <div class="reaction answer"></div>
+                    <div class="reaction answer" (click)="openThread(message)"></div>
                     <div class="reaction option" (click)="editMessagePopUp = !editMessagePopUp"
                         *ngIf="messageSendFrom(message.sender_id)"></div>
                     <div class="edit-message-popup" (click)="openEditText(message)"

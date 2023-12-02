@@ -3,3 +3,26 @@
     height: calc( 100vh - 160px )
     border-radius: 30px
     background-color: #fff
+
+.close
+    img
+        cursor: pointer
+        padding: 5px
+        &:hover
+            border-radius: 50%
+            background-color: #ECEEFE
+
+.chat-head
+    display: flex
+    justify-content: space-between
+    align-items: center
+    width: calc( 100% - 60px )
+    .title
+        display: flex
+        gap: 5px
+        align-items: center
+        .thread
+            font-size: 24px
+            font-weight: 700
+        .currentName
+            color: #797EF3

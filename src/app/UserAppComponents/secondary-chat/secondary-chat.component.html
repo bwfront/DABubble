@@ -1,1 +1,99 @@
-<div class="secondary-chat"></div>
+<div class="secondary-chat">
+    <div class="chat-con">
+        <div class="chat-head">
+            <div class="title">
+                <div class="thread">Thread</div><div class="currentName"># {{ currentChannel.groupName }}</div>
+            </div>
+            <div class="close" (click)="closeThread()"><img src="assets/images/close.png" alt="close"></div>
+        </div>
+        <div class="chat" #chatContainer>
+            <div *ngFor="let message of messages" class="message"
+                [ngClass]="{'message-you': messageSendFrom(message.sender_id)}">
+                <div class="reactions">
+                    <div class="reaction emoji" (click)="openEmojiPicker($event, message)"></div>
+                    <div class="reaction option" (click)="editMessagePopUp = !editMessagePopUp"
+                        *ngIf="messageSendFrom(message.sender_id)"></div>
+                    <div class="edit-message-popup" (click)="openEditText(message)"
+                        *ngIf="editMessagePopUp && messageSendFrom(message.sender_id)">Nachricht bearbeiten</div>
+                </div>
+                <div class="avatar"><img src="{{ message.avatar }}" alt="avatar"></div>
+                <div>
+                    <div class="message-content"
+                        [ngClass]="{'message-content-you': messageSendFrom(message.sender_id)}">
+                        <div class="name-time" [ngClass]="{'name-time-you': messageSendFrom(message.sender_id)}">
+                            <div class="name" (click)="openUserProfile(message.sender_id)">{{ message.name }}</div>
+                            <div class="time"> {{ message.time }}</div>
+                            <div class="time" *ngIf="message.edit">(Bearbeitet)</div>
+                        </div>
+                        <div class="msg" [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">{{message.text}}
+                        </div>
+                        <div class="reaction-con" [ngClass]="{'reaction-you': !messageSendFrom(message.sender_id)}">
+                            <div class="button" (click)="openEmojiPicker($event, message)"></div>
+                            <div class="user-reaction" (click)="quickReact(reaction.react, message)"
+                                [ngClass]="{'reaction-active': hasUserReacted(reaction)}"
+                                *ngFor="let reaction of message.reactions">{{ reaction.react }} <span>{{
+                                    reaction.from.length }}</span>
+                                <div class="hover-reaction-con">
+                                    <div class="emoji">{{ reaction.react }}</div>
+                                    <div class="users" *ngIf="reaction.from.length === 1">
+                                        <span *ngIf="hasCurrentUserReacted(reaction.from); else otherSingleUser">
+                                            Du
+                                        </span>
+                                        <ng-template #otherSingleUser>
+                                            {{ reaction.userNames[0] }}
+                                        </ng-template>
+                                    </div>
+                                    <div class="users" *ngIf="reaction.from.length === 2">
+                                        <span *ngIf="hasCurrentUserReacted(reaction.from)">
+                                            Du und {{ reaction.userNames[0] === this.uid ? reaction.userNames[1] :
+                                            reaction.userNames[0] }}
+                                        </span>
+                                        <span *ngIf="!hasCurrentUserReacted(reaction.from)">
+                                            {{ reaction.userNames.join(' und ') }}
+                                        </span>
+                                    </div>
+                                    <div class="users" *ngIf="reaction.from.length > 2">
+                                        <span *ngIf="hasCurrentUserReacted(reaction.from)">
+                                            Du und {{ reaction.from.length - 1 }} weitere
+                                        </span>
+                                        <span *ngIf="!hasCurrentUserReacted(reaction.from)">
+                                            {{ reaction.userNames[0] }} und {{ reaction.from.length - 1 }} weitere
+                                        </span>
+                                    </div>
+                                    <div class="text"
+                                        *ngIf="reaction.from.length === 1 && hasCurrentUserReacted(reaction.from)">hast
+                                        reagiert</div>
+                                    <div class="text"
+                                        *ngIf="reaction.from.length === 1 && !hasCurrentUserReacted(reaction.from)">hat
+                                        reagiert</div>
+                                    <div class="text" *ngIf="reaction.from.length > 1">haben reagiert</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="input-chat" *ngIf="!editTextArea">
+            <textarea type="text" placeholder="Antworten..." [(ngModel)]="message"></textarea>
+            <div class="chat-icons">
+                <div class="left-icons"></div>
+                <div class="send-icon" (click)="sendMessage()"></div>
+            </div>
+        </div>
+        <div class="error" *ngIf="errorEdit">Die Nachricht darf nicht Leer sein.</div>
+        <div class="input-chat" *ngIf="editTextArea">
+            <textarea type="text" placeholder="Nachricht an Bearbeiten" [(ngModel)]="editMessageText"></textarea>
+            <div class="buttons">
+                <div class="btn btn2" (click)="editTextArea = false">Schließen</div>
+                <div class="btn" (click)="sendEditMessage()">Speichern</div>
+            </div>
+        </div>
+        <div *ngIf="showEmojiPicker" class="overlay" (click)="closeEmojiPicker()"></div>
+        <div *ngIf="showEmojiPicker"
+            [ngStyle]="{'position': 'absolute', 'top': pickerPosition.top, 'left': pickerPosition.left}"
+            style="z-index: 1001;">
+            <emoji-mart [showPreview]="false" (emojiClick)="onEmojiSelect($event.emoji.native)"></emoji-mart>
+        </div>
+    </div>
+</div>
