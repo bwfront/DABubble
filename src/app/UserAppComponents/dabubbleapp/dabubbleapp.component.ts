@@ -31,16 +31,14 @@ export class DabubbleappComponent {
   private checkWindowSize() {
     this.windowWidth = window.innerWidth;
     if (this.windowWidth < 751) {
-      this.chatActive = true;
+      this.chatActive = false;
       this.channelActive = true;
       this.threadActive = false;
     }
     if (this.windowWidth > 750) {
-      if (this.threadActive) {
         this.chatActive = true;
         this.channelActive = true;
         this.threadActive = false;
-      }
     }
   }
 

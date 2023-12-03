@@ -12,14 +12,14 @@
             <img class="logo" src="assets/images/channel/workspace_logo.png" alt="logo">
             <div class="logo-text">Code learning</div>
         </div>
-        <app-searchbar style="position: absolute; left: 405px;"></app-searchbar>
+            <app-searchbar class="searchbar-top"></app-searchbar>
         <app-profile (click)="profilePopUpOpen = !profilePopUpOpen"></app-profile>
     </div>
     <div class="dabubble-content">
-        <div class="profile-popup" *ngIf="profilePopUpOpen" style="z-index: 2">
+        <div class="profile-popup" *ngIf="profilePopUpOpen">
             <app-pop-up-menu></app-pop-up-menu>
         </div>
-        <div class="profile-popup" *ngIf="usersProfilePopUpOpen" style="z-index: 2">
+        <div class="profile-popup" *ngIf="usersProfilePopUpOpen">
             <app-users-profile-pop-up></app-users-profile-pop-up>
         </div>
         <div class="channels" [ngStyle]="{'display': !channelActive ? 'none' : 'block'}">
