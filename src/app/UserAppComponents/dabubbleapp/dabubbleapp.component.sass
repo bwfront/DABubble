@@ -86,19 +86,11 @@
         .in
             .img
                 background-image: url(/assets/images/minimize/isIn-hover.png) !important
-.mobile
-    display: none !important
-    .img
-        width: 18px !important
-        height: 18px !important
-    .text
-        font-size: 18px !important
 
 @media ( max-width: 1300px )
     .chat, .secondary-chat
         width: calc( 100% - 380px ) !important
         margin-left: 0px !important
-
 
 @media  ( max-width: 750px )
     .dabubble-content
@@ -110,8 +102,6 @@
             width: 100vw !important
     .out, .in
         display: none !important
-    .mobile
-        display: flex !important
     .minimize-channel-con
         margin-top: 70px
         left: -110px
@@ -120,12 +110,16 @@
 @media  ( max-width: 485px )
     .popup
         position: relative
-@media  ( max-width: 370px )
-.logo-con
-    gap: 10px
-    .logo
-        width: 50px
-        height: auto
-    .logo-text
-        font-size: 23px
-        font-weight: 600
+@media  ( max-width: 425px )
+    .dabubble-con
+        padding-top: 10px
+    .dabubble-content
+        margin-top: 10px
+    .logo-con
+        gap: 10px
+        .logo
+            width: 50px
+            height: auto
+        .logo-text
+            font-size: 23px
+            font-weight: 600

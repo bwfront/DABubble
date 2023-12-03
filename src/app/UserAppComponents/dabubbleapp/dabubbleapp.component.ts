@@ -16,6 +16,7 @@ export class DabubbleappComponent {
   windowWidth: number = 0;
   movedChannel: boolean = false;
 
+  codelearning: boolean = false;
   threadActive: boolean = false;
 
   ngOnInit() {
@@ -30,32 +31,41 @@ export class DabubbleappComponent {
   private checkWindowSize() {
     this.windowWidth = window.innerWidth;
     if (this.windowWidth < 751) {
-      this.chatActive = false;
+      this.chatActive = true;
       this.channelActive = true;
       this.threadActive = false;
     }
     if (this.windowWidth > 750) {
-      if (!this.threadActive) {
+      if (this.threadActive) {
         this.chatActive = true;
         this.channelActive = true;
+        this.threadActive = false;
       }
     }
   }
 
   openChat() {
     if (this.windowWidth < 751) {
-      this.chatActive = !this.chatActive;
-      this.channelActive = !this.channelActive;
+      if (this.threadActive) {
+        this.codelearning = false;
+        this.chatActive = false;
+        this.channelActive = true;
+        this.threadActive = false;
+      } else {
+        this.codelearning = !this.codelearning;
+        this.chatActive = !this.chatActive;
+        this.channelActive = !this.channelActive;
+      }
     }
   }
 
   openThread() {
     if (this.windowWidth < 1300) {
       this.chatActive = !this.chatActive;
-    } 
-      this.threadActive = true;
+    }
+    this.threadActive = true;
   }
-  
+
   closeThread() {
     if (this.windowWidth < 1300) {
       this.chatActive = true;

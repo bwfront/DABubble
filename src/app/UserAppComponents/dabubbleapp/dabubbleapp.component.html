@@ -3,11 +3,16 @@
         <app-create-channel-pop-up></app-create-channel-pop-up>
     </div>
     <div class="header-con">
-        <div class="logo-con">
+        <div class="logo-con" *ngIf="!codelearning">
             <img class="logo" src="assets/images/login/logo.png" alt="logo">
             <div class="logo-text">DABubble</div>
         </div>
-        <app-searchbar></app-searchbar>
+        <div class="logo-con" *ngIf="codelearning" style="margin-left: -20px;" (click)="openChat()">
+            <img src="assets/images/arrow_down.png" alt="back" style="transform: rotate(90deg);">
+            <img class="logo" src="assets/images/channel/workspace_logo.png" alt="logo">
+            <div class="logo-text">Code learning</div>
+        </div>
+        <app-searchbar style="position: absolute; left: 405px;"></app-searchbar>
         <app-profile (click)="profilePopUpOpen = !profilePopUpOpen"></app-profile>
     </div>
     <div class="dabubble-content">
@@ -34,10 +39,6 @@
             <div class="img"></div>
         </div>
         <div class="con in" (click)="channelActive = true;" *ngIf="!channelActive">
-            <div class="text">Workspace-Menü öffnen</div>
-            <div class="img"></div>
-        </div>
-        <div class="con mobile" (click)="openChat()" *ngIf="!channelActive">
             <div class="text">Workspace-Menü öffnen</div>
             <div class="img"></div>
         </div>
