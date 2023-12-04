@@ -22,7 +22,6 @@
                 <span class="channel" *ngFor="let channel of channels" (click)="openChannel(channel.group_name)"><div class="tag">#</div> {{ channel.group_name }}</span>
                 <div class="createchannel" (click)="createChannelOpen()"><div class="createimg"></div>Channel hinzufügen</div>
             </div>
-            
             <div class="head">
                 <div class="left-head" (click)="usersChannelOpen = !usersChannelOpen">
                     <div class="arrow" [ngStyle]="{'transform': usersChannelOpen ? 'rotate(0deg)' : 'rotate(270deg)'}"></div>

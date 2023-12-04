@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { BehaviorSubject, Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable, finalize, map } from 'rxjs';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import { Message } from '../models/message.model';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 @Injectable({
   providedIn: 'root',
@@ -19,13 +20,31 @@ export class ChatService {
     this.currentChannel = channel;
   }
 
-  constructor(private firestore: AngularFirestore) {}
+  constructor(private firestore: AngularFirestore, private storage: AngularFireStorage) {}
+
+  uploadFile(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const filePath = `uploads/${new Date().getTime()}_${file.name}`;
+      const fileRef = this.storage.ref(filePath);
+      const task = this.storage.upload(filePath, file);
+
+      task.snapshotChanges().pipe(
+        finalize(() => {
+          fileRef.getDownloadURL().subscribe(downloadURL => {
+            resolve(downloadURL);
+          }, error => reject(error));
+        })
+      ).subscribe();
+    });
+  }
 
   sendMessage(
     chatId: string,
     senderId: string,
     messageText: string,
-    collection: string
+    collection: string,
+    fileUrl?: any,
+    fileType?: any
   ) {
     const message = {
       sender_id: senderId,
@@ -34,7 +53,13 @@ export class ChatService {
       time: this.getTime(),
       timestamp: new Date(),
       reactions: [],
+      fileType: 'text',
+      fileUrl: ''
     };
+    if (fileUrl && fileType) {
+      message.fileUrl = fileUrl;
+      message.fileType = fileType;
+    }
     return this.firestore
       .collection(collection)
       .doc(chatId)

@@ -35,10 +35,23 @@
                             <div class="time"> {{ message.time }}</div>
                             <div class="time" *ngIf="message.edit">(Bearbeitet)</div>
                         </div>
-                        <div class="msg" [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">{{message.text}}
+                        <div *ngIf="!message.fileUrl" class="msg" [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">
+                            {{message.text}}
+                        </div>
+                        <div style="display: flex; flex-direction: column;" *ngIf="message.fileUrl">
+                            <div *ngIf="message.text" class="msg" [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">
+                                {{message.text}}
+                            </div>
+                            <div class="msg" style="margin-top: 5px;"
+                                [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">
+                                <a href="{{message.fileUrl}}" target="_blank"><img *ngIf="message.fileType === 'image'"
+                                        [src]="message.fileUrl" class="message-image" /></a>
+                                <a *ngIf="message.fileType === 'pdf'" [href]="message.fileUrl" target="_blank"
+                                    class="message-pdf">Open PDF</a>
+                            </div>
                         </div>
                         <div class="reaction-con" [ngClass]="{'reaction-you': !messageSendFrom(message.sender_id)}">
-                            <div class="answer-count" *ngIf="message.thread.length != 0" (click)="openThread(message)">
+                            <div class="answer-count" *ngIf="checkThreadLenght(message)" (click)="openThread(message)">
                                 {{ message.thread.length }} Antworten</div>
                             <div class="button" (click)="openEmojiPicker($event, message)"></div>
                             <div class="user-reaction" (click)="quickReact(reaction.react, message)"
@@ -98,10 +111,17 @@
         <textarea type="text" placeholder="Nachricht an #{{ groupName }}" [(ngModel)]="message"></textarea>
         <div class="chat-icons">
             <div class="left-icons">
-                <div class="attachment-send"><div></div></div>
+                <div class="attachment-send" (click)="fileInput.click()">
+                    <div></div>
+                </div>
+                <input type="file" #fileInput (change)="onFileSelected($event)" accept=".png, .jpg, .jpeg, .pdf" hidden>
                 <div class="vector-send"></div>
-                <div class="emoji-send" (click)="openEmojiPicker($event, null)"><div></div></div>
-                <div class="users-send"><div></div></div>
+                <div class="emoji-send" (click)="openEmojiPicker($event, null)">
+                    <div></div>
+                </div>
+                <div class="users-send">
+                    <div></div>
+                </div>
             </div>
             <div class="send-icon" (click)="sendMessage()"></div>
         </div>

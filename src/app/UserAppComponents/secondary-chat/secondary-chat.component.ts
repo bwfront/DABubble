@@ -37,16 +37,16 @@ export class SecondaryChatComponent implements AfterViewChecked {
   messages: any[] = [];
   message: string = '';
   repliesLength: number = 0;
-
   showEmojiPicker = false;
   pickerPosition = { top: '0px', left: '0px' };
   disableAutoScroll: boolean = false;
-
   editMessagePopUp: boolean = false;
   editTextArea: boolean = false;
   editMessageText: string = '';
   currentEditMessage: any;
   errorEdit: boolean = false;
+  uploadedFileUrl: string | null = null;
+  uploadedFileType: string | null = null;
   constructor(
     private threadS: ThreadService,
     private local: LocalStorageService,
@@ -74,8 +74,23 @@ export class SecondaryChatComponent implements AfterViewChecked {
     });
   }
 
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const allowedTypes = ['image/png', 'image/jpeg', 'application/pdf'];
+      if (allowedTypes.includes(file.type)) {
+        this.chatService.uploadFile(file).then((fileUrl) => {
+          this.uploadedFileUrl = fileUrl;
+          this.uploadedFileType = file.type.includes('image/') ? 'image' : 'pdf';
+        })
+      } else {
+        alert('Only PNG, JPG, JPEG, and PDF files are allowed.');
+      }
+    }
+  }
+
   sendMessage() {
-    if (this.message != '') {
+    if (this.message != '' || this.uploadedFileUrl != null) {
       const answer: Answer = {
         sender_id: this.uid,
         text: this.message,
@@ -88,10 +103,14 @@ export class SecondaryChatComponent implements AfterViewChecked {
       this.threadS.sendMessage(
         this.currentChannel.currentId,
         this.selectedMessage.id,
-        answer
+        answer,
+        this.uploadedFileUrl,
+        this.uploadedFileType
       );
     }
     this.message = '';
+    this.uploadedFileUrl = null;
+    this.uploadedFileType = null;
   }
 
   loadReplies(chatId: string, messageId: string) {
@@ -101,6 +120,8 @@ export class SecondaryChatComponent implements AfterViewChecked {
       this.getUserInformation();
       this.disableAutoScroll = true;
       this.scrollToBottom();
+      console.log(this.fetchedReplies);
+      
     });
   }
 
@@ -217,16 +238,21 @@ export class SecondaryChatComponent implements AfterViewChecked {
   }
 
   onEmojiSelect(emoji: any) {
-    this.disableAutoScroll = true;
-    this.threadS.reactToMessage(
-      this.currentChannel.currentId,
-      this.selectedMessage.id,
-      this.currentEditMessage.id,
-      emoji,
-      this.uid
-    );
+    if(this.currentEditMessage != null){
+      this.disableAutoScroll = true;
+      this.threadS.reactToMessage(
+        this.currentChannel.currentId,
+        this.selectedMessage.id,
+        this.currentEditMessage.id,
+        emoji,
+        this.uid
+      );
+    }else{
+      this.message += emoji;
+    }
     this.showEmojiPicker = false;
   }
+
   hasUserReacted(reaction: any): boolean {
     return reaction.from.includes(this.uid);
   }

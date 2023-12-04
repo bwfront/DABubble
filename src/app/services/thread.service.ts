@@ -20,7 +20,11 @@ export class ThreadService {
     this.threadSource.next({ message, channel });
   }
 
-  sendMessage(chatId: string, messageId: string, answer: Answer) {
+  sendMessage(chatId: string, messageId: string, answer: Answer, fileUrl?: any, fileType?: any) {
+    if (fileUrl && fileType) {
+      answer.fileUrl = fileUrl;
+      answer.fileType = fileType;
+    }
     const messageDocRef = this.firestore
       .collection('group_chats')
       .doc(chatId)

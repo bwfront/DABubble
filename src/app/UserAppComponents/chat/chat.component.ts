@@ -54,10 +54,12 @@ export class ChatComponent implements AfterViewChecked {
   editMessageText: string = '';
   currentEditMessage: any;
   errorEdit: boolean = false;
-
   showEmojiPicker = false;
   pickerPosition = { top: '0px', left: '0px' };
   disableAutoScroll: boolean = false;
+
+  uploadedFileUrl: string | null = null;
+  uploadedFileType: string | null = null;
 
   constructor(
     private chatService: ChatService,
@@ -78,6 +80,34 @@ export class ChatComponent implements AfterViewChecked {
       }
     });
   }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const allowedTypes = ['image/png', 'image/jpeg', 'application/pdf'];
+      if (allowedTypes.includes(file.type)) {
+        this.chatService.uploadFile(file).then((fileUrl) => {
+          this.uploadedFileUrl = fileUrl;
+          this.uploadedFileType = file.type.includes('image/') ? 'image' : 'pdf';
+        })
+      } else {
+        alert('Only PNG, JPG, JPEG, and PDF files are allowed.');
+      }
+    }
+  }
+
+  checkThreadLenght(message: any){
+    if(message.thread){
+      if(message.thread.length > 0){
+        return true
+      }else{
+        return false
+      }
+    }else{
+      return false
+    }
+  }
+
 
   openThread(message: any) {
     const channelInfo = {
@@ -258,15 +288,19 @@ export class ChatComponent implements AfterViewChecked {
   }
 
   sendMessage() {
-    if (this.message != '') {
+    if (this.message != '' || this.uploadedFileUrl != null) {
       this.chatService.sendMessage(
         this.currentId,
         this.getUid(),
         this.message,
-        'group_chats'
+        'group_chats',
+        this.uploadedFileUrl,
+        this.uploadedFileType
       );
     }
     this.message = '';
+    this.uploadedFileUrl = null;
+    this.uploadedFileType = null;
   }
 
   async loadMessages() {

@@ -241,10 +241,60 @@ form
         justify-content: space-between
         display: flex
         width: calc( 100% - 130px )
-
         .left-icons
-            width: 30px
-            height: 30px
+            position: absolute
+            top: 80px
+            left: 35px
+            display: flex
+            align-items: center
+            gap: 5px
+        .vector-send
+            border-right: 1px solid #797EF3
+            height: 25px
+            width: 2px
+        .attachment-send
+            cursor: pointer
+            padding: 1px
+            border-radius: 50%
+            div
+                width: 30px
+                height: 30px
+                background-image: url(/assets/images/chat/add.png)
+                background-repeat: no-repeat
+                background-position: center
+            &:hover
+                background-color: #ECEEFE
+                div
+                    background-image: url(/assets/images/chat/add_hover.png)
+        .emoji-send
+            cursor: pointer
+            padding: 1px
+            border-radius: 50%
+            div
+                width: 30px
+                height: 30px
+                background-image: url(/assets/images/chat/sentiment_satisfied.png)
+                background-repeat: no-repeat
+                background-position: center
+            &:hover
+                background-color: #ECEEFE
+                div
+                    background-image: url(/assets/images/chat/sentiment_satisfied_hover.png)
+        .users-send
+            cursor: pointer
+            padding: 1px
+            border-radius: 50%
+            div
+                width: 30px
+                height: 30px
+                background-image: url(/assets/images/chat/alternate_email.png)
+                background-repeat: no-repeat
+                background-position: center
+            &:hover
+                background-color: #ECEEFE
+                div
+                    background-image: url(/assets/images/chat/alternate_email_hover.png)
+
         .send-icon
             position: absolute
             bottom: 100px
@@ -469,6 +519,25 @@ form
     &:hover
         background-color: #ECEEFE
 
+input[type="file"]
+    display: none
+
+.message-image
+    max-width: 100%
+    max-height: 350px
+    border-radius: 20px
+    padding-top: 5px !important
+.message-pdf
+    color: #fff
+.message-content
+    a
+        display: inline-block
+    .msg
+        .message-pdf
+            color: #000
+    .msg-you
+        .message-pdf
+            color: #fff
 @media ( max-width: 1300px )
     .chat-con
         margin-left: 0px !important
@@ -478,7 +547,11 @@ form
             bottom: 100px
             right: 100px
             cursor: pointer
+    .message-image
+        max-width: 100% !important
+        max-height: 300px
 
+        margin: 0 !important
 @media ( max-width: 800px )
     .avatar
         img

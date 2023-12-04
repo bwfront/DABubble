@@ -6,4 +6,6 @@ export interface Answer {
     timestamp: Date;
     edit: boolean;
     reactions: [];
+    fileUrl?: any;
+    fileType?: any;
 }

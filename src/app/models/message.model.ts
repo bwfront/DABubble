@@ -9,4 +9,6 @@ export interface Message {
   edit: boolean;
   reactions: any;
   thread: any;
+  fileType: any;
+  fileUrl: any;
 }

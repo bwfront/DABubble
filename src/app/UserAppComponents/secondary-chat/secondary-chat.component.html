@@ -26,8 +26,22 @@
                             <div class="time"> {{ message.time }}</div>
                             <div class="time" *ngIf="message.edit">(Bearbeitet)</div>
                         </div>
-                        <div class="msg" [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">
+                        <div *ngIf="!message.fileUrl" class="msg"
+                            [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">
                             {{message.text}}
+                        </div>
+                        <div style="display: flex; flex-direction: column;" *ngIf="message.fileUrl">
+                            <div *ngIf="message.text" class="msg"
+                                [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">
+                                {{message.text}}
+                            </div>
+                            <div class="msg" style="margin-top: 5px;"
+                                [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">
+                                <a href="{{message.fileUrl}}" target="_blank"><img *ngIf="message.fileType === 'image'"
+                                        [src]="message.fileUrl" class="message-image" /></a>
+                                <a *ngIf="message.fileType === 'pdf'" [href]="message.fileUrl" target="_blank"
+                                    class="message-pdf">Open PDF</a>
+                            </div>
                         </div>
                         <div class="reaction-con" [ngClass]="{'reaction-you': !messageSendFrom(message.sender_id)}">
                             <div class="button" (click)="openEmojiPicker($event, message)"></div>
@@ -77,30 +91,63 @@
                     </div>
                 </div>
             </div>
-            <div class="answer-count"><div class="answer">{{ repliesLength }} Antworten</div><div class="line"></div>
+            <div class="answer-count">
+                <div class="answer">{{ repliesLength }} Antworten</div>
+                <div class="line"></div>
             </div>
-            <div class="message threadmessage"
-            [ngClass]="{'message-you': messageSendFrom(selectedMessage.sender_id)}">
-            <div class="avatar"><img src="{{ selectedMessage.avatar }}" alt="avatar"></div>
-            <div>
-                <div class="message-content" [ngClass]="{'message-content-you': messageSendFrom(selectedMessage.sender_id)}">
-                    <div class="name-time" [ngClass]="{'name-time-you': messageSendFrom(selectedMessage.sender_id)}">
-                        <div class="name" (click)="openUserProfile(selectedMessage.sender_id)">{{ selectedMessage.name }}</div>
-                        <div class="time"> {{ selectedMessage.time }}</div>
-                        <div class="time" *ngIf="selectedMessage.edit">(Bearbeitet)</div>
-                    </div>
-                    <div class="msg" [ngClass]="{'msg-you': messageSendFrom(selectedMessage.sender_id)}">
-                        {{selectedMessage.text}}
+            <div class="message threadmessage" [ngClass]="{'message-you': messageSendFrom(selectedMessage.sender_id)}">
+                <div class="avatar"><img src="{{ selectedMessage.avatar }}" alt="avatar"></div>
+                <div>
+                    <div class="message-content"
+                        [ngClass]="{'message-content-you': messageSendFrom(selectedMessage.sender_id)}">
+                        <div class="message-content"
+                            [ngClass]="{'message-content-you': messageSendFrom(selectedMessage.sender_id)}">
+                            <div class="name-time"
+                                [ngClass]="{'name-time-you': messageSendFrom(selectedMessage.sender_id)}">
+                                <div class="name" (click)="openUserProfile(selectedMessage.sender_id)">{{
+                                    selectedMessage.name }}</div>
+                                <div class="time"> {{ selectedMessage.time }}</div>
+                                <div class="time" *ngIf="selectedMessage.edit">(Bearbeitet)</div>
+                            </div>
+                            <div *ngIf="!selectedMessage.fileUrl" class="msg"
+                                [ngClass]="{'msg-you': messageSendFrom(selectedMessage.sender_id)}">
+                                {{selectedMessage.text}}
+                            </div>
+                            <div style="display: flex; flex-direction: column;" *ngIf="selectedMessage.fileUrl">
+                                <div *ngIf="selectedMessage.text" class="msg"
+                                    [ngClass]="{'msg-you': messageSendFrom(selectedMessage.sender_id)}">
+                                    {{selectedMessage.text}}
+                                </div>
+                                <div class="msg" style="margin-top: 5px;"
+                                    [ngClass]="{'msg-you': messageSendFrom(selectedMessage.sender_id)}">
+                                    <a href="{{selectedMessage.fileUrl}}" target="_blank"><img
+                                            *ngIf="selectedMessage.fileType === 'image'" [src]="selectedMessage.fileUrl"
+                                            class="message-image" /></a>
+                                    <a *ngIf="selectedMessage.fileType === 'pdf'" [href]="selectedMessage.fileUrl"
+                                        target="_blank" class="message-pdf">Open PDF</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        </div>
         <div class="input-chat" *ngIf="!editTextArea">
             <textarea type="text" placeholder="Antworten..." [(ngModel)]="message"></textarea>
             <div class="chat-icons">
-                <div class="left-icons"></div>
+                <div class="left-icons">
+                    <div class="attachment-send" (click)="fileInput.click()">
+                        <div></div>
+                    </div>
+                    <input type="file" #fileInput (change)="onFileSelected($event)" accept=".png, .jpg, .jpeg, .pdf" hidden>
+                    <div class="vector-send"></div>
+                    <div class="emoji-send" (click)="openEmojiPicker($event, null)">
+                        <div></div>
+                    </div>
+                    <div class="users-send">
+                        <div></div>
+                    </div>
+                </div>
                 <div class="send-icon" (click)="sendMessage()"></div>
             </div>
         </div>

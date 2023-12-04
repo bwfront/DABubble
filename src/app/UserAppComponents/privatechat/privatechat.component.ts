@@ -48,10 +48,12 @@ export class PrivatechatComponent implements AfterViewChecked {
   editMessageText: string = '';
   currentEditMessage: any;
   errorEdit: boolean = false;
-
   showEmojiPicker = false;
   pickerPosition = { top: '0px', left: '0px' };
   disableAutoScroll: boolean = false;
+
+  uploadedFileUrl: string | null = null;
+  uploadedFileType: string | null = null;
   constructor(
     private chatService: ChatService,
     private local: LocalStorageService,
@@ -59,6 +61,23 @@ export class PrivatechatComponent implements AfterViewChecked {
     private dabubble: DabubbleappComponent,
     private userProfileSevice: UserProfileService
   ) {}
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const allowedTypes = ['image/png', 'image/jpeg', 'application/pdf'];
+      if (allowedTypes.includes(file.type)) {
+        this.chatService.uploadFile(file).then((fileUrl) => {
+          this.uploadedFileUrl = fileUrl;
+          this.uploadedFileType = file.type.includes('image/') ? 'image' : 'pdf';
+        })
+      } else {
+        alert('Only PNG, JPG, JPEG, and PDF files are allowed.');
+      }
+    }
+  } 
+
+
 
   private calculatePickerPosition(event: MouseEvent): {
     top: string;
@@ -101,13 +120,17 @@ export class PrivatechatComponent implements AfterViewChecked {
   }
 
   onEmojiSelect(emoji: any) {
-    this.chatService.reactToMessage(
-      'private_chats',
-      this.currentId,
-      this.currentEditMessage.id,
-      emoji,
-      this.uid
-    );
+    if(this.currentEditMessage != null){
+      this.chatService.reactToMessage(
+        'group_chats',
+        this.currentId,
+        this.currentEditMessage.id,
+        emoji,
+        this.uid
+      );
+    }else{
+      this.message += emoji
+    }
     this.showEmojiPicker = false;
   }
 
@@ -198,15 +221,19 @@ export class PrivatechatComponent implements AfterViewChecked {
   }
 
   sendMessage() {
-    if (this.message != '') {
+    if (this.message != '' || this.uploadedFileUrl != null) {
       this.chatService.sendMessage(
         this.currentId,
         this.getUid(),
         this.message,
-        'private_chats'
+        'private_chats',
+        this.uploadedFileUrl,
+        this.uploadedFileType
       );
     }
     this.message = '';
+    this.uploadedFileUrl = null;
+    this.uploadedFileType = null;
   }
 
   loadMessages() {
