@@ -26,11 +26,12 @@
                 <div class="mail-head">
                     <img src="assets/images/login/mail.png" alt="mail">E-Mail-Adresse
                 </div>
-                <input class="mail" [(ngModel)]="mail" name="email" required type="email" placeholder="E-Mail-Adresse">
+                <input class="mail" [(ngModel)]="mail" name="email" required email type="email" placeholder="E-Mail-Adresse" #email="ngModel">
+
             </div>
             <div class="login-button-con">
                 <button class="guest" (click)="editProfile = false">Abbrechen</button>
-                <button class="login" type="submit" [disabled]="!changeUser.valid">Speichern</button>
+                <button class="login" type="submit" [disabled]="email.invalid">Speichern</button>
             </div>
         </form>
     </div>

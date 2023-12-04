@@ -149,13 +149,17 @@ export class ChatComponent implements AfterViewChecked {
   }
 
   onEmojiSelect(emoji: any) {
-    this.chatService.reactToMessage(
-      'group_chats',
-      this.currentId,
-      this.currentEditMessage.id,
-      emoji,
-      this.uid
-    );
+    if(this.currentEditMessage != null){
+      this.chatService.reactToMessage(
+        'group_chats',
+        this.currentId,
+        this.currentEditMessage.id,
+        emoji,
+        this.uid
+      );
+    }else{
+      this.message += emoji
+    }
     this.showEmojiPicker = false;
   }
 

@@ -18,6 +18,62 @@
     &::-webkit-scrollbar
         width: 5px
 
+.chat-icons
+    .left-icons
+        position: absolute
+        top: 80px
+        left: 35px
+        display: flex
+        align-items: center
+        gap: 5px
+        .vector-send
+            border-right: 1px solid #797EF3
+            height: 25px
+            width: 2px
+        .attachment-send
+            cursor: pointer
+            padding: 1px
+            border-radius: 50%
+            div
+                width: 30px
+                height: 30px
+                background-image: url(/assets/images/chat/add.png)
+                background-repeat: no-repeat
+                background-position: center
+            &:hover
+                background-color: #ECEEFE
+                div
+                    background-image: url(/assets/images/chat/add_hover.png)
+        .emoji-send
+            cursor: pointer
+            padding: 1px
+            border-radius: 50%
+            div
+                width: 30px
+                height: 30px
+                background-image: url(/assets/images/chat/sentiment_satisfied.png)
+                background-repeat: no-repeat
+                background-position: center
+            &:hover
+                background-color: #ECEEFE
+                div
+                    background-image: url(/assets/images/chat/sentiment_satisfied_hover.png)
+        .users-send
+            cursor: pointer
+            padding: 1px
+            border-radius: 50%
+            div
+                width: 30px
+                height: 30px
+                background-image: url(/assets/images/chat/alternate_email.png)
+                background-repeat: no-repeat
+                background-position: center
+            &:hover
+                background-color: #ECEEFE
+                div
+                    background-image: url(/assets/images/chat/alternate_email_hover.png)
+
+
 .startChat-con
     padding: 0 30px
     .name
@@ -80,7 +136,7 @@
     &:hover
         color: #535AF1
         font-weight: 600
-        
+
 @media ( max-width: 950px )
     .users
         display: none !important
