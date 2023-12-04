@@ -22,17 +22,22 @@ export class ChatService {
 
   constructor(private firestore: AngularFirestore, private storage: AngularFireStorage) {}
 
-  uploadFile(file: File): Promise<string> {
-    return new Promise((resolve, reject) => {
+  uploadFile(file: File): Observable<number | string> {
+    return new Observable(observer => {
       const filePath = `uploads/${new Date().getTime()}_${file.name}`;
       const fileRef = this.storage.ref(filePath);
       const task = this.storage.upload(filePath, file);
 
+      task.percentageChanges().subscribe(progress => {
+        observer.next(progress);
+      });
+
       task.snapshotChanges().pipe(
         finalize(() => {
           fileRef.getDownloadURL().subscribe(downloadURL => {
-            resolve(downloadURL);
-          }, error => reject(error));
+            observer.next(downloadURL);
+            observer.complete();
+          });
         })
       ).subscribe();
     });

@@ -57,9 +57,12 @@ export class ChatComponent implements AfterViewChecked {
   showEmojiPicker = false;
   pickerPosition = { top: '0px', left: '0px' };
   disableAutoScroll: boolean = false;
-
   uploadedFileUrl: string | null = null;
   uploadedFileType: string | null = null;
+
+  uploadingFileName: string | null = null;
+  uploadProgress: number = 0;
+  isUploading: boolean = false;
 
   constructor(
     private chatService: ChatService,
@@ -86,34 +89,47 @@ export class ChatComponent implements AfterViewChecked {
     if (file) {
       const allowedTypes = ['image/png', 'image/jpeg', 'application/pdf'];
       if (allowedTypes.includes(file.type)) {
-        this.chatService.uploadFile(file).then((fileUrl) => {
-          this.uploadedFileUrl = fileUrl;
-          this.uploadedFileType = file.type.includes('image/') ? 'image' : 'pdf';
-        })
+        this.uploadingFileName = file.name;
+        this.uploadProgress = 0;
+        this.isUploading = true;
+        this.chatService.uploadFile(file).subscribe(response => {
+          if (typeof response === 'number') {
+            this.uploadProgress = response;
+          } else {
+            this.uploadedFileUrl = response;
+            this.uploadedFileType = file.type.includes('image/') ? 'image' : 'pdf';
+            this.isUploading = false;
+          }
+        });
       } else {
-        alert('Only PNG, JPG, JPEG, and PDF files are allowed.');
+        alert('Nur PNG, JPG, JPEG, und PDF Datein sind Erlaubt.');
       }
     }
   }
 
-  checkThreadLenght(message: any){
-    if(message.thread){
-      if(message.thread.length > 0){
-        return true
-      }else{
-        return false
-      }
-    }else{
-      return false
-    }
+  deletFile(){
+    this.uploadedFileUrl = null;
+    this.uploadedFileType = null;
+    this.uploadingFileName = null;
   }
 
+  checkThreadLenght(message: any) {
+    if (message.thread) {
+      if (message.thread.length > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
 
   openThread(message: any) {
     const channelInfo = {
       currentId: this.currentId,
       groupName: this.groupName,
-    }
+    };
     this.threadService.setSelectedMessage(message, channelInfo);
     this.dabubble.openThread();
   }
@@ -179,7 +195,7 @@ export class ChatComponent implements AfterViewChecked {
   }
 
   onEmojiSelect(emoji: any) {
-    if(this.currentEditMessage != null){
+    if (this.currentEditMessage != null) {
       this.chatService.reactToMessage(
         'group_chats',
         this.currentId,
@@ -187,8 +203,8 @@ export class ChatComponent implements AfterViewChecked {
         emoji,
         this.uid
       );
-    }else{
-      this.message += emoji
+    } else {
+      this.message += emoji;
     }
     this.showEmojiPicker = false;
   }
@@ -309,22 +325,24 @@ export class ChatComponent implements AfterViewChecked {
         .getMessages(this.currentId, 'group_chats')
         .subscribe(async (messages) => {
           this.messages = messages;
-          await this.loadThreadsForMessage()
+          await this.loadThreadsForMessage();
           await this.loadUserNamesForReactions(this.messages);
           this.getUserInformation();
           this.disableAutoScroll = false;
           this.scrollToBottom();
         });
-    }  
+    }
   }
 
-  proccesMessages: any
+  proccesMessages: any;
   async loadThreadsForMessage() {
-   this.proccesMessages = this.messages
+    this.proccesMessages = this.messages;
     this.proccesMessages.forEach((message: any, index: any) => {
-      this.threadService.fetchSingleReplies(this.currentId, message.id).subscribe(threads => {
-        this.messages[index].thread = threads;
-      });
+      this.threadService
+        .fetchSingleReplies(this.currentId, message.id)
+        .subscribe((threads) => {
+          this.messages[index].thread = threads;
+        });
     });
   }
 

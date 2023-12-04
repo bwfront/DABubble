@@ -106,6 +106,23 @@
                     (click)="openUserProfile(otherUser)" class="name">{{'@'}}{{ nameChat }}</span> und dir statt.</div>
         </div>
     </div>
+
+    <div *ngIf="isUploading" class="file-con-upload">
+        <div>{{ uploadingFileName }}</div>
+        <div class="upload-progress-bar">
+            <div class="upload-progress" [style.width]="uploadProgress + '%'"></div>
+        </div>
+    </div>
+    <div class="files">
+        <div class="file-con" *ngIf="uploadedFileType">
+            {{ uploadingFileName }}
+            <div class="delete" (click)="deletFile()">
+                x
+            </div>
+        </div>
+    </div>
+
+
     <div class="input-chat" *ngIf="!editTextArea">
         <textarea type="text" placeholder="Nachricht an {{ nameChat }}" [(ngModel)]="message"></textarea>
         <div class="chat-icons">

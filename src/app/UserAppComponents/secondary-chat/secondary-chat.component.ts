@@ -47,6 +47,11 @@ export class SecondaryChatComponent implements AfterViewChecked {
   errorEdit: boolean = false;
   uploadedFileUrl: string | null = null;
   uploadedFileType: string | null = null;
+
+
+  uploadingFileName: string | null = null;
+  uploadProgress: number = 0;
+  isUploading: boolean = false;
   constructor(
     private threadS: ThreadService,
     private local: LocalStorageService,
@@ -79,18 +84,32 @@ export class SecondaryChatComponent implements AfterViewChecked {
     if (file) {
       const allowedTypes = ['image/png', 'image/jpeg', 'application/pdf'];
       if (allowedTypes.includes(file.type)) {
-        this.chatService.uploadFile(file).then((fileUrl) => {
-          this.uploadedFileUrl = fileUrl;
-          this.uploadedFileType = file.type.includes('image/') ? 'image' : 'pdf';
-        })
+        this.uploadingFileName = file.name;
+        this.uploadProgress = 0;
+        this.isUploading = true;
+        this.chatService.uploadFile(file).subscribe(response => {
+          if (typeof response === 'number') {
+            this.uploadProgress = response;
+          } else {
+            this.uploadedFileUrl = response;
+            this.uploadedFileType = file.type.includes('image/') ? 'image' : 'pdf';
+            this.isUploading = false;
+          }
+        });
       } else {
-        alert('Only PNG, JPG, JPEG, and PDF files are allowed.');
+        alert('Nur PNG, JPG, JPEG, und PDF Datein sind Erlaubt.');
       }
     }
   }
 
+  deletFile(){
+    this.uploadedFileUrl = null;
+    this.uploadedFileType = null;
+    this.uploadingFileName = null;
+  }
+
   sendMessage() {
-    if (this.message != '' || this.uploadedFileUrl != null) {
+    if (this.message != '' || this.uploadedFileUrl != null) {
       const answer: Answer = {
         sender_id: this.uid,
         text: this.message,

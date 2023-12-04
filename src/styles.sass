@@ -230,6 +230,7 @@ form
     height: 145px
     padding: 30px
     position: relative
+    margin-top: -40px
     textarea
         resize: none
         padding: 15px
@@ -538,6 +539,50 @@ input[type="file"]
     .msg-you
         .message-pdf
             color: #fff
+
+.file-con-upload
+    margin-top: -25px
+    z-index: 2
+.upload-progress-bar
+    background-color: #f3f3f3
+    border-radius: 2px
+    position: relative
+    height: 5px
+    width: 100%
+
+.upload-progress
+    background-color: #535AF1
+    height: 100%
+    width: 0%
+    border-radius: 2px
+    transition: width 0.5s ease-in-out
+.files
+    position: relative
+    width: 100%
+    height: 40px
+    .file-con
+        top: -15px
+        position: absolute
+        background: #fff
+        border-radius: 30px
+        display: flex
+        align-items: center
+        padding: 5px 12px 5px 12px
+        border: 1px solid #535AF1
+        left: 30px
+        gap: 5px
+        z-index: 2
+        .delete
+            font-size: 22px
+            cursor: pointer
+            &:hover
+                color: #535AF1
+                font-weight: 700
+        &:hover
+            font-weight: 600
+            background-color: #ECEEFE
+
+
 @media ( max-width: 1300px )
     .chat-con
         margin-left: 0px !important
