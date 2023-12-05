@@ -233,9 +233,9 @@ form
     margin-top: -40px
     textarea
         resize: none
-        padding: 15px
+        padding: 15px 15px 30px 15px
         width: calc( 100% - 90px )
-        height: calc( 100% - 90px )
+        height: calc( 100% - 100px )
         border-radius: 20px
         border: 1px solid #ADB0D9
     .chat-icons
@@ -244,11 +244,13 @@ form
         width: calc( 100% - 130px )
         .left-icons
             position: absolute
-            top: 80px
+            top: 85px
             left: 35px
             display: flex
             align-items: center
             gap: 5px
+            background-color: #fff
+            border-radius: 20px
         .vector-send
             border-right: 1px solid #797EF3
             height: 25px
@@ -298,7 +300,7 @@ form
 
         .send-icon
             position: absolute
-            bottom: 100px
+            bottom: 95px
             right: 100px
             cursor: pointer
             width: 24px
@@ -523,6 +525,14 @@ form
 input[type="file"]
     display: none
 
+.username
+    background-color: yellow
+    color: #000
+    cursor: pointer
+
+.link-user-con
+    position: relative
+
 .message-image
     max-width: 100%
     max-height: 350px
@@ -581,7 +591,6 @@ input[type="file"]
         &:hover
             font-weight: 600
             background-color: #ECEEFE
-
 
 @media ( max-width: 1300px )
     .chat-con

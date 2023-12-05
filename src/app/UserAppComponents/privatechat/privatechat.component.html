@@ -32,12 +32,28 @@
                             <div class="time"> {{ message.time }}</div>
                             <div class="time" *ngIf="message.edit">(Bearbeitet)</div>
                         </div>
-                        <div *ngIf="!message.fileUrl" class="msg" [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">
-                            {{message.text}}
+                        <div *ngIf="!message.fileUrl" class="msg"
+                            [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">
+                            <ng-container *ngFor="let segment of parseMessage(message.text)">
+                                <span *ngIf="segment.isUsername" class="username" (click)="openUserProfile(segment.id)">
+                                    {{ segment.text }}
+                                </span>
+                                <span *ngIf="!segment.isUsername">
+                                    {{ segment.text }}
+                                </span>
+                            </ng-container>
                         </div>
                         <div style="display: flex; flex-direction: column;" *ngIf="message.fileUrl">
-                            <div *ngIf="message.text" class="msg" [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">
-                                {{message.text}}
+                            <div *ngIf="message.text" class="msg"
+                                [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">
+                                <ng-container *ngFor="let segment of parseMessage(message.text)">
+                                    <span *ngIf="segment.isUsername" class="username" (click)="openUserProfile(segment.id)">
+                                        {{ segment.text }}
+                                    </span>
+                                    <span *ngIf="!segment.isUsername">
+                                        {{ segment.text }}
+                                    </span>
+                                </ng-container>
                             </div>
                             <div class="msg" style="margin-top: 5px;"
                                 [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">
@@ -106,7 +122,6 @@
                     (click)="openUserProfile(otherUser)" class="name">{{'@'}}{{ nameChat }}</span> und dir statt.</div>
         </div>
     </div>
-
     <div *ngIf="isUploading" class="file-con-upload">
         <div>{{ uploadingFileName }}</div>
         <div class="upload-progress-bar">
@@ -121,8 +136,6 @@
             </div>
         </div>
     </div>
-
-
     <div class="input-chat" *ngIf="!editTextArea">
         <textarea type="text" placeholder="Nachricht an {{ nameChat }}" [(ngModel)]="message"></textarea>
         <div class="chat-icons">
@@ -135,7 +148,7 @@
                 <div class="emoji-send" (click)="openEmojiPicker($event, null)">
                     <div></div>
                 </div>
-                <div class="users-send">
+                <div class="users-send" (click)="openLinkUserPopUp()">
                     <div></div>
                 </div>
             </div>
@@ -155,5 +168,8 @@
         [ngStyle]="{'position': 'absolute', 'top': pickerPosition.top, 'left': pickerPosition.left}"
         style="z-index: 1001;">
         <emoji-mart [showPreview]="false" (emojiClick)="onEmojiSelect($event.emoji.native)"></emoji-mart>
+    </div>
+    <div class="link-user-con" *ngIf="openLinkUser">
+        <app-link-user-pop-up (userClicked)="handleUserClick($event)"></app-link-user-pop-up>
     </div>
 </div>

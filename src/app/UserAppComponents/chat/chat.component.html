@@ -37,21 +37,43 @@
                         </div>
                         <div *ngIf="!message.fileUrl" class="msg"
                             [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">
-                            {{message.text}}
+
+                            <ng-container *ngFor="let segment of parseMessage(message.text)">
+                                <span *ngIf="segment.isUsername" class="username" (click)="openUserProfile(segment.id)">
+                                    {{ segment.text }}
+                                </span>
+                                <span *ngIf="!segment.isUsername">
+                                    {{ segment.text }}
+                                </span>
+                            </ng-container>
+
                         </div>
+
                         <div style="display: flex; flex-direction: column;" *ngIf="message.fileUrl">
                             <div *ngIf="message.text" class="msg"
                                 [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">
-                                {{message.text}}
+
+                                <ng-container *ngFor="let segment of parseMessage(message.text)">
+                                    <span *ngIf="segment.isUsername" class="username" (click)="openUserProfile(segment.id)">
+                                        {{ segment.text }}
+                                    </span>
+                                    <span *ngIf="!segment.isUsername">
+                                        {{ segment.text }}
+                                    </span>
+                                </ng-container>
+
                             </div>
                             <div class="msg" style="margin-top: 5px;"
                                 [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">
-                                <a href="{{message.fileUrl}}" target="_blank"><img *ngIf="message.fileType === 'image'"
-                                        [src]="message.fileUrl" class="message-image" /></a>
-                                <a *ngIf="message.fileType === 'pdf'" [href]="message.fileUrl" target="_blank"
-                                    class="message-pdf">Open PDF</a>
-                            </div>
+                                <a href="{{message.fileUrl}}" target="_blank">
+                                    <img *ngIf="message.fileType === 'image'" [src]="message.fileUrl"
+                                        class="message-image" />
+                                    <a *ngIf="message.fileType === 'pdf'" [href]="message.fileUrl" target="_blank"
+                                        class="message-pdf">Open PDF</a>
+                                </a>
+                            </div> 
                         </div>
+                        
                         <div class="reaction-con" [ngClass]="{'reaction-you': !messageSendFrom(message.sender_id)}">
                             <div class="answer-count" *ngIf="checkThreadLenght(message)" (click)="openThread(message)">
                                 {{ message.thread.length }} Antworten</div>
@@ -109,9 +131,6 @@
                 Das ist der Anfang des Channels.</div>
         </div>
     </div>
-
-
-
     <div *ngIf="isUploading" class="file-con-upload">
         <div>{{ uploadingFileName }}</div>
         <div class="upload-progress-bar">
@@ -126,8 +145,6 @@
             </div>
         </div>
     </div>
-        
-
     <div class="input-chat" *ngIf="!editTextArea">
         <textarea type="text" placeholder="Nachricht an #{{ groupName }}" [(ngModel)]="message"></textarea>
         <div class="chat-icons">
@@ -140,7 +157,7 @@
                 <div class="emoji-send" (click)="openEmojiPicker($event, null)">
                     <div></div>
                 </div>
-                <div class="users-send">
+                <div class="users-send" (click)="openLinkUserPopUp()">
                     <div></div>
                 </div>
             </div>
@@ -166,5 +183,8 @@
         [ngStyle]="{'position': 'absolute', 'top': pickerPosition.top, 'left': pickerPosition.left}"
         style="z-index: 1001;">
         <emoji-mart [showPreview]="false" (emojiClick)="onEmojiSelect($event.emoji.native)"></emoji-mart>
+    </div>
+    <div class="link-user-con" *ngIf="openLinkUser">
+        <app-link-user-pop-up (userClicked)="handleUserClick($event)"></app-link-user-pop-up>
     </div>
 </div>

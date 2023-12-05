@@ -11,7 +11,7 @@
             <div class="status"><img src="assets/images/profile/online_status.png" alt="status">Aktiv</div>
             <div class="mail-con" *ngIf="!guest">
                 <div class="mail-head"><img src="assets/images/login/mail.png" alt="mail">E-Mail-Adresse</div>
-                <div class="mail">{{ userMail }}</div>
+                <div class="mail"><a href="mailto:{{ userMail }}">{{ userMail }}</a></div>
             </div>
             <div class="login-button-con">
                 <button class="login" (click)="sendMessage()"><img src="assets/images/profile/mode_comment.png">Nachricht</button>

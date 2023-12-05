@@ -28,12 +28,26 @@
                         </div>
                         <div *ngIf="!message.fileUrl" class="msg"
                             [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">
-                            {{message.text}}
+                            <ng-container *ngFor="let segment of parseMessage(message.text)">
+                                <span *ngIf="segment.isUsername" class="username" (click)="openUserProfile(segment.id)">
+                                    {{ segment.text }}
+                                </span>
+                                <span *ngIf="!segment.isUsername">
+                                    {{ segment.text }}
+                                </span>
+                            </ng-container>
                         </div>
                         <div style="display: flex; flex-direction: column;" *ngIf="message.fileUrl">
                             <div *ngIf="message.text" class="msg"
                                 [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">
-                                {{message.text}}
+                                <ng-container *ngFor="let segment of parseMessage(message.text)">
+                                    <span *ngIf="segment.isUsername" class="username" (click)="openUserProfile(segment.id)">
+                                        {{ segment.text }}
+                                    </span>
+                                    <span *ngIf="!segment.isUsername">
+                                        {{ segment.text }}
+                                    </span>
+                                </ng-container>
                             </div>
                             <div class="msg" style="margin-top: 5px;"
                                 [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">
@@ -158,7 +172,7 @@
                     <div class="emoji-send" (click)="openEmojiPicker($event, null)">
                         <div></div>
                     </div>
-                    <div class="users-send">
+                    <div class="users-send" (click)="openLinkUserPopUp()">
                         <div></div>
                     </div>
                 </div>
@@ -179,6 +193,9 @@
             [ngStyle]="{'position': 'absolute', 'top': pickerPosition.top, 'left': pickerPosition.left}"
             style="z-index: 1001;">
             <emoji-mart [showPreview]="false" (emojiClick)="onEmojiSelect($event.emoji.native)"></emoji-mart>
+        </div>
+        <div class="link-user-con" *ngIf="openLinkUser">
+            <app-link-user-pop-up (userClicked)="handleUserClick($event)"></app-link-user-pop-up>
         </div>
     </div>
 </div>

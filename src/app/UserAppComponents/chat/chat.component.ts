@@ -12,6 +12,7 @@ import { DataService } from 'src/app/services/data.service';
 import { DabubbleappComponent } from '../dabubbleapp/dabubbleapp.component';
 import { UserProfileService } from 'src/app/services/userprofile.service';
 import { ThreadService } from 'src/app/services/thread.service';
+import { ChannelService } from 'src/app/services/channel.service';
 
 interface MessageGroup {
   label: string;
@@ -59,22 +60,25 @@ export class ChatComponent implements AfterViewChecked {
   disableAutoScroll: boolean = false;
   uploadedFileUrl: string | null = null;
   uploadedFileType: string | null = null;
-
   uploadingFileName: string | null = null;
   uploadProgress: number = 0;
   isUploading: boolean = false;
 
+  openLinkUser: boolean = false;
+  users: any = [];
   constructor(
     private chatService: ChatService,
     private local: LocalStorageService,
     private data: DataService,
     private dabubble: DabubbleappComponent,
     private userProfileSevice: UserProfileService,
-    private threadService: ThreadService
+    private threadService: ThreadService,
+    private channelS: ChannelService
   ) {}
 
   ngOnInit() {
     this.messages = [];
+    this.loadUsers();
     this.uid = this.getUid();
     this.chatService.openChannel.subscribe((channel) => {
       if (channel) {
@@ -82,6 +86,66 @@ export class ChatComponent implements AfterViewChecked {
         this.createbyId = channel.createdby;
       }
     });
+  }
+
+  openLinkUserPopUp() {
+    this.openLinkUser = !this.openLinkUser;
+  }
+
+  handleUserClick(user: any) {
+    const usernameHtml = `@${user.data.realName}`;
+    this.message += usernameHtml;
+  }
+
+  loadUsers() {
+    this.channelS.fetchData('users').subscribe((users) => {
+      this.users = users;
+    });
+  }
+
+  findUsername(text: string): { username: string; id: string } | null {
+    for (let user of this.users) {
+      let username = `@${user.data.realName}`;
+      if (text.startsWith(username)) {
+        return { username, id: user.id };
+      }
+    }
+    return null;
+  }
+
+  processNonUsernameText(text: string): { text: string } {
+    let nextSpaceIndex = text.indexOf(' ');
+    if (nextSpaceIndex === -1) nextSpaceIndex = text.length;
+    return { text: text.substring(0, nextSpaceIndex) };
+  }
+
+  parseMessage(
+    messageText: string
+  ): Array<{ text: string; isUsername: boolean; id: string }> {
+    const segments = [];
+    let remainingText = messageText;
+    while (remainingText.length > 0) {
+      if (remainingText.startsWith('@')) {
+        const usernameInfo = this.findUsername(remainingText);
+        if (usernameInfo) {
+          segments.push({
+            text: usernameInfo.username,
+            isUsername: true,
+            id: usernameInfo.id,
+          });
+          remainingText = remainingText
+            .substring(usernameInfo.username.length)
+            .trimStart();
+          continue;
+        }
+      }
+      const nonUsernameText = this.processNonUsernameText(remainingText);
+      segments.push({ text: nonUsernameText.text, isUsername: false, id: '' });
+      remainingText = remainingText
+        .substring(nonUsernameText.text.length)
+        .trimStart();
+    }
+    return segments;
   }
 
   onFileSelected(event: any) {
@@ -92,12 +156,14 @@ export class ChatComponent implements AfterViewChecked {
         this.uploadingFileName = file.name;
         this.uploadProgress = 0;
         this.isUploading = true;
-        this.chatService.uploadFile(file).subscribe(response => {
+        this.chatService.uploadFile(file).subscribe((response) => {
           if (typeof response === 'number') {
             this.uploadProgress = response;
           } else {
             this.uploadedFileUrl = response;
-            this.uploadedFileType = file.type.includes('image/') ? 'image' : 'pdf';
+            this.uploadedFileType = file.type.includes('image/')
+              ? 'image'
+              : 'pdf';
             this.isUploading = false;
           }
         });
@@ -107,7 +173,7 @@ export class ChatComponent implements AfterViewChecked {
     }
   }
 
-  deletFile(){
+  deletFile() {
     this.uploadedFileUrl = null;
     this.uploadedFileType = null;
     this.uploadingFileName = null;
@@ -317,6 +383,7 @@ export class ChatComponent implements AfterViewChecked {
     this.message = '';
     this.uploadedFileUrl = null;
     this.uploadedFileType = null;
+    this.openLinkUser = false;
   }
 
   async loadMessages() {

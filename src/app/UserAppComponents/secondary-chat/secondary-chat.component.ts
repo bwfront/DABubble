@@ -12,6 +12,7 @@ import { UserProfileService } from 'src/app/services/userprofile.service';
 import { DabubbleappComponent } from '../dabubbleapp/dabubbleapp.component';
 import { Answer } from 'src/app/models/answer.model';
 import { ChatService } from 'src/app/services/chat.service';
+import { ChannelService } from 'src/app/services/channel.service';
 
 @Component({
   selector: 'app-secondary-chat',
@@ -24,14 +25,10 @@ export class SecondaryChatComponent implements AfterViewChecked {
       this.scrollToBottom();
     }
   }
-
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
-
   uid: string = '';
-
   selectedMessage: any;
   currentChannel: any;
-
   replies: any;
   fetchedReplies: any;
   messages: any[] = [];
@@ -47,24 +44,88 @@ export class SecondaryChatComponent implements AfterViewChecked {
   errorEdit: boolean = false;
   uploadedFileUrl: string | null = null;
   uploadedFileType: string | null = null;
-
-
   uploadingFileName: string | null = null;
   uploadProgress: number = 0;
   isUploading: boolean = false;
+
+  openLinkUser: boolean = false;
+  users: any = [];
   constructor(
     private threadS: ThreadService,
     private local: LocalStorageService,
     private data: DataService,
     private dabubble: DabubbleappComponent,
     private userProfileSevice: UserProfileService,
-    private chatService: ChatService
+    private chatService: ChatService,
+    private channelS: ChannelService
   ) {}
 
   ngOnInit() {
     this.uid = this.getUid();
     this.getMessage();
+    this.loadUsers();
   }
+
+  openLinkUserPopUp() {
+    this.openLinkUser = !this.openLinkUser;
+  }
+
+  handleUserClick(user: any) {
+    const usernameHtml = `@${user.data.realName}`;
+    this.message += usernameHtml;
+  }
+
+  loadUsers() {
+    this.channelS.fetchData('users').subscribe((users) => {
+      this.users = users;
+    });
+  }
+
+  findUsername(text: string): { username: string; id: string } | null {
+    for (let user of this.users) {
+      let username = `@${user.data.realName}`;
+      if (text.startsWith(username)) {
+        return { username, id: user.id };
+      }
+    }
+    return null;
+  }
+
+  processNonUsernameText(text: string): { text: string } {
+    let nextSpaceIndex = text.indexOf(' ');
+    if (nextSpaceIndex === -1) nextSpaceIndex = text.length;
+    return { text: text.substring(0, nextSpaceIndex) };
+  }
+
+  parseMessage(
+    messageText: string
+  ): Array<{ text: string; isUsername: boolean; id: string }> {
+    const segments = [];
+    let remainingText = messageText;
+    while (remainingText.length > 0) {
+      if (remainingText.startsWith('@')) {
+        const usernameInfo = this.findUsername(remainingText);
+        if (usernameInfo) {
+          segments.push({
+            text: usernameInfo.username,
+            isUsername: true,
+            id: usernameInfo.id,
+          });
+          remainingText = remainingText
+            .substring(usernameInfo.username.length)
+            .trimStart();
+          continue;
+        }
+      }
+      const nonUsernameText = this.processNonUsernameText(remainingText);
+      segments.push({ text: nonUsernameText.text, isUsername: false, id: '' });
+      remainingText = remainingText
+        .substring(nonUsernameText.text.length)
+        .trimStart();
+    }
+    return segments;
+  }
+
 
   getMessage() {
     this.threadS.selectedMessage.subscribe((infos: any) => {
