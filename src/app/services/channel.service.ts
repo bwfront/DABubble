@@ -7,6 +7,8 @@ import {
   addDoc,
   collection,
   getDocs,
+  query,
+  where,
 } from '@angular/fire/firestore';
 
 interface Channel {
@@ -128,20 +130,25 @@ export class ChannelService {
   }
 
   async privateChat(uid: string, secuid: string) {
-    let private_chats = await this.fetchPrivateChat();
+    let private_chats = await this.fetchPrivateChat(uid);
     for (let chat of private_chats) {
-        if (uid !== secuid && chat.userIds.includes(uid) && chat.userIds.includes(secuid)) {
-            return chat;
-        }
+      if (
+        uid !== secuid &&
+        chat.userIds.includes(uid) &&
+        chat.userIds.includes(secuid)
+      ) {
+        return chat;
+      }
     }
     return this.createPrivateChat(uid, secuid);
-}
+  }
 
-  async fetchPrivateChat() {
+  async fetchPrivateChat(uid: string) {
     const colRef = collection(this.fire, 'private_chats');
-    const docs = await getDocs(colRef);
+    const q = query(colRef, where('userIds', 'array-contains', uid));
+    const querySnapshot = await getDocs(q);
     const collectionData: any = [];
-    docs.forEach((doc) => {
+    querySnapshot.forEach((doc) => {
       collectionData.push({ id: doc.id, ...doc.data() });
     });
     return collectionData;
@@ -163,14 +170,14 @@ export class ChannelService {
   }
 
   async openPrivateNotes(uid: string) {
-    const notes = await this.fetchPrivateChat();
+    const notes = await this.fetchPrivateChat(uid);
     for (const note of notes) {
-        if (note.user == uid) {
-            return note;
-        }
+      if (note.user == uid) {
+        return note;
+      }
     }
     return this.createPrivateNotes(uid);
-}
+  }
 
   async createPrivateNotes(uid: string) {
     const colRef = collection(this.fire, 'private_chats');
@@ -187,5 +194,4 @@ export class ChannelService {
         console.log('konnte nicht erstellet werden');
       });
   }
-
 }

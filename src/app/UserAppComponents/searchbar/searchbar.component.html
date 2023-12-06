@@ -1,3 +1,7 @@
 <div class="searchbar-con">
-    <div class="searchbar"><input type="text" placeholder="Code learing durchsuchen"><img src="assets/images/search.png" alt="search"></div>
+    <div class="searchbar"><input type="text" placeholder="Code learning durchsuchen"  (focus)="showSearchContent = true"
+        (blur)="showSearchContent = false" [(ngModel)]="searchmodel" (ngModelChange)="fetchData()"><img src="assets/images/search.png" alt="search"></div>
+</div>
+<div class="search-con" *ngIf="showSearchContent">
+AIJdnjipa
 </div>
