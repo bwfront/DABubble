@@ -5,24 +5,6 @@ import { DabubbleappComponent } from '../dabubbleapp/dabubbleapp.component';
 import { LocalStorageService } from 'src/app/services/localstorage.service';
 import { ChatService } from 'src/app/services/chat.service';
 
-interface Channel {
-  data: GroupChatData;
-}
-
-interface GroupChatData {
-  chat_id: string;
-  created_at: string;
-  group_name: string;
-  participants: string[];
-  messages: Message[];
-}
-
-interface Message {
-  message_id: string;
-  sender_id: string;
-  text: string;
-  timestamp: string;
-}
 
 @Component({
   selector: 'app-chanel-menu',

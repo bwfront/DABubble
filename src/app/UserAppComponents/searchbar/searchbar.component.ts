@@ -1,37 +1,148 @@
 import { Component } from '@angular/core';
+import { DataService } from 'src/app/services/data.service';
 import { LocalStorageService } from 'src/app/services/localstorage.service';
 import { SearchService } from 'src/app/services/search.service';
+import { ChanelMenuComponent } from '../chanel-menu/chanel-menu.component';
+import { ChannelService } from 'src/app/services/channel.service';
+import { DabubbleappComponent } from '../dabubbleapp/dabubbleapp.component';
+import { ChatService } from 'src/app/services/chat.service';
+interface Timestamp {
+  seconds: number;
+  nanoseconds: number;
+}
 
+interface Message {
+  id: string;
+  time: string;
+  text: string;
+  sender_id: string;
+  timestamp: Timestamp;
+  fileUrl: string;
+  date: string;
+  reactions: any[];
+  fileType: string;
+}
+
+interface PrivateChat {
+  id: string;
+  created_at: Timestamp;
+  userIds: string[];
+  messages: Message[];
+  searched?: Message;
+  sender: string;
+}
 @Component({
   selector: 'app-searchbar',
   templateUrl: './searchbar.component.html',
-  styleUrls: ['./searchbar.component.sass']
+  styleUrls: ['./searchbar.component.sass'],
 })
 export class SearchbarComponent {
-  showSearchContent: boolean = false
+  showSearchContent: boolean = false;
   searchmodel: string = 'Hallo';
   uid: string = '';
   privateChat: any;
-  searchedPrivateChat: string[] = [];
-  constructor(private SearchS:  SearchService,private localS:  LocalStorageService){}
-  ngOnInit(){
-    this.getUid()
-    this.fetchData()
+  channels: any;
+  allChannels: any;
+  searchedPrivateChat: PrivateChat[] = [];
+  constructor(
+    private SearchS: SearchService,
+    private localS: LocalStorageService,
+    private dataS: DataService,
+    private channelService: ChannelService,
+    private dabubble: DabubbleappComponent,
+    private chatService: ChatService
+  ) {}
+  ngOnInit() {
+    this.getUid();
+    this.fetchData();
   }
 
-  async fetchData(){
-    this.privateChat = await this.SearchS.fetchPrivateChat(this.uid);
-    this.searchPrivateChat()
+  async fetchData() {
+    if (this.searchmodel != '') {
+      this.privateChat = await this.SearchS.fetchPrivateChat(this.uid);
+      this.searchPrivateChat();
+      this.searchChannels();
+    }
   }
 
-  searchPrivateChat(){
-    this.privateChat.forEach((pChat: any) => {
-      pChat.messages.forEach((message: any) => {
-        if(message.text.includes(this.searchmodel)){
-          pChat.messages = message;
+  async searchChannels() {
+    this.SearchS.fetchChannels(this.uid).subscribe(async (channels) => {
+      this.allChannels = channels;
+      const filteredChannels = [];
+      for (const channel of channels) {
+        const messagePromises = channel.messages.map(async (message: any) => {
+          if (message.text.includes(this.searchmodel)) {
+            message.sender = await this.getUserName(message.sender_id);
+            return message;
+          }
+          return null;
+        });
+        const resolvedMessages = await Promise.all(messagePromises);
+        const searchedM = resolvedMessages.filter((m) => m !== null);
+        if (searchedM.length > 0) {
+          filteredChannels.push({ ...channel, searchedM });
+        }
+      }
+      this.channels = filteredChannels;
+      console.log(this.channels);
+    });
+  }
+
+  async getUserName(docId: string) {
+    try {
+      const user = await this.dataS.getUserRef(docId);
+      return user?.realName;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  async searchPrivateChat() {
+    this.searchedPrivateChat = [];
+    for (const pChat of this.privateChat) {
+      for (const message of pChat.messages) {
+        if (message.text.includes(this.searchmodel)) {
+          pChat.searched = message;
+          const index = pChat.userIds.indexOf(this.uid);
+          if (index > -1) {
+            pChat.userIds.splice(index, 1);
+          }
+          if (pChat.userIds.length > 0) {
+            pChat.sender = await this.getUserName(pChat.userIds[0]);
+          } else {
+            pChat.sender = null;
+          }
           this.searchedPrivateChat.push(pChat);
         }
-      });
+      }
+    }
+  }
+
+  async openPrivateChat(userId: string) {
+    if (userId != this.uid) {
+      let element = await this.channelService.privateChat(this.uid, userId);
+      this.chatService.updateOpenChannel(element);
+      this.dabubble.groupChat = false;
+      this.dabubble.openChat();
+    } else {
+      let element = await this.channelService.openPrivateNotes(this.uid);
+      this.chatService.updateOpenChannel(element);
+      this.dabubble.groupChat = false;
+      this.dabubble.openChat();
+    }
+    this.searchmodel = '';
+  }
+
+  openChannel(groupName: string) {
+    console.log(groupName);
+    
+    this.allChannels.forEach((element: any) => {
+      console.log(element);
+      if (element.data.group_name == groupName) {
+        this.chatService.updateOpenChannel(element.data);
+        this.dabubble.groupChat = true;
+        this.dabubble.openChat();
+      }
     });
   }
 

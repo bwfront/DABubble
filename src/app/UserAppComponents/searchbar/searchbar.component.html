@@ -1,7 +1,18 @@
 <div class="searchbar-con">
-    <div class="searchbar"><input type="text" placeholder="Code learning durchsuchen"  (focus)="showSearchContent = true"
-        (blur)="showSearchContent = false" [(ngModel)]="searchmodel" (ngModelChange)="fetchData()"><img src="assets/images/search.png" alt="search"></div>
+    <div class="searchbar"><input type="text" placeholder="Code learning durchsuchen" (focus)="showSearchContent = true"
+            (blur)="showSearchContent = false" [(ngModel)]="searchmodel" (ngModelChange)="fetchData()"><img
+            src="assets/images/search.png" alt="search"></div>
 </div>
-<div class="search-con" *ngIf="showSearchContent">
-AIJdnjipa
+<div class="search-con" *ngIf="showSearchContent || searchmodel != ''">
+    <div class="privatechats" *ngIf="searchmodel != ''">
+        <div class="search" *ngFor="let pC of searchedPrivateChat" (click)="openPrivateChat(pC.userIds[0])">
+            "{{pC.searched?.text}}" in Direktnachrichten mit {{pC.sender}}
+        </div>
+    </div>
+    <div>
+        <div *ngFor="let cC of channels">
+            <div class="search" *ngFor="let message of cC.searchedM" (click)="openChannel(cC.data.group_name)">
+                "{{message.text}}" von {{message.sender}} in #{{cC.data.group_name}}</div>
+        </div>
+    </div>
 </div>
