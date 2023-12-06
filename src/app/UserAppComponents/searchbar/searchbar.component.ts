@@ -84,7 +84,6 @@ export class SearchbarComponent {
         }
       }
       this.channels = filteredChannels;
-      console.log(this.channels);
     });
   }
 
@@ -133,15 +132,14 @@ export class SearchbarComponent {
     this.searchmodel = '';
   }
 
-  openChannel(groupName: string) {
-    console.log(groupName);
-    
+  openChannel(groupName: string, message: any) {
     this.allChannels.forEach((element: any) => {
-      console.log(element);
+      element.data.id = element.id;
       if (element.data.group_name == groupName) {
         this.chatService.updateOpenChannel(element.data);
         this.dabubble.groupChat = true;
         this.dabubble.openChat();
+        this.chatService.triggerScrollToMessage(message);
       }
     });
   }

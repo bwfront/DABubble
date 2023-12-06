@@ -13,6 +13,7 @@ import { DabubbleappComponent } from '../dabubbleapp/dabubbleapp.component';
 import { UserProfileService } from 'src/app/services/userprofile.service';
 import { ThreadService } from 'src/app/services/thread.service';
 import { ChannelService } from 'src/app/services/channel.service';
+import { Subscription } from 'rxjs';
 
 interface MessageGroup {
   label: string;
@@ -28,11 +29,13 @@ interface MessageGroup {
 })
 export class ChatComponent implements AfterViewChecked {
   ngAfterViewChecked() {
-    this.scrollToBottom();
+    if (this.autoScrollToBottom && !this.disableAutoScroll) {
+      this.scrollToBottom();
+    }
   }
 
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
-
+  private subscription = new Subscription();
   groupName: string = '';
   channel: any;
   currentId: string = '';
@@ -66,6 +69,7 @@ export class ChatComponent implements AfterViewChecked {
 
   openLinkUser: boolean = false;
   users: any = [];
+  autoScrollToBottom: boolean = true;
   constructor(
     private chatService: ChatService,
     private local: LocalStorageService,
@@ -74,7 +78,17 @@ export class ChatComponent implements AfterViewChecked {
     private userProfileSevice: UserProfileService,
     private threadService: ThreadService,
     private channelS: ChannelService
-  ) {}
+  ) {
+    this.subscription.add(
+      this.chatService.scrollToMessage$.subscribe((messageId) =>
+        this.scrollToMessage(messageId)
+      )
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 
   ngOnInit() {
     this.messages = [];
@@ -86,6 +100,19 @@ export class ChatComponent implements AfterViewChecked {
         this.createbyId = channel.createdby;
       }
     });
+  }
+
+  private scrollToMessage(message: any) {
+    this.autoScrollToBottom = false;
+    setTimeout(() => {
+      const messageElement = document.getElementById(
+        message.text + message.sender_id
+      );
+      if (messageElement) {
+        console.log('Element offsetTop:', messageElement.offsetTop);
+        messageElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }, 300);
   }
 
   openLinkUserPopUp() {
@@ -361,12 +388,9 @@ export class ChatComponent implements AfterViewChecked {
   }
 
   private scrollToBottom(): void {
-    try {
-      if (!this.disableAutoScroll) {
-        this.chatContainer.nativeElement.scrollTop =
-          this.chatContainer.nativeElement.scrollHeight;
-      }
-    } catch (err) {}
+    if (!this.disableAutoScroll) {
+        //Deactivate
+    }
   }
 
   sendMessage() {

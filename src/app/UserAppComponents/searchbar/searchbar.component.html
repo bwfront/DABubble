@@ -11,7 +11,7 @@
     </div>
     <div>
         <div *ngFor="let cC of channels">
-            <div class="search" *ngFor="let message of cC.searchedM" (click)="openChannel(cC.data.group_name)">
+            <div class="search" *ngFor="let message of cC.searchedM" (click)="openChannel(cC.data.group_name, message)">
                 "{{message.text}}" von {{message.sender}} in #{{cC.data.group_name}}</div>
         </div>
     </div>

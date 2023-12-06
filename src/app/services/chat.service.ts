@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { BehaviorSubject, Observable, finalize, map } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, finalize, map } from 'rxjs';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import { Message } from '../models/message.model';
@@ -18,6 +18,14 @@ export class ChatService {
   public updateOpenChannel(channel: any) {
     this._openChannel.next(channel);
     this.currentChannel = channel;
+  }
+
+  private scrollToMessageSource = new Subject<string>();
+
+  scrollToMessage$ = this.scrollToMessageSource.asObservable();
+
+  triggerScrollToMessage(messageId: string) {
+    this.scrollToMessageSource.next(messageId);
   }
 
   constructor(private firestore: AngularFirestore, private storage: AngularFireStorage) {}

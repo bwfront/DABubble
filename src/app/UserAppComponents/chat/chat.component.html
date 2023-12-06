@@ -17,7 +17,7 @@
                 <div class="date-label">{{ group.label }}</div>
             </div>
             <div *ngFor="let message of group.messages" class="message"
-                [ngClass]="{'message-you': messageSendFrom(message.sender_id)}">
+                [ngClass]="{'message-you': messageSendFrom(message.sender_id)}" [id]="message.text + message.sender_id">
                 <div class="reactions">
                     <div class="reaction emoji" (click)="openEmojiPicker($event, message)"></div>
                     <div class="reaction answer" (click)="openThread(message)"></div>
