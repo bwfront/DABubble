@@ -70,15 +70,15 @@ export class PrivatechatComponent implements AfterViewChecked {
   ) {}
 
   ngOnInit() {
+    this.loadUsers();
+    this.uid = this.getUid();
     this.chatService.openChannel.subscribe((channel) => {
       if (channel && channel.id) {
         this.setPrivateChatData(channel);
         this.currentId = channel.id;
+        this.loadMessages(); 
       }
     });
-    this.loadUsers();
-    this.uid = this.getUid();
-    this.loadMessages();
   }
 
   openLinkUserPopUp() {

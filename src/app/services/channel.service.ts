@@ -6,6 +6,8 @@ import {
   Firestore,
   addDoc,
   collection,
+  doc,
+  getDoc,
   getDocs,
   query,
   where,
@@ -130,17 +132,14 @@ export class ChannelService {
   }
 
   async privateChat(uid: string, secuid: string) {
-    let private_chats = await this.fetchPrivateChat(uid);
-    for (let chat of private_chats) {
-      if (
-        uid !== secuid &&
-        chat.userIds.includes(uid) &&
-        chat.userIds.includes(secuid)
-      ) {
+    const private_chats = await this.fetchPrivateChat(uid);
+    for (const chat of private_chats) {
+      if (uid !== secuid && chat.userIds.includes(uid) && chat.userIds.includes(secuid)) {
         return chat;
       }
     }
-    return this.createPrivateChat(uid, secuid);
+    const chatId = await this.createPrivateChat(uid, secuid);
+    return chatId ? this.getChatById(chatId) : null;
   }
 
   async fetchPrivateChat(uid: string) {
@@ -160,23 +159,24 @@ export class ChannelService {
       userIds: [uid, secuid],
       created_at: new Date(),
     };
-    await addDoc(colRef, privatechat)
-      .then(() => {
-        return colRef.id;
-      })
-      .catch(() => {
-        console.log('konnte nicht erstellet werden');
-      });
+  
+    try {
+      const docRef = await addDoc(colRef, privatechat);
+      return docRef.id;
+    } catch (error) {
+      return null;
+    }
   }
 
   async openPrivateNotes(uid: string) {
     const notes = await this.fetchPrivateChat(uid);
     for (const note of notes) {
-      if (note.user == uid) {
+      if (note.user === uid) {
         return note;
       }
     }
-    return this.createPrivateNotes(uid);
+    const chatId = await this.createPrivateNotes(uid);
+    return chatId ? this.getChatById(chatId) : null;
   }
 
   async createPrivateNotes(uid: string) {
@@ -186,12 +186,22 @@ export class ChannelService {
       userIds: [uid],
       created_at: new Date(),
     };
-    await addDoc(colRef, privatechat)
-      .then(() => {
-        return colRef.id;
-      })
-      .catch(() => {
-        console.log('konnte nicht erstellet werden');
-      });
+  
+    try {
+      const docRef = await addDoc(colRef, privatechat);
+      return docRef.id;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  async getChatById(chatId: string) {
+    const docRef = doc(this.fire, 'private_chats', chatId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return { id: docSnap.id, ...docSnap.data() };
+    } else {
+      return null;
+    }
   }
 }
