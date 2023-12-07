@@ -13,6 +13,7 @@ import { DabubbleappComponent } from '../dabubbleapp/dabubbleapp.component';
 import { Answer } from 'src/app/models/answer.model';
 import { ChatService } from 'src/app/services/chat.service';
 import { ChannelService } from 'src/app/services/channel.service';
+import { MessageParsingService } from 'src/app/services/parseMessage.service';
 
 @Component({
   selector: 'app-secondary-chat',
@@ -57,13 +58,12 @@ export class SecondaryChatComponent implements AfterViewChecked {
     private dabubble: DabubbleappComponent,
     private userProfileSevice: UserProfileService,
     private chatService: ChatService,
-    private channelS: ChannelService
+    private parseS: MessageParsingService
   ) {}
 
   ngOnInit() {
     this.uid = this.getUid();
     this.getMessage();
-    this.loadUsers();
   }
 
   openLinkUserPopUp() {
@@ -75,57 +75,9 @@ export class SecondaryChatComponent implements AfterViewChecked {
     this.message += usernameHtml;
   }
 
-  loadUsers() {
-    this.channelS.fetchData('users').subscribe((users) => {
-      this.users = users;
-    });
+  parseMessage(messageText: string) {
+    return this.parseS.parseMessage(messageText);
   }
-
-  findUsername(text: string): { username: string; id: string } | null {
-    for (let user of this.users) {
-      let username = `@${user.data.realName}`;
-      if (text.startsWith(username)) {
-        return { username, id: user.id };
-      }
-    }
-    return null;
-  }
-
-  processNonUsernameText(text: string): { text: string } {
-    let nextSpaceIndex = text.indexOf(' ');
-    if (nextSpaceIndex === -1) nextSpaceIndex = text.length;
-    return { text: text.substring(0, nextSpaceIndex) };
-  }
-
-  parseMessage(
-    messageText: string
-  ): Array<{ text: string; isUsername: boolean; id: string }> {
-    const segments = [];
-    let remainingText = messageText;
-    while (remainingText.length > 0) {
-      if (remainingText.startsWith('@')) {
-        const usernameInfo = this.findUsername(remainingText);
-        if (usernameInfo) {
-          segments.push({
-            text: usernameInfo.username,
-            isUsername: true,
-            id: usernameInfo.id,
-          });
-          remainingText = remainingText
-            .substring(usernameInfo.username.length)
-            .trimStart();
-          continue;
-        }
-      }
-      const nonUsernameText = this.processNonUsernameText(remainingText);
-      segments.push({ text: nonUsernameText.text, isUsername: false, id: '' });
-      remainingText = remainingText
-        .substring(nonUsernameText.text.length)
-        .trimStart();
-    }
-    return segments;
-  }
-
 
   getMessage() {
     this.threadS.selectedMessage.subscribe((infos: any) => {
@@ -148,12 +100,14 @@ export class SecondaryChatComponent implements AfterViewChecked {
         this.uploadingFileName = file.name;
         this.uploadProgress = 0;
         this.isUploading = true;
-        this.chatService.uploadFile(file).subscribe(response => {
+        this.chatService.uploadFile(file).subscribe((response) => {
           if (typeof response === 'number') {
             this.uploadProgress = response;
           } else {
             this.uploadedFileUrl = response;
-            this.uploadedFileType = file.type.includes('image/') ? 'image' : 'pdf';
+            this.uploadedFileType = file.type.includes('image/')
+              ? 'image'
+              : 'pdf';
             this.isUploading = false;
           }
         });
@@ -163,7 +117,7 @@ export class SecondaryChatComponent implements AfterViewChecked {
     }
   }
 
-  deletFile(){
+  deletFile() {
     this.uploadedFileUrl = null;
     this.uploadedFileType = null;
     this.uploadingFileName = null;
@@ -191,6 +145,7 @@ export class SecondaryChatComponent implements AfterViewChecked {
     this.message = '';
     this.uploadedFileUrl = null;
     this.uploadedFileType = null;
+    this.openLinkUser = false;
   }
 
   loadReplies(chatId: string, messageId: string) {
@@ -200,8 +155,6 @@ export class SecondaryChatComponent implements AfterViewChecked {
       this.getUserInformation();
       this.disableAutoScroll = true;
       this.scrollToBottom();
-      console.log(this.fetchedReplies);
-      
     });
   }
 
@@ -318,7 +271,7 @@ export class SecondaryChatComponent implements AfterViewChecked {
   }
 
   onEmojiSelect(emoji: any) {
-    if(this.currentEditMessage != null){
+    if (this.currentEditMessage != null) {
       this.disableAutoScroll = true;
       this.threadS.reactToMessage(
         this.currentChannel.currentId,
@@ -327,7 +280,7 @@ export class SecondaryChatComponent implements AfterViewChecked {
         emoji,
         this.uid
       );
-    }else{
+    } else {
       this.message += emoji;
     }
     this.showEmojiPicker = false;
