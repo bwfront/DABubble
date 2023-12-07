@@ -4,6 +4,7 @@
             src="assets/images/search.png" alt="search"></div>
 </div>
 <div class="search-con" *ngIf="showSearchContent || searchmodel != ''">
+    <div *ngIf="searchmodel === ''">Suche nach Nachrichten</div>
     <div class="privatechats" *ngIf="searchmodel != ''">
         <div class="search" *ngFor="let pC of searchedPrivateChat" (click)="openPrivateChat(pC.userIds[0])">
             "{{pC.searched?.text}}" in Direktnachrichten mit {{pC.sender}}

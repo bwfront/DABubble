@@ -66,7 +66,7 @@ export class ChatComponent implements AfterViewChecked {
   uploadingFileName: string | null = null;
   uploadProgress: number = 0;
   isUploading: boolean = false;
-
+  proccesMessages: any;
   openLinkUser: boolean = false;
   users: any = [];
   autoScrollToBottom: boolean = true;
@@ -109,10 +109,9 @@ export class ChatComponent implements AfterViewChecked {
         message.text + message.sender_id
       );
       if (messageElement) {
-        console.log('Element offsetTop:', messageElement.offsetTop);
         messageElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
-    }, 300);
+    }, 500);
   }
 
   openLinkUserPopUp() {
@@ -389,7 +388,7 @@ export class ChatComponent implements AfterViewChecked {
 
   private scrollToBottom(): void {
     if (!this.disableAutoScroll) {
-        //Deactivate
+      //Deactivate
     }
   }
 
@@ -419,13 +418,22 @@ export class ChatComponent implements AfterViewChecked {
           await this.loadThreadsForMessage();
           await this.loadUserNamesForReactions(this.messages);
           this.getUserInformation();
-          this.disableAutoScroll = false;
-          this.scrollToBottom();
+          this.loadMessagesScroll();
         });
     }
   }
 
-  proccesMessages: any;
+  loadMessagesScroll() {
+    this.disableAutoScroll = false;
+    const pendingMessage = this.chatService.getPendingScrollMessage();
+    if (pendingMessage) {
+      setTimeout(() => {
+        this.scrollToMessage(pendingMessage);
+        this.chatService.clearPendingScrollMessage();
+      }, 300);
+    }
+  }
+
   async loadThreadsForMessage() {
     this.proccesMessages = this.messages;
     this.proccesMessages.forEach((message: any, index: any) => {

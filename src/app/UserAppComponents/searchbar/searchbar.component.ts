@@ -38,7 +38,7 @@ interface PrivateChat {
 })
 export class SearchbarComponent {
   showSearchContent: boolean = false;
-  searchmodel: string = 'Hallo';
+  searchmodel: string = '';
   uid: string = '';
   privateChat: any;
   channels: any;

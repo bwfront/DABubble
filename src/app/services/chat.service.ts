@@ -24,30 +24,51 @@ export class ChatService {
 
   scrollToMessage$ = this.scrollToMessageSource.asObservable();
 
-  triggerScrollToMessage(messageId: string) {
-    this.scrollToMessageSource.next(messageId);
+  triggerScrollToMessage(message: any) {
+    this.scrollToMessageSource.next(message);
+    this.setPendingScrollMessage(message);
   }
 
-  constructor(private firestore: AngularFirestore, private storage: AngularFireStorage) {}
+  private pendingScrollMessage: any = null;
+
+  setPendingScrollMessage(message: any) {
+    this.pendingScrollMessage = message;
+  }
+
+  getPendingScrollMessage() {
+    return this.pendingScrollMessage;
+  }
+
+  clearPendingScrollMessage() {
+    this.pendingScrollMessage = null;
+  }
+
+  constructor(
+    private firestore: AngularFirestore,
+    private storage: AngularFireStorage
+  ) {}
 
   uploadFile(file: File): Observable<number | string> {
-    return new Observable(observer => {
+    return new Observable((observer) => {
       const filePath = `uploads/${new Date().getTime()}_${file.name}`;
       const fileRef = this.storage.ref(filePath);
       const task = this.storage.upload(filePath, file);
 
-      task.percentageChanges().subscribe(progress => {
+      task.percentageChanges().subscribe((progress) => {
         observer.next(progress);
       });
 
-      task.snapshotChanges().pipe(
-        finalize(() => {
-          fileRef.getDownloadURL().subscribe(downloadURL => {
-            observer.next(downloadURL);
-            observer.complete();
-          });
-        })
-      ).subscribe();
+      task
+        .snapshotChanges()
+        .pipe(
+          finalize(() => {
+            fileRef.getDownloadURL().subscribe((downloadURL) => {
+              observer.next(downloadURL);
+              observer.complete();
+            });
+          })
+        )
+        .subscribe();
     });
   }
 
@@ -67,7 +88,7 @@ export class ChatService {
       timestamp: new Date(),
       reactions: [],
       fileType: 'text',
-      fileUrl: ''
+      fileUrl: '',
     };
     if (fileUrl && fileType) {
       message.fileUrl = fileUrl;

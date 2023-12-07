@@ -57,10 +57,8 @@ export class ChanelMenuComponent {
   }
 
   openChannel(groupName: string) {
-    
     this.channels.forEach((element) => {
       console.log(element);
-      
       if (element.group_name == groupName) {
         this.chatService.updateOpenChannel(element);
         this.dabubble.groupChat = true;
