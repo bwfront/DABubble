@@ -3,17 +3,20 @@
             (blur)="showSearchContent = false" [(ngModel)]="searchmodel" (ngModelChange)="fetchData()"><img
             src="assets/images/search.png" alt="search"></div>
 </div>
-<div class="search-con" *ngIf="showSearchContent || searchmodel != ''">
-    <div *ngIf="searchmodel === ''">Suche nach Nachrichten</div>
-    <div class="privatechats" *ngIf="searchmodel != ''">
-        <div class="search" *ngFor="let pC of searchedPrivateChat" (click)="openPrivateChat(pC.userIds[0])">
-            "{{pC.searched?.text}}" in Direktnachrichten mit {{pC.sender}}
+<div style="position: relative;" *ngIf="showSearchContent || searchmodel != ''">
+    <div class="search-con">
+        <div>{{search}}</div>
+        <div class="privatechats" *ngIf="searchmodel != ''">
+            <div class="search" *ngFor="let pC of searchedPrivateChat" (click)="openPrivateChat(pC.userIds[0])">
+                "{{pC.searched?.text}}" in Direktnachrichten mit {{pC.sender}}
+            </div>
         </div>
-    </div>
-    <div>
-        <div *ngFor="let cC of channels">
-            <div class="search" *ngFor="let message of cC.searchedM" (click)="openChannel(cC.data.group_name, message)">
-                "{{message.text}}" von {{message.sender}} in #{{cC.data.group_name}}</div>
+        <div *ngIf="searchmodel != ''">
+            <div *ngFor="let cC of channels">
+                <div class="search" *ngFor="let message of cC.searchedM"
+                    (click)="openChannel(cC.data.group_name, message)">
+                    "{{message.text}}" von {{message.sender}} in #{{cC.data.group_name}}</div>
+            </div>
         </div>
     </div>
 </div>

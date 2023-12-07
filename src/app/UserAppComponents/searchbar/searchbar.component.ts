@@ -44,6 +44,7 @@ export class SearchbarComponent {
   channels: any;
   allChannels: any;
   searchedPrivateChat: PrivateChat[] = [];
+  search: string = 'Suche nach Nachrichten'
   constructor(
     private SearchS: SearchService,
     private localS: LocalStorageService,
@@ -62,6 +63,10 @@ export class SearchbarComponent {
       this.privateChat = await this.SearchS.fetchPrivateChat(this.uid);
       this.searchPrivateChat();
       this.searchChannels();
+    } else {
+      this.searchedPrivateChat = [];
+      this.channels = [];
+      this.search = 'Suche nach Nachrichten'
     }
   }
 
@@ -71,7 +76,7 @@ export class SearchbarComponent {
       const filteredChannels = [];
       for (const channel of channels) {
         const messagePromises = channel.messages.map(async (message: any) => {
-          if (message.text.includes(this.searchmodel)) {
+          if (message.text.toLowerCase().includes(this.searchmodel.toLowerCase())) {
             message.sender = await this.getUserName(message.sender_id);
             return message;
           }
@@ -85,6 +90,7 @@ export class SearchbarComponent {
       }
       this.channels = filteredChannels;
     });
+    this.checkSearchFound();
   }
 
   async getUserName(docId: string) {
@@ -100,7 +106,7 @@ export class SearchbarComponent {
     this.searchedPrivateChat = [];
     for (const pChat of this.privateChat) {
       for (const message of pChat.messages) {
-        if (message.text.includes(this.searchmodel)) {
+        if (message.text.toLowerCase().includes(this.searchmodel.toLowerCase())) {
           pChat.searched = message;
           const index = pChat.userIds.indexOf(this.uid);
           if (index > -1) {
@@ -115,7 +121,18 @@ export class SearchbarComponent {
         }
       }
     }
+    this.checkSearchFound()
   }
+
+
+  checkSearchFound(){
+    if(this.channels.length == 0 && this.searchedPrivateChat.length == 0){
+      this.search = 'Keine Ergebnisse gefunden'
+    }else{
+      this.search = ''
+    }
+  }
+
 
   async openPrivateChat(userId: string) {
     if (userId != this.uid) {
@@ -142,6 +159,7 @@ export class SearchbarComponent {
         this.chatService.triggerScrollToMessage(message);
       }
     });
+    this.searchmodel = '';
   }
 
   getUid() {
