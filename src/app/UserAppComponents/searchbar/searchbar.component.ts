@@ -44,7 +44,7 @@ export class SearchbarComponent {
   channels: any;
   allChannels: any;
   searchedPrivateChat: PrivateChat[] = [];
-  search: string = 'Suche nach Nachrichten'
+  search: string = 'Suche nach Nachrichten';
   constructor(
     private SearchS: SearchService,
     private localS: LocalStorageService,
@@ -66,7 +66,7 @@ export class SearchbarComponent {
     } else {
       this.searchedPrivateChat = [];
       this.channels = [];
-      this.search = 'Suche nach Nachrichten'
+      this.search = 'Suche nach Nachrichten';
     }
   }
 
@@ -76,7 +76,9 @@ export class SearchbarComponent {
       const filteredChannels = [];
       for (const channel of channels) {
         const messagePromises = channel.messages.map(async (message: any) => {
-          if (message.text.toLowerCase().includes(this.searchmodel.toLowerCase())) {
+          if (
+            message.text.toLowerCase().includes(this.searchmodel.toLowerCase())
+          ) {
             message.sender = await this.getUserName(message.sender_id);
             return message;
           }
@@ -106,7 +108,9 @@ export class SearchbarComponent {
     this.searchedPrivateChat = [];
     for (const pChat of this.privateChat) {
       for (const message of pChat.messages) {
-        if (message.text.toLowerCase().includes(this.searchmodel.toLowerCase())) {
+        if (
+          message.text.toLowerCase().includes(this.searchmodel.toLowerCase())
+        ) {
           pChat.searched = message;
           const index = pChat.userIds.indexOf(this.uid);
           if (index > -1) {
@@ -121,30 +125,32 @@ export class SearchbarComponent {
         }
       }
     }
-    this.checkSearchFound()
+    this.checkSearchFound();
   }
 
-
-  checkSearchFound(){
-    if(this.channels.length == 0 && this.searchedPrivateChat.length == 0){
-      this.search = 'Keine Ergebnisse gefunden'
-    }else{
-      this.search = ''
+  checkSearchFound() {
+    if (this.channels.length == 0 && this.searchedPrivateChat.length == 0) {
+      this.search = 'Keine Ergebnisse gefunden';
+    } else {
+      this.search = '';
     }
   }
 
-
-  async openPrivateChat(userId: string) {
+  async openPrivateChat(userId: string, message: any) {
     if (userId != this.uid) {
       let element = await this.channelService.privateChat(this.uid, userId);
       this.chatService.updateOpenChannel(element);
       this.dabubble.groupChat = false;
       this.dabubble.openChat();
+      this.chatService.triggerScrollToMessage(message);
+      console.log(message);
     } else {
       let element = await this.channelService.openPrivateNotes(this.uid);
       this.chatService.updateOpenChannel(element);
       this.dabubble.groupChat = false;
       this.dabubble.openChat();
+
+      this.chatService.triggerScrollToMessage(message);
     }
     this.searchmodel = '';
   }
@@ -157,6 +163,7 @@ export class SearchbarComponent {
         this.dabubble.groupChat = true;
         this.dabubble.openChat();
         this.chatService.triggerScrollToMessage(message);
+        console.log(message);
       }
     });
     this.searchmodel = '';

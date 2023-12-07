@@ -12,6 +12,7 @@ import { DataService } from 'src/app/services/data.service';
 import { DabubbleappComponent } from '../dabubbleapp/dabubbleapp.component';
 import { UserProfileService } from 'src/app/services/userprofile.service';
 import { MessageParsingService } from 'src/app/services/parseMessage.service';
+import { Subscription } from 'rxjs';
 
 interface MessageGroup {
   label: string;
@@ -60,6 +61,10 @@ export class PrivatechatComponent implements AfterViewChecked {
 
   openLinkUser: boolean = false;
   users: any = [];
+
+  autoScrollToBottom: boolean = true;
+  private subscription = new Subscription();
+
   constructor(
     private chatService: ChatService,
     private local: LocalStorageService,
@@ -67,17 +72,36 @@ export class PrivatechatComponent implements AfterViewChecked {
     private dabubble: DabubbleappComponent,
     private userProfileSevice: UserProfileService,
     private parseS: MessageParsingService
-  ) {}
+  ) {
+    this.subscription.add(
+      this.chatService.scrollToMessage$.subscribe((messageId) =>
+        this.scrollToMessage(messageId)
+      )
+    );
+  }
 
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
   ngOnInit() {
     this.uid = this.getUid();
     this.chatService.openChannel.subscribe((channel) => {
       if (channel && channel.id) {
         this.setPrivateChatData(channel);
         this.currentId = channel.id;
-        this.loadMessages(); 
+        this.loadMessages();
       }
     });
+  }
+
+  private scrollToMessage(message: any) {
+    this.autoScrollToBottom = false;
+    setTimeout(() => {
+      const messageElement = document.getElementById(message.searched.id);
+      if (messageElement) {
+        messageElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }, 500);
   }
 
   openLinkUserPopUp() {
@@ -91,7 +115,7 @@ export class PrivatechatComponent implements AfterViewChecked {
 
   parseMessage(messageText: string) {
     return this.parseS.parseMessage(messageText);
-   }
+  }
 
   onFileSelected(event: any) {
     const file = event.target.files[0];
@@ -101,12 +125,14 @@ export class PrivatechatComponent implements AfterViewChecked {
         this.uploadingFileName = file.name;
         this.uploadProgress = 0;
         this.isUploading = true;
-        this.chatService.uploadFile(file).subscribe(response => {
+        this.chatService.uploadFile(file).subscribe((response) => {
           if (typeof response === 'number') {
             this.uploadProgress = response;
           } else {
             this.uploadedFileUrl = response;
-            this.uploadedFileType = file.type.includes('image/') ? 'image' : 'pdf';
+            this.uploadedFileType = file.type.includes('image/')
+              ? 'image'
+              : 'pdf';
             this.isUploading = false;
           }
         });
@@ -116,12 +142,11 @@ export class PrivatechatComponent implements AfterViewChecked {
     }
   }
 
-  deletFile(){
+  deletFile() {
     this.uploadedFileUrl = null;
     this.uploadedFileType = null;
     this.uploadingFileName = null;
   }
-
 
   private calculatePickerPosition(event: MouseEvent): {
     top: string;
@@ -164,7 +189,7 @@ export class PrivatechatComponent implements AfterViewChecked {
   }
 
   onEmojiSelect(emoji: any) {
-    if(this.currentEditMessage != null){
+    if (this.currentEditMessage != null) {
       this.chatService.reactToMessage(
         'group_chats',
         this.currentId,
@@ -172,8 +197,8 @@ export class PrivatechatComponent implements AfterViewChecked {
         emoji,
         this.uid
       );
-    }else{
-      this.message += emoji
+    } else {
+      this.message += emoji;
     }
     this.showEmojiPicker = false;
   }
@@ -247,10 +272,9 @@ export class PrivatechatComponent implements AfterViewChecked {
   }
 
   private scrollToBottom(): void {
-    try {
-      this.chatContainer.nativeElement.scrollTop =
-        this.chatContainer.nativeElement.scrollHeight;
-    } catch (err) {}
+    if (!this.disableAutoScroll) {
+      //Deactivate
+    }
   }
 
   sendMessage() {
@@ -279,9 +303,19 @@ export class PrivatechatComponent implements AfterViewChecked {
           this.messages = messages;
           await this.loadUserNamesForReactions(this.messages);
           this.getUserInformation();
-          this.disableAutoScroll = false;
-          this.scrollToBottom();
+          this.loadMessagesScroll();
         });
+    }
+  }
+
+  loadMessagesScroll() {
+    this.disableAutoScroll = false;
+    const pendingMessage = this.chatService.getPendingScrollMessage();
+    if (pendingMessage) {
+      setTimeout(() => {
+        this.scrollToMessage(pendingMessage);
+        this.chatService.clearPendingScrollMessage();
+      }, 500);
     }
   }
 
@@ -304,7 +338,7 @@ export class PrivatechatComponent implements AfterViewChecked {
   hasCurrentUserReacted(reactionFrom: string[]): boolean {
     return reactionFrom.includes(this.uid);
   }
-  
+
   async getUserInformation() {
     const messagePromises = this.messages.map(async (message) => {
       try {

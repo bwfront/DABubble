@@ -132,7 +132,7 @@ export class ChatService {
           actions.map((a) => {
             const data = a.payload.doc.data() as Message;
             const id = a.payload.doc.id;
-            return { id, ...data };
+            return { ...data, id };
           })
         )
       );

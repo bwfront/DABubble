@@ -11,4 +11,5 @@ export interface Message {
   thread: any;
   fileType: any;
   fileUrl: any;
+  id: any;
 }

@@ -77,7 +77,7 @@ export class ChatComponent implements AfterViewChecked {
     private dabubble: DabubbleappComponent,
     private userProfileSevice: UserProfileService,
     private threadService: ThreadService,
-    private parseS: MessageParsingService,
+    private parseS: MessageParsingService
   ) {
     this.subscription.add(
       this.chatService.scrollToMessage$.subscribe((messageId) =>
@@ -123,7 +123,7 @@ export class ChatComponent implements AfterViewChecked {
   }
 
   parseMessage(messageText: string) {
-   return this.parseS.parseMessage(messageText);
+    return this.parseS.parseMessage(messageText);
   }
 
   onFileSelected(event: any) {

@@ -13,7 +13,7 @@
                 <div class="date-label">{{ group.label }}</div>
             </div>
             <div *ngFor="let message of group.messages" class="message"
-                [ngClass]="{'message-you': messageSendFrom(message.sender_id)}">
+                [ngClass]="{'message-you': messageSendFrom(message.sender_id)}" [id]="message.id">
                 <div class="reactions">
                     <div class="reaction emoji" (click)="openEmojiPicker($event, message)"></div>
                     <div class="reaction option" (click)="editMessagePopUp = !editMessagePopUp"
@@ -47,7 +47,8 @@
                             <div *ngIf="message.text" class="msg"
                                 [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">
                                 <ng-container *ngFor="let segment of parseMessage(message.text)">
-                                    <span *ngIf="segment.isUsername" class="username" (click)="openUserProfile(segment.id)">
+                                    <span *ngIf="segment.isUsername" class="username"
+                                        (click)="openUserProfile(segment.id)">
                                         {{ segment.text }}
                                     </span>
                                     <span *ngIf="!segment.isUsername">

@@ -7,7 +7,7 @@
     <div class="search-con">
         <div>{{search}}</div>
         <div class="privatechats" *ngIf="searchmodel != ''">
-            <div class="search" *ngFor="let pC of searchedPrivateChat" (click)="openPrivateChat(pC.userIds[0])">
+            <div class="search" *ngFor="let pC of searchedPrivateChat" (click)="openPrivateChat(pC.userIds[0], pC)">
                 "{{pC.searched?.text}}" in Direktnachrichten mit {{pC.sender}}
             </div>
         </div>
