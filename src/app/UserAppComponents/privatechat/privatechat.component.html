@@ -15,6 +15,8 @@
             <div *ngFor="let message of group.messages" class="message"
                 [ngClass]="{'message-you': messageSendFrom(message.sender_id)}" [id]="message.id">
                 <div class="reactions">
+                    <div class="reaction frequent" (click)="quickReact('✅', message)">✅</div>
+                    <div class="reaction frequent" (click)="quickReact('🤩', message)">🤩</div>
                     <div class="reaction emoji" (click)="openEmojiPicker($event, message)"></div>
                     <div class="reaction option" (click)="editMessagePopUp = !editMessagePopUp"
                         *ngIf="messageSendFrom(message.sender_id)"></div>

@@ -55,7 +55,6 @@ export class SearchbarComponent {
   ) {}
   ngOnInit() {
     this.getUid();
-    this.fetchData();
   }
 
   async fetchData() {
