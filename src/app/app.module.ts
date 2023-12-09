@@ -34,7 +34,7 @@ import { UsersProfilePopUpComponent } from './UserAppComponents/users-profile-po
 import { AddUsersPopUpComponent } from './UserAppComponents/add-users-pop-up/add-users-pop-up.component';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { LinkUserPopUpComponent } from './UserAppComponents/link-user-pop-up/link-user-pop-up.component';
-import { NewmessageComponent } from './UserAppComponents/newmessage/newmessage.component';
+
 
 const firebaseConfig = {
   projectId: 'dabubble-1a43e',
@@ -70,7 +70,6 @@ const firebaseConfig = {
     UsersProfilePopUpComponent,
     AddUsersPopUpComponent,
     LinkUserPopUpComponent,
-    NewmessageComponent,
   ],
   imports: [
     BrowserModule,

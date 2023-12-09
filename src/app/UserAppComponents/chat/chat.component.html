@@ -4,7 +4,19 @@
                 class="arrowimg">
             </div>
         </div>
-        <div class="chat-heading" *ngIf="newMessage"><input type="text" placeholder="dbqbdwvqödqd">
+        <div *ngIf="newMessage" class="new-message">
+            <h2 class="headingM">Neue Nachricht</h2>
+            <input type="text" placeholder="An: #Kanal, @Benutzer">
+            <div class="render-new-messages-con">
+                <div class="render-new-messages">
+                    <div class="user-con">
+                        <div class="user" *ngFor="let user of allPrivateChats">
+                            <img src="{{user.data.avatarURl}}" alt="avatar">
+                            <div>{{ user.data.realName }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="users-con" *ngIf="!newMessage">
             <div class="users" (click)="openShowUserPopUp()">
@@ -171,14 +183,9 @@
         </div>
     </div>
     <div class="input-chat" *ngIf="newMessage">
-        <textarea type="text" placeholder="Nachricht an..." [(ngModel)]="message"></textarea>
+        <textarea type="text" placeholder="Nachricht an..." [(ngModel)]="strNewMessage"></textarea>
         <div class="chat-icons">
             <div class="left-icons">
-                <div class="attachment-send" (click)="fileInput.click()">
-                    <div></div>
-                </div>
-                <input type="file" #fileInput (change)="onFileSelected($event)" accept=".png, .jpg, .jpeg, .pdf" hidden>
-                <div class="vector-send"></div>
                 <div class="emoji-send" (click)="openEmojiPicker($event, null)">
                     <div></div>
                 </div>
@@ -186,7 +193,6 @@
                     <div></div>
                 </div>
             </div>
-            <div class="send-icon" (click)="sendMessage()"></div>
         </div>
     </div>
 

@@ -14,6 +14,8 @@ import { UserProfileService } from 'src/app/services/userprofile.service';
 import { ThreadService } from 'src/app/services/thread.service';
 import { Subscription } from 'rxjs';
 import { MessageParsingService } from 'src/app/services/parseMessage.service';
+import { SearchService } from 'src/app/services/search.service';
+import { ChannelService } from 'src/app/services/channel.service';
 
 interface MessageGroup {
   label: string;
@@ -70,8 +72,11 @@ export class ChatComponent implements AfterViewChecked {
   openLinkUser: boolean = false;
   users: any = [];
   autoScrollToBottom: boolean = true;
-
   newMessage: boolean = true;
+
+  strNewMessage: string = 'ewfew';
+  allChannels: any = [];
+  allPrivateChats: any = [];
   constructor(
     private chatService: ChatService,
     private local: LocalStorageService,
@@ -79,7 +84,9 @@ export class ChatComponent implements AfterViewChecked {
     private dabubble: DabubbleappComponent,
     private userProfileSevice: UserProfileService,
     private threadService: ThreadService,
-    private parseS: MessageParsingService
+    private parseS: MessageParsingService,
+    private searchS: SearchService,
+    private channelS: ChannelService
   ) {
     this.subscription.add(
       this.chatService.scrollToMessage$.subscribe((messageId) =>
@@ -94,6 +101,7 @@ export class ChatComponent implements AfterViewChecked {
 
   ngOnInit() {
     this.uid = this.getUid();
+    this.newMessageSearch();
     this.chatService.openChannel.subscribe((channel) => {
       if (channel) {
         this.newMessage = false;
@@ -104,6 +112,25 @@ export class ChatComponent implements AfterViewChecked {
         this.messages = [];
         this.messageGroups = [];
       }
+    });
+  }
+
+  newMessageSearch() {
+    this.fetchAllChannels();
+    this.fetchAllPrivateChats();
+  }
+
+  fetchAllChannels() {
+    this.searchS.fetchChannels(this.uid).subscribe((sub) => {
+      this.allChannels = sub;
+      console.log(this.allChannels);
+    });
+  }
+
+  fetchAllPrivateChats() {
+    this.channelS.fetchData('users').subscribe((users) => {
+      this.allPrivateChats = users;
+      console.log(this.allPrivateChats);
     });
   }
 
