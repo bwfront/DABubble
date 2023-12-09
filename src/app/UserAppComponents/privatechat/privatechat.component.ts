@@ -65,7 +65,7 @@ export class PrivatechatComponent implements AfterViewChecked {
   autoScrollToBottom: boolean = true;
   private subscription = new Subscription();
 
-  topEmojis: any[] = [];
+  stringEmojis: any[] = [];
   constructor(
     private chatService: ChatService,
     private local: LocalStorageService,
@@ -87,21 +87,20 @@ export class PrivatechatComponent implements AfterViewChecked {
       const emojis = JSON.parse(emojiData);
       const sortedEmojis = Object.entries(emojis)
         .sort(([, a], [, b]) => (b as number) - (a as number))
-        .map(([key,]) => key)
+        .map(([key]) => key)
         .slice(0, 2);
-      this.topEmojis = sortedEmojis;
+      this.stringEmojis = sortedEmojis;
     }
-    console.log(this.topEmojis);
-    
+
   }
-  
+
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 
   ngOnInit() {
-    this.loadFrequentEmojis()
+    this.loadFrequentEmojis();
     this.uid = this.getUid();
     this.chatService.openChannel.subscribe((channel) => {
       if (channel && channel.id) {
@@ -199,8 +198,6 @@ export class PrivatechatComponent implements AfterViewChecked {
 
   quickReact(emoji: any, message: any) {
     this.currentEditMessage = message;
-    console.log(this.currentEditMessage);
-
     this.onEmojiSelect(emoji);
   }
 

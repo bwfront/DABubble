@@ -70,6 +70,8 @@ export class ChatComponent implements AfterViewChecked {
   openLinkUser: boolean = false;
   users: any = [];
   autoScrollToBottom: boolean = true;
+
+  newMessage: boolean = true;
   constructor(
     private chatService: ChatService,
     private local: LocalStorageService,
@@ -91,12 +93,16 @@ export class ChatComponent implements AfterViewChecked {
   }
 
   ngOnInit() {
-    this.messages = [];
     this.uid = this.getUid();
     this.chatService.openChannel.subscribe((channel) => {
       if (channel) {
+        this.newMessage = false;
         this.loadChannel(channel);
         this.createbyId = channel.createdby;
+      } else {
+        this.newMessage = true;
+        this.messages = [];
+        this.messageGroups = [];
       }
     });
   }

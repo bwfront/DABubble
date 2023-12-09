@@ -48,12 +48,6 @@ export class ChanelMenuComponent {
         }
       });
     });
-
-    if (this.channels.length > 0) {
-      this.chatService.updateOpenChannel(this.channels[0]);
-    } else {
-      this.chatService.updateOpenChannel(null);
-    }
   }
 
   openChannel(groupName: string) {
@@ -64,6 +58,12 @@ export class ChanelMenuComponent {
         this.dabubble.openChat();
       }
     });
+  }
+
+  openNewMessage(){
+    this.chatService.updateOpenChannel(null);
+    this.dabubble.groupChat = true;
+    this.dabubble.openChat();
   }
 
   async openPrivateChat(userId: string) {

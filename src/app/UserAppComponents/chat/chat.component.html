@@ -1,9 +1,12 @@
 <div class="chat-con">
     <div class="chat-head">
-        <div class="chat-heading" (click)="openEditChannel = true"><span>#</span>{{ groupName }}<div class="arrowimg">
+        <div class="chat-heading" *ngIf="!newMessage" (click)="openEditChannel = true"><span>#</span>{{ groupName }}<div
+                class="arrowimg">
             </div>
         </div>
-        <div class="users-con">
+        <div class="chat-heading" *ngIf="newMessage"><input type="text" placeholder="dbqbdwvqödqd">
+        </div>
+        <div class="users-con" *ngIf="!newMessage">
             <div class="users" (click)="openShowUserPopUp()">
                 <img class="avat" *ngFor="let avat of avatImg" src="{{ avat }}">
                 <div>{{ avatLength }}</div>
@@ -12,8 +15,9 @@
         </div>
     </div>
     <div class="chat" #chatContainer>
+
         <div *ngFor="let group of messageGroups">
-            <div class="date">
+            <div class="date" *ngIf="!newMessage">
                 <div class="date-label">{{ group.label }}</div>
             </div>
             <div *ngFor="let message of group.messages" class="message"
@@ -56,7 +60,8 @@
                                 [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">
 
                                 <ng-container *ngFor="let segment of parseMessage(message.text)">
-                                    <span *ngIf="segment.isUsername" class="username" (click)="openUserProfile(segment.id)">
+                                    <span *ngIf="segment.isUsername" class="username"
+                                        (click)="openUserProfile(segment.id)">
                                         {{ segment.text }}
                                     </span>
                                     <span *ngIf="!segment.isUsername">
@@ -73,9 +78,8 @@
                                     <a *ngIf="message.fileType === 'pdf'" [href]="message.fileUrl" target="_blank"
                                         class="message-pdf">Open PDF</a>
                                 </a>
-                            </div> 
+                            </div>
                         </div>
-                        
                         <div class="reaction-con" [ngClass]="{'reaction-you': !messageSendFrom(message.sender_id)}">
                             <div class="answer-count" *ngIf="checkThreadLenght(message)" (click)="openThread(message)">
                                 {{ message.thread.length }} Antworten</div>
@@ -125,7 +129,7 @@
                 </div>
             </div>
         </div>
-        <div class="startChat-con">
+        <div class="startChat-con" *ngIf="!newMessage">
             <div class="name"># {{ groupName }}</div>
             <div class="start-text" *ngIf="uid == createbyId">Du hast diesen Channel heute erstellt. Das ist der Anfang
                 des Channels.</div>
@@ -147,7 +151,7 @@
             </div>
         </div>
     </div>
-    <div class="input-chat" *ngIf="!editTextArea">
+    <div class="input-chat" *ngIf="!editTextArea && !newMessage">
         <textarea type="text" placeholder="Nachricht an #{{ groupName }}" [(ngModel)]="message"></textarea>
         <div class="chat-icons">
             <div class="left-icons">
@@ -166,6 +170,26 @@
             <div class="send-icon" (click)="sendMessage()"></div>
         </div>
     </div>
+    <div class="input-chat" *ngIf="newMessage">
+        <textarea type="text" placeholder="Nachricht an..." [(ngModel)]="message"></textarea>
+        <div class="chat-icons">
+            <div class="left-icons">
+                <div class="attachment-send" (click)="fileInput.click()">
+                    <div></div>
+                </div>
+                <input type="file" #fileInput (change)="onFileSelected($event)" accept=".png, .jpg, .jpeg, .pdf" hidden>
+                <div class="vector-send"></div>
+                <div class="emoji-send" (click)="openEmojiPicker($event, null)">
+                    <div></div>
+                </div>
+                <div class="users-send" (click)="openLinkUserPopUp()">
+                    <div></div>
+                </div>
+            </div>
+            <div class="send-icon" (click)="sendMessage()"></div>
+        </div>
+    </div>
+
     <div class="error" *ngIf="errorEdit">Die Nachricht darf nicht Leer sein.</div>
     <div class="input-chat" *ngIf="editTextArea">
         <textarea type="text" placeholder="Nachricht an Bearbeiten" [(ngModel)]="editMessageText"></textarea>

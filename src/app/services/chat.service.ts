@@ -15,7 +15,7 @@ export class ChatService {
 
   public readonly openChannel = this._openChannel.asObservable();
 
-  public updateOpenChannel(channel: any) {
+  public updateOpenChannel(channel: any) { 
     this._openChannel.next(channel);
     this.currentChannel = channel;
   }

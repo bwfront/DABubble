@@ -41,7 +41,7 @@ export class SearchbarComponent {
   searchmodel: string = '';
   uid: string = '';
   privateChat: any;
-  channels: any;
+  channels: any = [];
   allChannels: any;
   searchedPrivateChat: PrivateChat[] = [];
   search: string = 'Suche nach Nachrichten';
@@ -142,7 +142,6 @@ export class SearchbarComponent {
       this.dabubble.groupChat = false;
       this.dabubble.openChat();
       this.chatService.triggerScrollToMessage(message);
-      console.log(message);
     } else {
       let element = await this.channelService.openPrivateNotes(this.uid);
       this.chatService.updateOpenChannel(element);
@@ -162,7 +161,6 @@ export class SearchbarComponent {
         this.dabubble.groupChat = true;
         this.dabubble.openChat();
         this.chatService.triggerScrollToMessage(message);
-        console.log(message);
       }
     });
     this.searchmodel = '';
