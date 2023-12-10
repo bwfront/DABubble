@@ -5,7 +5,6 @@ import { DabubbleappComponent } from '../dabubbleapp/dabubbleapp.component';
 import { LocalStorageService } from 'src/app/services/localstorage.service';
 import { ChatService } from 'src/app/services/chat.service';
 
-
 @Component({
   selector: 'app-chanel-menu',
   templateUrl: './chanel-menu.component.html',
@@ -23,7 +22,7 @@ export class ChanelMenuComponent {
     private channelService: ChannelService,
     private dabubble: DabubbleappComponent,
     private local: LocalStorageService,
-    private chatService: ChatService,
+    private chatService: ChatService
   ) {}
 
   ngOnInit() {
@@ -53,8 +52,6 @@ export class ChanelMenuComponent {
   openChannel(groupName: string) {
     this.channels.forEach((element) => {
       if (element.group_name == groupName) {
-        console.log(element);
-        
         this.chatService.updateOpenChannel(element);
         this.dabubble.groupChat = true;
         this.dabubble.openChat();
@@ -62,20 +59,20 @@ export class ChanelMenuComponent {
     });
   }
 
-  openNewMessage(){
+  openNewMessage() {
     this.chatService.updateOpenChannel(null);
     this.dabubble.groupChat = true;
     this.dabubble.openChat();
   }
 
   async openPrivateChat(userId: string) {
-    if(userId != this.uid){
-      let element = await this.channelService.privateChat(this.uid, userId)
+    if (userId != this.uid) {
+      let element = await this.channelService.privateChat(this.uid, userId);
       this.chatService.updateOpenChannel(element);
       this.dabubble.groupChat = false;
       this.dabubble.openChat();
-    }else{
-      let element = await this.channelService.openPrivateNotes(this.uid)
+    } else {
+      let element = await this.channelService.openPrivateNotes(this.uid);
       this.chatService.updateOpenChannel(element);
       this.dabubble.groupChat = false;
       this.dabubble.openChat();

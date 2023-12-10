@@ -13,6 +13,7 @@ import { DabubbleappComponent } from '../dabubbleapp/dabubbleapp.component';
 import { UserProfileService } from 'src/app/services/userprofile.service';
 import { MessageParsingService } from 'src/app/services/parseMessage.service';
 import { Subscription } from 'rxjs';
+import { NewMessageService } from 'src/app/services/newMessage.service';
 
 interface MessageGroup {
   label: string;
@@ -72,7 +73,8 @@ export class PrivatechatComponent implements AfterViewChecked {
     private data: DataService,
     private dabubble: DabubbleappComponent,
     private userProfileSevice: UserProfileService,
-    private parseS: MessageParsingService
+    private parseS: MessageParsingService,
+    private newMessageS: NewMessageService
   ) {
     this.subscription.add(
       this.chatService.scrollToMessage$.subscribe((messageId) =>
@@ -91,9 +93,7 @@ export class PrivatechatComponent implements AfterViewChecked {
         .slice(0, 2);
       this.stringEmojis = sortedEmojis;
     }
-
   }
-
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
@@ -101,6 +101,7 @@ export class PrivatechatComponent implements AfterViewChecked {
 
   ngOnInit() {
     this.loadFrequentEmojis();
+    this.setMessage();
     this.uid = this.getUid();
     this.chatService.openChannel.subscribe((channel) => {
       if (channel && channel.id) {
@@ -109,6 +110,12 @@ export class PrivatechatComponent implements AfterViewChecked {
         this.loadMessages();
       }
     });
+  }
+
+  setMessage() {
+    this.message = this.newMessageS.getValue();
+    this.newMessageS.newMessage = false;
+    this.newMessageS.setValue('');
   }
 
   private scrollToMessage(message: any) {

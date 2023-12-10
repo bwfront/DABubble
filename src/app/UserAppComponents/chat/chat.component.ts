@@ -16,6 +16,7 @@ import { Subscription } from 'rxjs';
 import { MessageParsingService } from 'src/app/services/parseMessage.service';
 import { SearchService } from 'src/app/services/search.service';
 import { ChannelService } from 'src/app/services/channel.service';
+import { NewMessageService } from 'src/app/services/newMessage.service';
 
 interface MessageGroup {
   label: string;
@@ -74,8 +75,8 @@ export class ChatComponent implements AfterViewChecked {
   autoScrollToBottom: boolean = true;
   newMessage: boolean = true;
 
-  strNewMessage: string = 'ewfew';
-  searchQuery:string = '';
+  strNewMessage: string = '';
+  searchQuery: string = '';
   allChannels: any = [];
   allPrivateChats: any = [];
   constructor(
@@ -87,7 +88,8 @@ export class ChatComponent implements AfterViewChecked {
     private threadService: ThreadService,
     private parseS: MessageParsingService,
     private searchS: SearchService,
-    private channelS: ChannelService
+    private channelS: ChannelService,
+    private newMessageS: NewMessageService
   ) {
     this.subscription.add(
       this.chatService.scrollToMessage$.subscribe((messageId) =>
@@ -116,16 +118,17 @@ export class ChatComponent implements AfterViewChecked {
     });
   }
 
-
   get filteredPrivateChats() {
-    return this.allPrivateChats.filter((chat: any) => 
+    return this.allPrivateChats.filter((chat: any) =>
       chat.data.realName.toLowerCase().includes(this.searchQuery.toLowerCase())
     );
   }
 
   get filteredChannels() {
-    return this.allChannels.filter((channel: any) => 
-      channel.data.group_name.toLowerCase().includes(this.searchQuery.toLowerCase())
+    return this.allChannels.filter((channel: any) =>
+      channel.data.group_name
+        .toLowerCase()
+        .includes(this.searchQuery.toLowerCase())
     );
   }
 
@@ -137,38 +140,43 @@ export class ChatComponent implements AfterViewChecked {
   fetchAllChannels() {
     this.searchS.fetchChannels(this.uid).subscribe((sub) => {
       this.allChannels = sub;
-      console.log(this.allChannels);
     });
   }
 
   fetchAllPrivateChats() {
     this.channelS.fetchData('users').subscribe((users) => {
       this.allPrivateChats = users;
-      console.log(this.allPrivateChats);
     });
   }
 
   async openPrivateChat(userId: string) {
-    if(userId != this.uid){
-      let element = await this.channelS.privateChat(this.uid, userId)
+    if (userId != this.uid) {
+      let element = await this.channelS.privateChat(this.uid, userId);
       this.chatService.updateOpenChannel(element);
       this.dabubble.groupChat = false;
       this.dabubble.openChat();
-    }else{
-      let element = await this.channelS.openPrivateNotes(this.uid)
+    } else {
+      let element = await this.channelS.openPrivateNotes(this.uid);
       this.chatService.updateOpenChannel(element);
       this.dabubble.groupChat = false;
       this.dabubble.openChat();
     }
+    this.newMessageS.setValue(this.strNewMessage);
+    this.strNewMessage = '';
+    this.searchQuery = '';
+    this.newMessageS.newMessage = true;
   }
 
   openChannel(groupName: string) {
     this.allChannels.forEach((element: any) => {
       if (element.data.group_name == groupName) {
-        element.data.id = element.id
+        element.data.id = element.id;
         this.chatService.updateOpenChannel(element.data);
         this.dabubble.groupChat = true;
         this.dabubble.openChat();
+        this.message = this.strNewMessage;
+        this.strNewMessage = '';
+        this.searchQuery = '';
       }
     });
   }
@@ -320,7 +328,11 @@ export class ChatComponent implements AfterViewChecked {
         this.uid
       );
     } else {
-      this.message += emoji;
+      if (!this.newMessage) {
+        this.message += emoji;
+      } else {
+        this.strNewMessage += emoji;
+      }
     }
     this.showEmojiPicker = false;
   }
