@@ -199,7 +199,11 @@ export class ChatComponent implements AfterViewChecked {
 
   handleUserClick(user: any) {
     const usernameHtml = `@${user.data.realName}`;
-    this.message += usernameHtml;
+    if(!this.newMessage){
+      this.message += usernameHtml;
+    }else{
+      this.strNewMessage += usernameHtml;
+    }
   }
 
   parseMessage(messageText: string) {

@@ -72,14 +72,14 @@ export class AddUsersPopUpComponent {
     this.chat.openAddUserPop = false;
   }
 
-  openAddUser(){
+  openAddUser() {
     this.chat.showUser = false;
     this.chat.addUser = true;
   }
 
-  profilePopUp(uid: string){
-      this.dabubble.usersProfilePopUpOpen = true;
-      this.userProfileSevice.getUserProfile(uid);
+  profilePopUp(uid: string) {
+    this.dabubble.usersProfilePopUpOpen = true;
+    this.userProfileSevice.getUserProfile(uid);
   }
   getUid() {
     let data = this.local.get('currentUser');
@@ -144,10 +144,21 @@ export class AddUsersPopUpComponent {
   }
 
   saveUsers() {
-    this.channelService.updateChannelParticipants(
-      this.currentChannel.id,
-      this.channel.participants
-    );
+    this.channelService
+      .updateChannelParticipants(
+        this.currentChannel.id,
+        this.channel.participants
+      )
+      .then(() => {
+        this.openChannel();
+      });
     this.closePopUp();
+  }
+
+  openChannel() {
+    this.currentChannel.participants = this.channel.participants;
+    this.chatService.updateOpenChannel(this.currentChannel);
+    this.dabubble.groupChat = true;
+    this.dabubble.openChat();
   }
 }
