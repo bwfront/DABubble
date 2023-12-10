@@ -75,6 +75,7 @@ export class ChatComponent implements AfterViewChecked {
   newMessage: boolean = true;
 
   strNewMessage: string = 'ewfew';
+  searchQuery:string = '';
   allChannels: any = [];
   allPrivateChats: any = [];
   constructor(
@@ -115,6 +116,19 @@ export class ChatComponent implements AfterViewChecked {
     });
   }
 
+
+  get filteredPrivateChats() {
+    return this.allPrivateChats.filter((chat: any) => 
+      chat.data.realName.toLowerCase().includes(this.searchQuery.toLowerCase())
+    );
+  }
+
+  get filteredChannels() {
+    return this.allChannels.filter((channel: any) => 
+      channel.data.group_name.toLowerCase().includes(this.searchQuery.toLowerCase())
+    );
+  }
+
   newMessageSearch() {
     this.fetchAllChannels();
     this.fetchAllPrivateChats();
@@ -131,6 +145,31 @@ export class ChatComponent implements AfterViewChecked {
     this.channelS.fetchData('users').subscribe((users) => {
       this.allPrivateChats = users;
       console.log(this.allPrivateChats);
+    });
+  }
+
+  async openPrivateChat(userId: string) {
+    if(userId != this.uid){
+      let element = await this.channelS.privateChat(this.uid, userId)
+      this.chatService.updateOpenChannel(element);
+      this.dabubble.groupChat = false;
+      this.dabubble.openChat();
+    }else{
+      let element = await this.channelS.openPrivateNotes(this.uid)
+      this.chatService.updateOpenChannel(element);
+      this.dabubble.groupChat = false;
+      this.dabubble.openChat();
+    }
+  }
+
+  openChannel(groupName: string) {
+    this.allChannels.forEach((element: any) => {
+      if (element.data.group_name == groupName) {
+        element.data.id = element.id
+        this.chatService.updateOpenChannel(element.data);
+        this.dabubble.groupChat = true;
+        this.dabubble.openChat();
+      }
     });
   }
 

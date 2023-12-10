@@ -6,217 +6,247 @@
         </div>
         <div *ngIf="newMessage" class="new-message">
             <h2 class="headingM">Neue Nachricht</h2>
-            <input type="text" placeholder="An: #Kanal, @Benutzer">
-            <div class="render-new-messages-con">
+            <input type="text" placeholder="An: #Kanal, @Benutzer" [(ngModel)]="searchQuery">
+            <div *ngIf="searchQuery.length > 0" class="render-new-messages-con">
                 <div class="render-new-messages">
-                    <div class="user-con">
-                        <div class="user" *ngFor="let user of allPrivateChats">
+
+                    <div *ngIf="filteredPrivateChats.length === 0 && filteredChannels.length === 0">
+                        <p>Keine Ergebnisse gefunden.</p>
+                    </div>
+
+                    <div class="user-con" *ngIf="filteredPrivateChats.length > 0">
+                        <div class="user" *ngFor="let user of filteredPrivateChats"
+                            (click)="openPrivateChat(user.data.uid)">
                             <img src="{{user.data.avatarURl}}" alt="avatar">
                             <div>{{ user.data.realName }}</div>
                         </div>
                     </div>
+
+                    <div class="user-con" *ngIf="filteredChannels.length > 0">
+                        <div class="user" *ngFor="let channel of filteredChannels"
+                            (click)="openChannel(channel.data.group_name)">
+                            <div># {{ channel.data.group_name }}</div>
+                        </div>
+                    </div>
+                    </div>
+                    </div>
+
+
+                </div>
+                <div class="users-con" *ngIf="!newMessage">
+                    <div class="users" (click)="openShowUserPopUp()">
+                        <img class="avat" *ngFor="let avat of avatImg" src="{{ avat }}">
+                        <div>{{ avatLength }}</div>
+                    </div>
+                    <div class="add" (click)="openAddUserPopUp()"></div>
                 </div>
             </div>
-        </div>
-        <div class="users-con" *ngIf="!newMessage">
-            <div class="users" (click)="openShowUserPopUp()">
-                <img class="avat" *ngFor="let avat of avatImg" src="{{ avat }}">
-                <div>{{ avatLength }}</div>
-            </div>
-            <div class="add" (click)="openAddUserPopUp()"></div>
-        </div>
-    </div>
-    <div class="chat" #chatContainer>
+            <div class="chat" #chatContainer>
 
-        <div *ngFor="let group of messageGroups">
-            <div class="date" *ngIf="!newMessage">
-                <div class="date-label">{{ group.label }}</div>
-            </div>
-            <div *ngFor="let message of group.messages" class="message"
-                [ngClass]="{'message-you': messageSendFrom(message.sender_id)}" [id]="message.text + message.sender_id">
-                <div class="reactions">
-                    <div class="reaction frequent" (click)="quickReact('✅', message)">✅</div>
-                    <div class="reaction frequent" (click)="quickReact('🤩', message)">🤩</div>
-                    <div class="reaction emoji" (click)="openEmojiPicker($event, message)"></div>
-                    <div class="reaction answer" (click)="openThread(message)"></div>
-                    <div class="reaction option" (click)="editMessagePopUp = !editMessagePopUp"
-                        *ngIf="messageSendFrom(message.sender_id)"></div>
-                    <div class="edit-message-popup" (click)="openEditText(message)"
-                        *ngIf="editMessagePopUp && messageSendFrom(message.sender_id)">Nachricht bearbeiten</div>
-                </div>
-                <div class="avatar"><img src="{{ message.avatar }}" alt="avatar"></div>
-                <div>
-                    <div class="message-content"
-                        [ngClass]="{'message-content-you': messageSendFrom(message.sender_id)}">
-                        <div class="name-time" [ngClass]="{'name-time-you': messageSendFrom(message.sender_id)}">
-                            <div class="name" (click)="openUserProfile(message.sender_id)">{{ message.name }}</div>
-                            <div class="time"> {{ message.time }}</div>
-                            <div class="time" *ngIf="message.edit">(Bearbeitet)</div>
-                        </div>
-                        <div *ngIf="!message.fileUrl" class="msg"
-                            [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">
-
-                            <ng-container *ngFor="let segment of parseMessage(message.text)">
-                                <span *ngIf="segment.isUsername" class="username" (click)="openUserProfile(segment.id)">
-                                    {{ segment.text }}
-                                </span>
-                                <span *ngIf="!segment.isUsername">
-                                    {{ segment.text }}
-                                </span>
-                            </ng-container>
-
-                        </div>
-
-                        <div style="display: flex; flex-direction: column;" *ngIf="message.fileUrl">
-                            <div *ngIf="message.text" class="msg"
-                                [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">
-
-                                <ng-container *ngFor="let segment of parseMessage(message.text)">
-                                    <span *ngIf="segment.isUsername" class="username"
-                                        (click)="openUserProfile(segment.id)">
-                                        {{ segment.text }}
-                                    </span>
-                                    <span *ngIf="!segment.isUsername">
-                                        {{ segment.text }}
-                                    </span>
-                                </ng-container>
-
-                            </div>
-                            <div class="msg" style="margin-top: 5px;"
-                                [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">
-                                <a href="{{message.fileUrl}}" target="_blank">
-                                    <img *ngIf="message.fileType === 'image'" [src]="message.fileUrl"
-                                        class="message-image" />
-                                    <a *ngIf="message.fileType === 'pdf'" [href]="message.fileUrl" target="_blank"
-                                        class="message-pdf">Open PDF</a>
-                                </a>
+                <div *ngFor="let group of messageGroups">
+                    <div class="date" *ngIf="!newMessage">
+                        <div class="date-label">{{ group.label }}</div>
+                    </div>
+                    <div *ngFor="let message of group.messages" class="message"
+                        [ngClass]="{'message-you': messageSendFrom(message.sender_id)}"
+                        [id]="message.text + message.sender_id">
+                        <div class="reactions">
+                            <div class="reaction frequent" (click)="quickReact('✅', message)">✅</div>
+                            <div class="reaction frequent" (click)="quickReact('🤩', message)">🤩</div>
+                            <div class="reaction emoji" (click)="openEmojiPicker($event, message)"></div>
+                            <div class="reaction answer" (click)="openThread(message)"></div>
+                            <div class="reaction option" (click)="editMessagePopUp = !editMessagePopUp"
+                                *ngIf="messageSendFrom(message.sender_id)"></div>
+                            <div class="edit-message-popup" (click)="openEditText(message)"
+                                *ngIf="editMessagePopUp && messageSendFrom(message.sender_id)">Nachricht bearbeiten
                             </div>
                         </div>
-                        <div class="reaction-con" [ngClass]="{'reaction-you': !messageSendFrom(message.sender_id)}">
-                            <div class="answer-count" *ngIf="checkThreadLenght(message)" (click)="openThread(message)">
-                                {{ message.thread.length }} Antworten</div>
-                            <div class="button" (click)="openEmojiPicker($event, message)"></div>
-                            <div class="user-reaction" (click)="quickReact(reaction.react, message)"
-                                [ngClass]="{'reaction-active': hasUserReacted(reaction)}"
-                                *ngFor="let reaction of message.reactions">{{ reaction.react }} <span>{{
-                                    reaction.from.length }}</span>
-                                <div class="hover-reaction-con">
-                                    <div class="emoji">{{ reaction.react }}</div>
-                                    <div class="users" *ngIf="reaction.from.length === 1">
-                                        <span *ngIf="hasCurrentUserReacted(reaction.from); else otherSingleUser">
-                                            Du
-                                        </span>
-                                        <ng-template #otherSingleUser>
-                                            {{ reaction.userNames[0] }}
-                                        </ng-template>
+                        <div class="avatar"><img src="{{ message.avatar }}" alt="avatar"></div>
+                        <div>
+                            <div class="message-content"
+                                [ngClass]="{'message-content-you': messageSendFrom(message.sender_id)}">
+                                <div class="name-time"
+                                    [ngClass]="{'name-time-you': messageSendFrom(message.sender_id)}">
+                                    <div class="name" (click)="openUserProfile(message.sender_id)">{{ message.name }}
                                     </div>
-                                    <div class="users" *ngIf="reaction.from.length === 2">
-                                        <span *ngIf="hasCurrentUserReacted(reaction.from)">
-                                            Du und {{ reaction.userNames[0] === this.uid ? reaction.userNames[1] :
-                                            reaction.userNames[0] }}
+                                    <div class="time"> {{ message.time }}</div>
+                                    <div class="time" *ngIf="message.edit">(Bearbeitet)</div>
+                                </div>
+                                <div *ngIf="!message.fileUrl" class="msg"
+                                    [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">
+
+                                    <ng-container *ngFor="let segment of parseMessage(message.text)">
+                                        <span *ngIf="segment.isUsername" class="username"
+                                            (click)="openUserProfile(segment.id)">
+                                            {{ segment.text }}
                                         </span>
-                                        <span *ngIf="!hasCurrentUserReacted(reaction.from)">
-                                            {{ reaction.userNames.join(' und ') }}
+                                        <span *ngIf="!segment.isUsername">
+                                            {{ segment.text }}
                                         </span>
+                                    </ng-container>
+
+                                </div>
+
+                                <div style="display: flex; flex-direction: column;" *ngIf="message.fileUrl">
+                                    <div *ngIf="message.text" class="msg"
+                                        [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">
+
+                                        <ng-container *ngFor="let segment of parseMessage(message.text)">
+                                            <span *ngIf="segment.isUsername" class="username"
+                                                (click)="openUserProfile(segment.id)">
+                                                {{ segment.text }}
+                                            </span>
+                                            <span *ngIf="!segment.isUsername">
+                                                {{ segment.text }}
+                                            </span>
+                                        </ng-container>
+
                                     </div>
-                                    <div class="users" *ngIf="reaction.from.length > 2">
-                                        <span *ngIf="hasCurrentUserReacted(reaction.from)">
-                                            Du und {{ reaction.from.length - 1 }} weitere
-                                        </span>
-                                        <span *ngIf="!hasCurrentUserReacted(reaction.from)">
-                                            {{ reaction.userNames[0] }} und {{ reaction.from.length - 1 }} weitere
-                                        </span>
+                                    <div class="msg" style="margin-top: 5px;"
+                                        [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">
+                                        <a href="{{message.fileUrl}}" target="_blank">
+                                            <img *ngIf="message.fileType === 'image'" [src]="message.fileUrl"
+                                                class="message-image" />
+                                            <a *ngIf="message.fileType === 'pdf'" [href]="message.fileUrl"
+                                                target="_blank" class="message-pdf">Open PDF</a>
+                                        </a>
                                     </div>
-                                    <div class="text"
-                                        *ngIf="reaction.from.length === 1 && hasCurrentUserReacted(reaction.from)">hast
-                                        reagiert</div>
-                                    <div class="text"
-                                        *ngIf="reaction.from.length === 1 && !hasCurrentUserReacted(reaction.from)">hat
-                                        reagiert</div>
-                                    <div class="text" *ngIf="reaction.from.length > 1">haben reagiert</div>
+                                </div>
+                                <div class="reaction-con"
+                                    [ngClass]="{'reaction-you': !messageSendFrom(message.sender_id)}">
+                                    <div class="answer-count" *ngIf="checkThreadLenght(message)"
+                                        (click)="openThread(message)">
+                                        {{ message.thread.length }} Antworten</div>
+                                    <div class="button" (click)="openEmojiPicker($event, message)"></div>
+                                    <div class="user-reaction" (click)="quickReact(reaction.react, message)"
+                                        [ngClass]="{'reaction-active': hasUserReacted(reaction)}"
+                                        *ngFor="let reaction of message.reactions">{{ reaction.react }} <span>{{
+                                            reaction.from.length }}</span>
+                                        <div class="hover-reaction-con">
+                                            <div class="emoji">{{ reaction.react }}</div>
+                                            <div class="users" *ngIf="reaction.from.length === 1">
+                                                <span
+                                                    *ngIf="hasCurrentUserReacted(reaction.from); else otherSingleUser">
+                                                    Du
+                                                </span>
+                                                <ng-template #otherSingleUser>
+                                                    {{ reaction.userNames[0] }}
+                                                </ng-template>
+                                            </div>
+                                            <div class="users" *ngIf="reaction.from.length === 2">
+                                                <span *ngIf="hasCurrentUserReacted(reaction.from)">
+                                                    Du und {{ reaction.userNames[0] === this.uid ? reaction.userNames[1]
+                                                    :
+                                                    reaction.userNames[0] }}
+                                                </span>
+                                                <span *ngIf="!hasCurrentUserReacted(reaction.from)">
+                                                    {{ reaction.userNames.join(' und ') }}
+                                                </span>
+                                            </div>
+                                            <div class="users" *ngIf="reaction.from.length > 2">
+                                                <span *ngIf="hasCurrentUserReacted(reaction.from)">
+                                                    Du und {{ reaction.from.length - 1 }} weitere
+                                                </span>
+                                                <span *ngIf="!hasCurrentUserReacted(reaction.from)">
+                                                    {{ reaction.userNames[0] }} und {{ reaction.from.length - 1 }}
+                                                    weitere
+                                                </span>
+                                            </div>
+                                            <div class="text"
+                                                *ngIf="reaction.from.length === 1 && hasCurrentUserReacted(reaction.from)">
+                                                hast
+                                                reagiert</div>
+                                            <div class="text"
+                                                *ngIf="reaction.from.length === 1 && !hasCurrentUserReacted(reaction.from)">
+                                                hat
+                                                reagiert</div>
+                                            <div class="text" *ngIf="reaction.from.length > 1">haben reagiert</div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="startChat-con" *ngIf="!newMessage">
-            <div class="name"># {{ groupName }}</div>
-            <div class="start-text" *ngIf="uid == createbyId">Du hast diesen Channel heute erstellt. Das ist der Anfang
-                des Channels.</div>
-            <div class="start-text" *ngIf="uid != createbyId">{{ createby }} hat diesen Channel {{ createAt }} erstellt.
-                Das ist der Anfang des Channels.</div>
-        </div>
-    </div>
-    <div *ngIf="isUploading" class="file-con-upload">
-        <div>{{ uploadingFileName }}</div>
-        <div class="upload-progress-bar">
-            <div class="upload-progress" [style.width]="uploadProgress + '%'"></div>
-        </div>
-    </div>
-    <div class="files">
-        <div class="file-con" *ngIf="uploadedFileType">
-            {{ uploadingFileName }}
-            <div class="delete" (click)="deletFile()">
-                x
-            </div>
-        </div>
-    </div>
-    <div class="input-chat" *ngIf="!editTextArea && !newMessage">
-        <textarea type="text" placeholder="Nachricht an #{{ groupName }}" [(ngModel)]="message"></textarea>
-        <div class="chat-icons">
-            <div class="left-icons">
-                <div class="attachment-send" (click)="fileInput.click()">
-                    <div></div>
-                </div>
-                <input type="file" #fileInput (change)="onFileSelected($event)" accept=".png, .jpg, .jpeg, .pdf" hidden>
-                <div class="vector-send"></div>
-                <div class="emoji-send" (click)="openEmojiPicker($event, null)">
-                    <div></div>
-                </div>
-                <div class="users-send" (click)="openLinkUserPopUp()">
-                    <div></div>
+                <div class="startChat-con" *ngIf="!newMessage">
+                    <div class="name"># {{ groupName }}</div>
+                    <div class="start-text" *ngIf="uid == createbyId">Du hast diesen Channel heute erstellt. Das ist der
+                        Anfang
+                        des Channels.</div>
+                    <div class="start-text" *ngIf="uid != createbyId">{{ createby }} hat diesen Channel {{ createAt }}
+                        erstellt.
+                        Das ist der Anfang des Channels.</div>
                 </div>
             </div>
-            <div class="send-icon" (click)="sendMessage()"></div>
-        </div>
-    </div>
-    <div class="input-chat" *ngIf="newMessage">
-        <textarea type="text" placeholder="Nachricht an..." [(ngModel)]="strNewMessage"></textarea>
-        <div class="chat-icons">
-            <div class="left-icons">
-                <div class="emoji-send" (click)="openEmojiPicker($event, null)">
-                    <div></div>
-                </div>
-                <div class="users-send" (click)="openLinkUserPopUp()">
-                    <div></div>
+            <div *ngIf="isUploading" class="file-con-upload">
+                <div>{{ uploadingFileName }}</div>
+                <div class="upload-progress-bar">
+                    <div class="upload-progress" [style.width]="uploadProgress + '%'"></div>
                 </div>
             </div>
-        </div>
-    </div>
+            <div class="files">
+                <div class="file-con" *ngIf="uploadedFileType">
+                    {{ uploadingFileName }}
+                    <div class="delete" (click)="deletFile()">
+                        x
+                    </div>
+                </div>
+            </div>
+            <div class="input-chat" *ngIf="!editTextArea && !newMessage">
+                <textarea type="text" placeholder="Nachricht an #{{ groupName }}" [(ngModel)]="message"></textarea>
+                <div class="chat-icons">
+                    <div class="left-icons">
+                        <div class="attachment-send" (click)="fileInput.click()">
+                            <div></div>
+                        </div>
+                        <input type="file" #fileInput (change)="onFileSelected($event)" accept=".png, .jpg, .jpeg, .pdf"
+                            hidden>
+                        <div class="vector-send"></div>
+                        <div class="emoji-send" (click)="openEmojiPicker($event, null)">
+                            <div></div>
+                        </div>
+                        <div class="users-send" (click)="openLinkUserPopUp()">
+                            <div></div>
+                        </div>
+                    </div>
+                    <div class="send-icon" (click)="sendMessage()"></div>
+                </div>
+            </div>
+            <div class="input-chat" *ngIf="newMessage">
+                <textarea type="text" placeholder="Nachricht an..." [(ngModel)]="strNewMessage"></textarea>
+                <div class="chat-icons">
+                    <div class="left-icons">
+                        <div class="emoji-send" (click)="openEmojiPicker($event, null)">
+                            <div></div>
+                        </div>
+                        <div class="users-send" (click)="openLinkUserPopUp()">
+                            <div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    <div class="error" *ngIf="errorEdit">Die Nachricht darf nicht Leer sein.</div>
-    <div class="input-chat" *ngIf="editTextArea">
-        <textarea type="text" placeholder="Nachricht an Bearbeiten" [(ngModel)]="editMessageText"></textarea>
-        <div class="buttons">
-            <div class="btn btn2" (click)="editTextArea = false">Schließen</div>
-            <div class="btn" (click)="sendEditMessage()">Speichern</div>
+            <div class="error" *ngIf="errorEdit">Die Nachricht darf nicht Leer sein.</div>
+            <div class="input-chat" *ngIf="editTextArea">
+                <textarea type="text" placeholder="Nachricht an Bearbeiten" [(ngModel)]="editMessageText"></textarea>
+                <div class="buttons">
+                    <div class="btn btn2" (click)="editTextArea = false">Schließen</div>
+                    <div class="btn" (click)="sendEditMessage()">Speichern</div>
+                </div>
+            </div>
+            <div class="edit-popup" *ngIf="openEditChannel">
+                <app-edit-channel></app-edit-channel>
+            </div>
+            <div class="edit-popup" *ngIf="openAddUserPop">
+                <app-add-users-pop-up [addUsers]="addUser" [showUsers]="showUser"></app-add-users-pop-up>
+            </div>
+            <div *ngIf="showEmojiPicker" class="overlay" (click)="closeEmojiPicker()"></div>
+            <div *ngIf="showEmojiPicker"
+                [ngStyle]="{'position': 'absolute', 'top': pickerPosition.top, 'left': pickerPosition.left}"
+                style="z-index: 1001;">
+                <emoji-mart [showPreview]="false" (emojiClick)="onEmojiSelect($event.emoji.native)"></emoji-mart>
+            </div>
+            <div class="link-user-con" *ngIf="openLinkUser">
+                <app-link-user-pop-up (userClicked)="handleUserClick($event)"></app-link-user-pop-up>
+            </div>
         </div>
-    </div>
-    <div class="edit-popup" *ngIf="openEditChannel">
-        <app-edit-channel></app-edit-channel>
-    </div>
-    <div class="edit-popup" *ngIf="openAddUserPop">
-        <app-add-users-pop-up [addUsers]="addUser" [showUsers]="showUser"></app-add-users-pop-up>
-    </div>
-    <div *ngIf="showEmojiPicker" class="overlay" (click)="closeEmojiPicker()"></div>
-    <div *ngIf="showEmojiPicker"
-        [ngStyle]="{'position': 'absolute', 'top': pickerPosition.top, 'left': pickerPosition.left}"
-        style="z-index: 1001;">
-        <emoji-mart [showPreview]="false" (emojiClick)="onEmojiSelect($event.emoji.native)"></emoji-mart>
-    </div>
-    <div class="link-user-con" *ngIf="openLinkUser">
-        <app-link-user-pop-up (userClicked)="handleUserClick($event)"></app-link-user-pop-up>
-    </div>
-</div>

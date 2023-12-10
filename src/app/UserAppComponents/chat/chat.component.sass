@@ -108,11 +108,13 @@
     .user-con
         display: flex
         flex-direction: column
-        gap: 10px
+        gap: 2px
         .user
             display: flex
             align-items: center
             gap: 10px
+            padding: 5px
+            border-radius: 10px
             div
                 font-size: 18px
             img
@@ -120,6 +122,9 @@
                 height: 50px
                 border-radius: 50%
                 object-fit: cover
+            &:hover
+                cursor: pointer
+                background-color: #ECEEFE
 
 @media ( max-width: 950px )
     .users
