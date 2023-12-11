@@ -77,7 +77,7 @@ export class EditChannelComponent {
     let data = this.local.get('currentUser');
     return data.user.uid;
   }
-  
+
   closePopUp() {
     this.chat.openEditChannel = false;
     this.chatService.updateOpenChannel(this.currentChannel);

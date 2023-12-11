@@ -43,7 +43,8 @@
                             <div *ngIf="message.text" class="msg"
                                 [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">
                                 <ng-container *ngFor="let segment of parseMessage(message.text)">
-                                    <span *ngIf="segment.isUsername" class="username" (click)="openUserProfile(segment.id)">
+                                    <span *ngIf="segment.isUsername" class="username"
+                                        (click)="openUserProfile(segment.id)">
                                         {{ segment.text }}
                                     </span>
                                     <span *ngIf="!segment.isUsername">
@@ -169,7 +170,8 @@
                     <div class="attachment-send" (click)="fileInput.click()">
                         <div></div>
                     </div>
-                    <input type="file" #fileInput (change)="onFileSelected($event)" accept=".png, .jpg, .jpeg, .pdf" hidden>
+                    <input type="file" #fileInput (change)="onFileSelected($event)" accept=".png, .jpg, .jpeg, .pdf"
+                        hidden>
                     <div class="vector-send"></div>
                     <div class="emoji-send" (click)="openEmojiPicker($event, null)">
                         <div></div>
@@ -197,7 +199,8 @@
             <emoji-mart [showPreview]="false" (emojiClick)="onEmojiSelect($event.emoji.native)"></emoji-mart>
         </div>
         <div class="link-user-con" *ngIf="openLinkUser">
-            <app-link-user-pop-up (userClicked)="handleUserClick($event)"></app-link-user-pop-up>
+            <app-link-user-pop-up (userClicked)="handleUserClick($event)"
+                (closePopupEvent)="openLinkUser = false"></app-link-user-pop-up>
         </div>
     </div>
 </div>

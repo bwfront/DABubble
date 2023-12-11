@@ -36,15 +36,13 @@ export class DabubbleappComponent {
       this.threadActive = false;
     }
     if (this.windowWidth > 750) {
-        this.chatActive = true;
-        this.channelActive = true;
-        this.threadActive = false;
+      this.chatActive = true;
+      this.channelActive = true;
+      this.threadActive = false;
     }
   }
 
   openChat() {
-    console.log('test');
-    
     if (this.windowWidth < 751) {
       if (this.threadActive) {
         this.codelearning = false;

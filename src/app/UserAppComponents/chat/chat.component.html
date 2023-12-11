@@ -9,11 +9,9 @@
             <input type="text" placeholder="An: #Kanal, @Benutzer" [(ngModel)]="searchQuery">
             <div *ngIf="searchQuery.length > 0" class="render-new-messages-con">
                 <div class="render-new-messages">
-
                     <div *ngIf="filteredPrivateChats.length === 0 && filteredChannels.length === 0">
                         <p>Keine Ergebnisse gefunden.</p>
                     </div>
-
                     <div class="user-con" *ngIf="filteredPrivateChats.length > 0">
                         <div class="user" *ngFor="let user of filteredPrivateChats"
                             (click)="openPrivateChat(user.data.uid)">
@@ -21,7 +19,6 @@
                             <div>{{ user.data.realName }}</div>
                         </div>
                     </div>
-
                     <div class="user-con" *ngIf="filteredChannels.length > 0">
                         <div class="user" *ngFor="let channel of filteredChannels"
                             (click)="openChannel(channel.data.group_name)">
@@ -40,7 +37,6 @@
         </div>
     </div>
     <div class="chat" #chatContainer>
-
         <div *ngFor="let group of messageGroups">
             <div class="date" *ngIf="!newMessage">
                 <div class="date-label">{{ group.label }}</div>
@@ -70,7 +66,6 @@
                         </div>
                         <div *ngIf="!message.fileUrl" class="msg"
                             [ngClass]="{'msg-you': messageSendFrom(message.sender_id)}">
-
                             <ng-container *ngFor="let segment of parseMessage(message.text)">
                                 <span *ngIf="segment.isUsername" class="username" (click)="openUserProfile(segment.id)">
                                     {{ segment.text }}
@@ -234,6 +229,7 @@
         <emoji-mart [showPreview]="false" (emojiClick)="onEmojiSelect($event.emoji.native)"></emoji-mart>
     </div>
     <div class="link-user-con" *ngIf="openLinkUser">
-        <app-link-user-pop-up (userClicked)="handleUserClick($event)"></app-link-user-pop-up>
+        <app-link-user-pop-up (userClicked)="handleUserClick($event)"
+            (closePopupEvent)="openLinkUser = false"></app-link-user-pop-up>
     </div>
 </div>
