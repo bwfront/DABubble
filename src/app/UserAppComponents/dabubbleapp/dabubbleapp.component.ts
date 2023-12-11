@@ -43,6 +43,8 @@ export class DabubbleappComponent {
   }
 
   openChat() {
+    console.log('test');
+    
     if (this.windowWidth < 751) {
       if (this.threadActive) {
         this.codelearning = false;

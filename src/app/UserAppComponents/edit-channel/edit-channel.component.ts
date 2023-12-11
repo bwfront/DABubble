@@ -4,6 +4,7 @@ import { ChatService } from 'src/app/services/chat.service';
 import { DataService } from 'src/app/services/data.service';
 import { ChannelService } from 'src/app/services/channel.service';
 import { LocalStorageService } from 'src/app/services/localstorage.service';
+import { DabubbleappComponent } from '../dabubbleapp/dabubbleapp.component';
 
 @Component({
   selector: 'app-edit-channel',
@@ -23,7 +24,8 @@ export class EditChannelComponent {
     private chatService: ChatService,
     private data: DataService,
     private channel: ChannelService,
-    private local: LocalStorageService
+    private local: LocalStorageService,
+    private dabubble: DabubbleappComponent
   ) {}
 
   ngOnInit() {
@@ -43,33 +45,41 @@ export class EditChannelComponent {
       const user = await this.data.getUserRef(userId);
       this.createdby = user?.realName;
     } catch (error) {
-      this.createdby = "Nutzer nicht hinterlegt."
+      this.createdby = 'Nutzer nicht hinterlegt.';
     }
   }
 
   changeChannelName() {
-    this.channel.updateChannelName(this.channelId, this.name).then(() =>{
-      this.editName = false
-    })
+    this.channel.updateChannelName(this.channelId, this.name).then(() => {
+      this.currentChannel.group_name = this.name;
+      this.editName = false;
+    });
   }
 
   changeChannelDescription() {
-    this.channel.updateChannelDescription(this.channelId, this.description).then(() =>{
-      this.editDescription = false
-    })
+    this.channel
+      .updateChannelDescription(this.channelId, this.description)
+      .then(() => {
+        this.currentChannel.description = this.description;
+        this.editDescription = false;
+      });
   }
 
-  leaveChannel(){
-    this.channel.editParticipant(this.channelId, this.getUid(), false).then(() =>{
-      this.closePopUp()
-    })
+  leaveChannel() {
+    this.channel
+      .editParticipant(this.channelId, this.getUid(), false)
+      .then(() => {
+        this.closePopUp();
+      });
   }
 
   getUid() {
     let data = this.local.get('currentUser');
     return data.user.uid;
   }
+  
   closePopUp() {
     this.chat.openEditChannel = false;
+    this.chatService.updateOpenChannel(this.currentChannel);
   }
 }
