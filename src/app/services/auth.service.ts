@@ -127,5 +127,4 @@ export class AuthService {
       return Promise.reject('No current user');
     }
   }
-
 }

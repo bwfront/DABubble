@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, doc, getDoc } from '@angular/fire/firestore';
+import { Firestore, doc, getDoc, updateDoc } from '@angular/fire/firestore';
 
 export type UserData = {
   realName: string;
@@ -30,6 +30,19 @@ export class DataService {
         return null;
       }
     } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateUserData(uid: string, newRealName: string, newEmail: string): Promise<void> {
+    try {
+      const userDocRef = doc(this._firestore, 'users', uid);
+      await updateDoc(userDocRef, {
+        realName: newRealName,
+        email: newEmail
+      });
+    } catch (error) {
+      console.error("Error updating user data: ", error);
       throw error;
     }
   }

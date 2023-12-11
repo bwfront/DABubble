@@ -63,6 +63,7 @@ export class ProfilePopUpComponent {
   }
 
   changeUserInfo() {
+    this.data.updateUserData(this.uid, this.name, this.mail)
     this.auth.changeEmail(this.mail).then(() => {
       this.auth.changeName(this.name).then(() => {
         this.auth.logOut();
