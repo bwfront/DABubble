@@ -124,7 +124,7 @@ export class SecondaryChatComponent implements AfterViewChecked {
   }
 
   sendMessage() {
-    if (this.message != '' || this.uploadedFileUrl != null) {
+    if (this.message.trim() != '' || this.uploadedFileUrl != null) {
       const answer: Answer = {
         sender_id: this.uid,
         text: this.message,
@@ -302,7 +302,7 @@ export class SecondaryChatComponent implements AfterViewChecked {
   }
 
   sendEditMessage() {
-    if (this.editMessageText != '') {
+    if (this.editMessageText.trim() != '') {
       this.threadS.editMessage(
         this.currentChannel.currentId,
         this.selectedMessage.id,

@@ -10,6 +10,7 @@ import {
   sendPasswordResetEmail,
   confirmPasswordReset,
   updateEmail,
+  signInWithPopup,
 } from '@angular/fire/auth';
 import { doc, setDoc, Firestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
@@ -30,7 +31,32 @@ export class AuthService {
   }
 
   byGoogle(): Promise<UserCredential> {
-    return signInWithRedirect(this._auth, new GoogleAuthProvider());
+    return signInWithPopup(this._auth, new GoogleAuthProvider()).then(
+      (userCredential) => {
+        this.handleUserAuthentication(userCredential);
+        return userCredential;
+      }
+    );
+  }
+
+  private handleUserAuthentication(userCredential: any) {
+    if (userCredential._tokenResponse.isNewUser) {
+      this.createUserCollection(userCredential.user);
+    }
+  }
+
+  private createUserCollection(user: any) {
+    const userRef = doc(this._firestore, 'users', user.uid);
+    setDoc(userRef, {
+      realName: user.displayName,
+      avatarURl: user.photoURL,
+      uid: user.uid,
+      email: user.email,
+    });
+  }
+
+  get auth() {
+    return this._auth;
   }
 
   signUp(
@@ -50,7 +76,12 @@ export class AuthService {
     });
   }
 
-  signUpName(userCredential: any, realName: string, avatarURl: string, email: string) {
+  signUpName(
+    userCredential: any,
+    realName: string,
+    avatarURl: string,
+    email: string
+  ) {
     return updateProfile(userCredential.user, {
       displayName: realName,
     }).then(() => {
@@ -83,15 +114,12 @@ export class AuthService {
     return sendPasswordResetEmail(this._auth, email).catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
-      console.log(errorCode);
-      console.log(errorMessage);
     });
   }
 
   setNewPassword(code: string, newPassword: string) {
     return confirmPasswordReset(this._auth, code, newPassword)
       .then(() => {
-        console.log('worked');
         return true;
       })
       .catch(() => {
@@ -108,11 +136,10 @@ export class AuthService {
   changeEmail(newEmail: string) {
     let current = this._auth.currentUser;
     if (current) {
-      return updateEmail(current, newEmail)
-        .catch((error) => {
-          console.error(error);
-        });
-    }else{
+      return updateEmail(current, newEmail).catch((error) => {
+        console.error(error);
+      });
+    } else {
       return Promise.reject('No current user');
     }
   }
@@ -122,7 +149,7 @@ export class AuthService {
     if (current) {
       return updateProfile(current, { displayName: name })
         .then(() => 'Profile updated successfully')
-        .catch(error => Promise.reject(error)); 
+        .catch((error) => Promise.reject(error));
     } else {
       return Promise.reject('No current user');
     }

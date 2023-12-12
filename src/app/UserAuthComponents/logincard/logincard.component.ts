@@ -3,6 +3,7 @@ import { AuthService } from 'src/app//services/auth.service';
 import { LoginpageComponent } from '../loginpage/loginpage.component';
 import { LocalStorageService } from 'src/app/services/localstorage.service';
 import { Router } from '@angular/router';
+import { getRedirectResult } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-logincard',
@@ -42,7 +43,10 @@ export class LogincardComponent {
   }
 
   googleLogin() {
-    this.authService.byGoogle();
+    this.authService.byGoogle().then((userCredential) => {
+      this.router.navigate(['/dabubble']);
+      this.local.set('currentUser', userCredential);
+    });
   }
 
   passwordresetopen() {

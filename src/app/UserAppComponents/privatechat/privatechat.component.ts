@@ -239,7 +239,7 @@ export class PrivatechatComponent implements AfterViewChecked {
   }
 
   sendEditMessage() {
-    if (this.editMessageText != '') {
+    if (this.editMessageText.trim() != '') {
       this.chatService.editMessage(
         'private_chats',
         this.currentId,
@@ -297,12 +297,11 @@ export class PrivatechatComponent implements AfterViewChecked {
 
   private scrollToBottom(): void {
     if (!this.disableAutoScroll) {
-      //Deactivate
     }
   }
 
   sendMessage() {
-    if (this.message != '' || this.uploadedFileUrl != null) {
+    if (this.message.trim() != '' || this.uploadedFileUrl != null) {
       this.chatService.sendMessage(
         this.currentId,
         this.getUid(),
