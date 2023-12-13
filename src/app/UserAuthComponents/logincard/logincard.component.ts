@@ -3,7 +3,6 @@ import { AuthService } from 'src/app//services/auth.service';
 import { LoginpageComponent } from '../loginpage/loginpage.component';
 import { LocalStorageService } from 'src/app/services/localstorage.service';
 import { Router } from '@angular/router';
-import { getRedirectResult } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-logincard',
