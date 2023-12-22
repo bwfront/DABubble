@@ -45,7 +45,7 @@ export class RegistercardComponent {
 
   registerUser() {
     if (this.userEmail && this.userPassword) {
-      this.authService
+     const test = this.authService
         .signUp(
           this.userEmail,
           this.userPassword,

@@ -3,7 +3,6 @@ import {
   Auth,
   signInWithEmailAndPassword,
   GoogleAuthProvider,
-  signInWithRedirect,
   UserCredential,
   createUserWithEmailAndPassword,
   updateProfile,
@@ -15,6 +14,9 @@ import {
 import { doc, setDoc, Firestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { Observable, catchError, last, switchMap, throwError } from 'rxjs';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +26,8 @@ export class AuthService {
   private _auth = inject(Auth);
   private _firestore = inject(Firestore);
   private _firestorage = inject(AngularFireStorage);
-  constructor() {}
+  
+  constructor(private firestore: AngularFirestore) {}
 
   signIn(email: string, password: string): Promise<UserCredential> {
     return signInWithEmailAndPassword(this._auth, email, password);
@@ -70,13 +73,29 @@ export class AuthService {
       email.trim(),
       password.trim()
     ).then((userCredential) => {
+      this.addUserToChannel(userCredential.user.uid);
       return this.signUpName(userCredential, realName, avatarURl, email).then(
         () => userCredential
       );
+    })
+  }
+  addUserToChannel(uid: string) {
+    const channels = ['Bdlb3XLOXAa2rcgNeUKi', 'XDMpObBjKU9mwv2Rn9Tq', 'jXBsfTKaO5f3VB6XniaZ'];
+    channels.forEach((channel) => {
+      this.updateChannelParticipants(channel, uid);
     });
   }
+  
+  updateChannelParticipants(channelId: string, uid: string): Promise<void> {
+    const channelRef = this.firestore.collection('group_chats').doc(channelId);
+    return channelRef.update({
+      participants: firebase.firestore.FieldValue.arrayUnion(uid)
+    })
+    .catch((error) => console.error("Error updating participants: ", error));
+  }
 
-  signUpName(
+
+  async signUpName(
     userCredential: any,
     realName: string,
     avatarURl: string,
@@ -94,6 +113,8 @@ export class AuthService {
       });
     });
   }
+
+
 
   uploadFile(file: File): Observable<string> {
     const filePath = `userAvatars/${new Date().getTime()}_${file.name}`;
