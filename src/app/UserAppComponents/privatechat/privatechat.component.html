@@ -141,7 +141,7 @@
         </div>
     </div>
     <div class="input-chat" *ngIf="!editTextArea">
-        <textarea type="text" placeholder="Nachricht an {{ nameChat }}" [(ngModel)]="message"></textarea>
+        <textarea type="text" placeholder="Nachricht an {{ nameChat }}" [(ngModel)]="message" (keypress)="checkEnterKey($event, 'chat')"></textarea>
         <div class="chat-icons">
             <div class="left-icons">
                 <div class="attachment-send" (click)="fileInput.click()">
@@ -161,7 +161,7 @@
     </div>
     <div class="error" *ngIf="errorEdit">Die Nachricht darf nicht Leer sein.</div>
     <div class="input-chat" *ngIf="editTextArea">
-        <textarea type="text" placeholder="Nachricht an Bearbeiten" [(ngModel)]="editMessageText"></textarea>
+        <textarea type="text" placeholder="Nachricht an Bearbeiten" [(ngModel)]="editMessageText" (keypress)="checkEnterKey($event, 'edit')"></textarea>
         <div class="buttons">
             <div class="btn btn2" (click)="editTextArea = false">Schließen</div>
             <div class="btn" (click)="sendEditMessage()">Speichern</div>

@@ -300,6 +300,17 @@ export class PrivatechatComponent implements AfterViewChecked {
     }
   }
 
+  checkEnterKey(event: KeyboardEvent, chat: string): void {
+    if (event.key === 'Enter' && chat === 'chat') {
+      event.preventDefault();
+      this.sendMessage();
+    }
+    if (event.key === 'Enter' && chat === 'edit') {
+      event.preventDefault();
+      this.sendEditMessage();
+    }
+  }
+
   sendMessage() {
     if (this.message.trim() != '' || this.uploadedFileUrl != null) {
       this.chatService.sendMessage(

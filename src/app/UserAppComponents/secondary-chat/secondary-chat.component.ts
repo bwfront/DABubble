@@ -123,6 +123,17 @@ export class SecondaryChatComponent implements AfterViewChecked {
     this.uploadingFileName = null;
   }
 
+  checkEnterKey(event: KeyboardEvent, chat: string): void {
+    if (event.key === 'Enter' && chat === 'chat') {
+      event.preventDefault();
+      this.sendMessage();
+    }
+    if (event.key === 'Enter' && chat === 'edit') {
+      event.preventDefault();
+      this.sendEditMessage();
+    }
+  }
+
   sendMessage() {
     if (this.message.trim() != '' || this.uploadedFileUrl != null) {
       const answer: Answer = {
